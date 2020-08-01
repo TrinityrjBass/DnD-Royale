@@ -1,9 +1,10 @@
 """
-This script runs the newFlask application using a development server.
+This script runs the DnDRoyale application using a development server.
 """
 
 from os import environ
-from newFlask import app
+from DnDRoyale import app
+
 
 if __name__ == '__main__':
     HOST = environ.get('SERVER_HOST', 'localhost')
@@ -11,4 +12,4 @@ if __name__ == '__main__':
         PORT = int(environ.get('SERVER_PORT', '5555'))
     except ValueError:
         PORT = 5555
-    app.run(HOST, PORT)
+    app.run(HOST, PORT, debug=True)
