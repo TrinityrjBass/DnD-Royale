@@ -229,7 +229,11 @@ class Encounter:
         self.masterlog = []
         self.note = ''
         self.combattants = []
-        self.sides = ''
+        #keeping track of the number and what the teams are called.
+        self.sides = []
+        #self.teams["Red", "Blue"] I'm not sure if I'm going to need this, or an attribute that contains 
+        self.teamRed = []
+        self.teamBlue = []
         
         for chap in lineup:
             if type(chap) is dict:
@@ -241,14 +245,14 @@ class Encounter:
                 self.append(chap)            
             else:
                 print("pls don't summon the big guy here")
-                continue #pls dont' randomly add Cthulhu
+                continue 
 
         self.blank()
 
     def blank(self, hard=True):
         ''' resets the teams '''
-        # This is where The teams are set
-        self.sides = set([dude.alignment for dude in self])
+        # This is where The teams are recorded
+        self.sides = set([dude.team for dude in self])
         self.tally['battles'] = 0
         self.tally['rounds'] = 0
         self.tally['perfect'] = {side: 0 for side in self.sides}
@@ -262,8 +266,9 @@ class Encounter:
         #print("appending " + newbie + str(len(self.combattants))) #debugging
         if not type(newbie) is creature.Creature:
             newbie = creature.Creature(newbie) 
-        newbie.id = str(len(self.combattants)) #this should be in the beginning of the method
+        newbie.id = str(len(self.combattants)) 
         self.combattants.append(newbie)
+        #...the encounter is attached to each creature as an attribute??
         newbie.arena = self
         self.blank()
 
@@ -308,7 +313,7 @@ class Encounter:
                  "team_perfects": [self.tally['perfect'][x] for x in list(self.sides)],
                  "team_close": [self.tally['close'][x] for x in list(self.sides)],
                  "combattant_names": [x.name for x in self.combattants],
-                 "combattant_alignments": [x.alignment for x in self.combattants],
+                 "combattant_alignments": [x.team for x in self.combattants],
                  "combattant_damage_avg": [x.tally['damage'] / self.tally['battles'] for x in self.combattants],
                  "combattant_hit_avg": [x.tally['hits'] / self.tally['battles'] for x in self.combattants],
                  "combattant_miss_avg": [x.tally['misses'] / self.tally['battles'] for x in self.combattants],
@@ -362,7 +367,7 @@ class Encounter:
             self.combattants.remove(moriturus)
         self.blank()
 
-        
+        # I dont' think this is used in a normal simulation
     def set_deathmatch(self):
         """ setting colors for functionality that isn't used in this app"""
         colours = 'red blue green orange yellow lime cyan violet ultraviolet pink brown black white octarine teal magenta blue-green fuchsia purple cream grey'.split(
@@ -396,17 +401,17 @@ class Encounter:
             return "Prediction unavailable for more than 2 teams"
         t_ac = {x: [] for x in self.sides}
         for character in self:
-            t_ac[character.alignment].append(character.ac)
+            t_ac[character.team].append(character.ac)
         ac = {x: sum(t_ac[x]) / len(t_ac[x]) for x in t_ac.keys()}
         damage = {x: 0 for x in self.sides}
         hp = {x: 0 for x in self.sides}
         for character in self:
             for move in character.attacks:
                 move['damage'].avg = True
-                damage[character.alignment] += safediv((20 + move['attack'].bonus - ac[not_us(character.alignment)]),
+                damage[character.team] += safediv((20 + move['attack'].bonus - ac[not_us(character.team)]),
                                                        20 * move['damage'].roll())
                 move['damage'].avg = False
-                hp[character.alignment] += character.starting_hp
+                hp[character.team] += character.starting_hp
         (a, b) = list(self.sides)
         rate = {a: safediv(hp[a], damage[b], 0.0), b: safediv(hp[b], damage[a], 0.0)}
         return ('Rough a priori predictions:' + N +
@@ -440,7 +445,8 @@ class Encounter:
             except Encounter.Victory:
                 break
         # closing up maths
-        side = self.active.alignment
+        side = self.active.team
+        # this could be simplified... I think. If it's doing what it looks like it's doing
         team = self.find('allies')
         self.tally['victories'][side] += 1
         perfect = 1
@@ -486,10 +492,10 @@ class Encounter:
     def find(self, what, searcher=None, team=None):
 
         def _enemies(folk):
-            return [query for query in folk if (query.alignment != team)]
+            return [query for query in folk if (query.team != team)]
 
         def _allies(folk):
-            return [query for query in folk if (query.alignment == team)]
+            return [query for query in folk if (query.team == team)]
 
         def _alive(folk):
             return [query for query in folk if (query.hp > 0)]
@@ -514,7 +520,7 @@ class Encounter:
             return _alive(_enemies(folk))
 
         searcher = searcher or self.active
-        team = team or searcher.alignment
+        team = team or searcher.team
         folk = self.combattants
         agenda = list(what.split())
         opt = {
