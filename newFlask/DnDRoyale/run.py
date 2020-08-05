@@ -1,2 +1,4 @@
 from DnDRoyale import app
-app.run(debug=True)
+print("run.py")
+if __name__ == '__main__':
+    app.run(debug=True)

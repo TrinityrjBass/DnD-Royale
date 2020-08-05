@@ -10,7 +10,7 @@ from DnDRoyale import app, DnD
 
 
 #from DnDRoyale import creature
-
+print("loading views file")
 @app.route('/')
 @app.route('/home')
 def home():
@@ -49,7 +49,7 @@ def sendindex():
     # Read creatures from bestiary  
     # creature.Creature.beastiary=creature.Creature.load_beastiary(static/content/+'beastiary.csv')
     creaturelist = '';
-    with open('DnDRoyale/creatures.csv', newline='') as csvfile:
+    with open('creatures.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []
