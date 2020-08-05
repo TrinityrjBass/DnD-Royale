@@ -390,7 +390,7 @@
                 </div>
             </div>
             <br />
-            <button onclick="duel()"><i class="fa fa-bolt"></i> Calculate</button>
+            <button onclick="duel()"><i class="fa fa-bolt"></i> Calculate</button> <!--I kinda want this button to cause the modal to be shown too... and not when the data gets returned-->
             <button onclick='rosterTable("hard")'>
                 <i class="fa fa-trash-o"></i>
                 Clear
@@ -399,7 +399,9 @@
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
     </div>
-    <div id="result" class="modal"></div>
+    <div id="result" class="modal">
+        <h3>Results<i class="fa fa-chevron-up" id="OFF_result" onclick="flip('result',0)"></i><i class="fa fa-chevron-down" id="ON_result" onclick="flip('result',1)"></i></h3>
+    </div>
     
 </div>
 
