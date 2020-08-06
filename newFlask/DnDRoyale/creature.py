@@ -300,10 +300,19 @@ class Creature:
         # last but not least
         print("Assessing alignment")
 
+        #I dont' think I need this any more
     def getAlignment(self):
-        if 'alignment' not in self.settings:
-            self.settings['alignment'] = "unassigned mercenaries" 
-        self.alignment = self.settings['alignment']
+        #if 'alignment' not in self.settings:
+        #    self.settings['alignment'] = "unassigned mercenaries" 
+        #self.alignment = self.settings['alignment']
+
+        #recording the different teams... thought they should only be 'Red' and 'Blue'... I think 
+        if 'team' not in self.settings:
+            self.settings['team'] = "unassigned mercenaries" 
+        self.team = self.settings['team']
+        
+
+    def getInternalStuff(self):
         # internal stuff
         self.tally = {'damage': 0, 'hits': 0, 'dead': 0, 'misses': 0, 'battles': 0, 'rounds': 0, 'hp': 0,
                       'healing_spells': 0}
@@ -401,6 +410,7 @@ class Creature:
         self.getmorale()
         self.getAltAttack()
         self.getAlignment()
+        self.getInternalStuff()
         self.getBuffSpells()
 
         ##backdoor and overider
@@ -774,7 +784,7 @@ class Creature:
     def __str__(self):
         if self.tally['battles']:
             battles = self.tally['battles']
-            return self.name + ": {team=" + self.alignment + "; avg hp=" + str(
+            return self.name + ": {team=" + self.team + "; avg hp=" + str(
                 self.tally['hp'] / battles) + " (from " + str(
                 self.starting_hp) + "); avg healing spells left=" + str(
                 self.tally['healing_spells'] / battles) + " (from " + str(
@@ -801,7 +811,7 @@ class Creature:
         if points > 10 : self.current_morale -= 1 # pseudo critical hit
         if verbose: verbose.append(self.name + self.id + ' is at ' + str(self.current_morale) + ' morale.')
 
-        # if morale gets to be 0 or less, remove from combattants list (run away), else check if concentrating.
+        # if morale gets to be 0 or less, remove from combatants list (run away), else check if concentrating.
         if self.current_morale < 1 : 
             self.hp = 0 #psuedo death (running away)
             if verbose: verbose.append(self.name + self.id + ' lost its desire to fight and ran away from battle')

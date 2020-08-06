@@ -83,10 +83,8 @@ function Output(text) {
     // would like to add some logic here to only show error if unsuccessful simulation
     
     let modal = $("#result");
-    // does this work???
-    modal.onclick = function () {
-        modal.style.display = "none";
-    }
+
+    $("#result").show();
     modal.append('<div id="OUT_battles"></div>')
     modal.append('<div id="OUT_rounds"></div>')
     modal.append('<div id="OUT_prediction"></div>')
