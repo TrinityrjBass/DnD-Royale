@@ -78,7 +78,7 @@ class Creature:
             warnings.warn('Beastiary error, expected path ' + path + ' error ' + str(e))
             return {}
 
-    beastiary = load_beastiary.__func__('beastiary.csv')
+    beastiary = load_beastiary.__func__('creattures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
 
     def __init__(self, wildcard, **kwargs):  # I removed *args... not sure what they did.
@@ -248,7 +248,7 @@ class Creature:
             self.sc_ab = max('wis', 'int', 'cha',
                              key=lambda ab: self.ability_bonuses[ab])  # Going for highest. seriously?!
             print(
-                "Please specify spellcasting ability of " + self.name + " next time, this time " + self.sc_ab + " was used as it was biggest.")
+                "Please specify spellcasting ability of " + self.name + self.id + " next time, this time " + self.sc_ab + " was used as it was biggest.")
         else:
             self.sc_ab = 'con'  # TODO fix this botch up.
         if not 'healing_bonus' in self.settings:
@@ -784,7 +784,7 @@ class Creature:
     def __str__(self):
         if self.tally['battles']:
             battles = self.tally['battles']
-            return self.name + ": {team=" + self.team + "; avg hp=" + str(
+            return self.name + self.id + ": {team=" + self.team + "; avg hp=" + str(
                 self.tally['hp'] / battles) + " (from " + str(
                 self.starting_hp) + "); avg healing spells left=" + str(
                 self.tally['healing_spells'] / battles) + " (from " + str(
@@ -794,7 +794,7 @@ class Creature:
                 self.tally['misses'] / battles) + "; rounds (PBA)=" + str(
                 self.tally['rounds'] / battles) + ";}"
         else:
-            return self.name + ": UNTESTED IN BATTLE"
+            return self.name + self.id + ": UNTESTED IN BATTLE"
 
         # Morale may be needed to be factored in here too
     def isalive(self):
@@ -821,7 +821,7 @@ class Creature:
                 if dc < 10: dc = 10
                 if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
                     self.conc_fx()
-                    if verbose: verbose.append(self.name + ' has lost their concentration')
+                    if verbose: verbose.append(self.name + self.id + ' has lost their concentration')
 
     def ready(self):
         self.dodge = 0
@@ -879,15 +879,15 @@ class Creature:
     def heal(self, points, verbose=1):
         self.hp += points
         self.current_morale +=  1
-        if verbose: verbose.append(self.name + ' was healed by ' + str(points) + '. Now on ' + str(self.hp) + ' hp.')
-        if verbose: verbose.append(self.name + ' got a morale boost from getting healed and is now at ' + str(self.current_morale) + ' morale.')
+        if verbose: verbose.append(self.name + self.id + ' was healed by ' + str(points) + '. Now on ' + str(self.hp) + ' hp.')
+        if verbose: verbose.append(self.name + self.id + ' got a morale boost from getting healed and is now at ' + str(self.current_morale) + ' morale.')
 
     def assess_wounded(self, verbose=0):
         targets = self.arena.find('bloodiest allies')
         if len(targets) > 0:
             weakling = targets[0]
             if weakling.starting_hp > (self.healing.dice[0] + self.healing.bonus + weakling.hp):
-                if verbose: verbose.append(self.name + " wants to heal " + weakling.name)
+                if verbose: verbose.append(self.name + self.id + " wants to heal " + weakling.name + weakling.id)
                 return weakling
             else:
                 return 0
@@ -908,7 +908,7 @@ class Creature:
             except IndexError:
                 raise self.arena.Victory()
             if verbose:
-                verbose.append(self.name + ' attacks ' + opponent.name + ' with ' + str(self.attacks[i]['name']))
+                verbose.append(self.name + self.id + ' attacks ' + opponent.name + ' with ' + str(self.attacks[i]['name']))
             # This was the hit method. put here for now.
             self.attacks[i]['attack'].advantage = self.check_advantage(opponent)
             if self.attacks[i]['attack'].roll(verbose) >= opponent.ac:
@@ -954,14 +954,14 @@ class Creature:
         # Buff?
         if self.condition == 'netted':
             # NOT-RAW: DC10 strength check or something equally easy for monsters
-            if verbose: verbose.append(self.name + " freed himself from a net")
+            if verbose: verbose.append(self.name + self.id + " freed himself from a net")
             self.condition = 'normal'
         elif self.buff_spells > 0 and self.concentrating == 0:
             self.conc_fx()
-            if verbose: verbose.append(self.name + ' buffs up!')
+            if verbose: verbose.append(self.name + self.id + ' buffs up!')
             # greater action economy: waste opponent's turn.
         elif economy and self is self.arena.find('weakest allies')[0]:
-            if verbose: verbose.append(self.name + " is dodging")
+            if verbose: verbose.append(self.name + self.id + " is dodging")
             self.dodge = 1
         elif economy and self.alt_attack['name'] == 'net':
             opponent = self.arena.find('fiersomest enemy alive', self)[0]
@@ -973,6 +973,7 @@ class Creature:
 
             self.multiattack(verbose)
 
+    # I dont' think I'll ever use this function
     def generate_character_sheet(self):
         """
         An markdown character sheet.
