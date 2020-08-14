@@ -1,4 +1,4 @@
-
+from DnDRoyale.app import app
 
 
 #def sendindex():
