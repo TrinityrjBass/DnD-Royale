@@ -6,7 +6,7 @@ import json
 import threading, time
 from datetime import datetime
 from flask import render_template, request
-from DnDRoyale import app, DnD
+from . import app, DnD
 
 
 #from DnDRoyale import creature
@@ -115,3 +115,7 @@ def poster():
     print("resopnse body : " + str(response_body))
 
     return response_body
+
+#if __name__ == '__main__':
+#    app.run(debug=True)
+# I don't think this is needed... maybe
