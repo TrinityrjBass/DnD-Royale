@@ -1,6 +1,9 @@
-from flask import Flask
-app = Flask(__name__)
+#from flask import Flask
+from . import app
+from . import views
 
-@app.route("/")
-def hello():
-    return "My god... finally"
+#app = Flask(__name__)
+
+#@app.route("/")
+#def hello():
+#    return "My god... finally"
