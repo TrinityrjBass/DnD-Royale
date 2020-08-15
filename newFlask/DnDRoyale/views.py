@@ -3,10 +3,11 @@ Routes and views for the flask application.
 """
 import csv
 import json
+import os
 import threading, time
 from datetime import datetime
 from flask import render_template, request
-from . import app, DnD
+from . import app, DnD, creature
 
 
 #from DnDRoyale import creature
@@ -47,9 +48,10 @@ def sendindex():
     """ loads creatures from beastiary file and populates dropdown menu on page"""
     print("SendIndex") #for debugging
     # Read creatures from bestiary  
-    # creature.Creature.beastiary=creature.Creature.load_beastiary(static/content/+'beastiary.csv')
-    creaturelist = '';
-    with open('creatures.csv', newline='') as csvfile:
+    #root = 'static/content/'
+    #creaturelist =creature.Creature.load_beastiary('DnDRoyale/creatures.csv')
+    creaturelist = ''
+    with open('DnDRoyale/creatures.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []

@@ -2,7 +2,7 @@
 
 
 import warnings
-import math
+import math, os
 from DnDRoyale import DnD
 
 TARGET = 'enemy alive weakest'
@@ -12,7 +12,6 @@ class Creature:
     """
     Creature class handles the creatures and their actions and some interactions with the encounter.
     """
-
     @staticmethod
     def load_beastiary(path):
         """
@@ -64,6 +63,7 @@ class Creature:
         * max_morale
         * current_morale
         """
+        
         try:
             import csv
             r = csv.reader(open(path, encoding='utf-8'))
@@ -78,10 +78,10 @@ class Creature:
             warnings.warn('Beastiary error, expected path ' + path + ' error ' + str(e))
             return {}
 
-    beastiary = load_beastiary.__func__('creattures.csv')
+    beastiary = load_beastiary.__func__('DnDRoyale/creatures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
 
-    def __init__(self, wildcard, **kwargs):  # I removed *args... not sure what they did.
+    def __init__(self, wildcard, **kwargs): 
         """
         Creature object creation. A lot of paramaters make a creature so a lot of assumptions are made (see __init__`).
         :param wildcard: the name of the creature.
