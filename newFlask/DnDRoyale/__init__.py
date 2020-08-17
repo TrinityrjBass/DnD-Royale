@@ -1,12 +1,12 @@
 """
 The flask application package.
-
-this file was formerly called "__init__.py"
 """
-#import os
 
 from flask import Flask
+import os #temp debugging
 
+breadcrumb = os.listdir()
+print("initializing init.py from " + str(breadcrumb))
 
 app = Flask(__name__)
 print("got to init, app created")

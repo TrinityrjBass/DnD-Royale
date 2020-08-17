@@ -1,8 +1,9 @@
-#from DnDRoyale import app
+from flask import Flask
+from . import app
 import os
 
-from flask import Flask
 
-print("run.py")
+breadcrumb = os.listdir()
+print("running run.py from : " + str(breadcrumb))
 if __name__ == '__main__':
     app.run(debug=True)
