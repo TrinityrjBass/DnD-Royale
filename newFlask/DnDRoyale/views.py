@@ -12,6 +12,8 @@ from . import app, DnD, creature
 
 #from DnDRoyale import creature
 print("loading views file")
+breadcrumb = os.listdir()
+print("working from: " + str(breadcrumb)) #for finding out where Azure is launching from 
 @app.route('/')
 @app.route('/home')
 def home():
