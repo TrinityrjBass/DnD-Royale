@@ -56,7 +56,7 @@ def sendindex():
     creaturelist = ''
     #creaturelist =creature.Creature.load_beastiary('DnDRoyale/creatures.csv')
     #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
-    with open('creatures.csv', encoding='utf-8', newline='') as csvfile:
+    with open('/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv', encoding='utf-8', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []
