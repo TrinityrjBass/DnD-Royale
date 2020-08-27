@@ -95,7 +95,7 @@
                         <td class=clear>
                             <input type=text id="name">
                             <span class="fa fa-question"
-                                           data-toggle="tooltip" title="The name of the creature. This is used for the summary and identical names can be used."></span>
+                                  data-toggle="tooltip" title="The name of the creature. This is used for the summary and identical names can be used."></span>
                         </td>
                     </tr>
                     <tr>
@@ -103,7 +103,7 @@
                         <td class=clear>
                             <input type=text id=base>
                             <span class="fa fa-question"
-                                          data-toggle="tooltip" title="The base creature that you would like to modify attributes of. You can type this in, or select the creature from the drop down in Option A and it will auto-fill here."></span>
+                                  data-toggle="tooltip" title="The base creature that you would like to modify attributes of. You can type this in, or select the creature from the drop down in Option A and it will auto-fill here."></span>
                         </td>
                     </tr>
                     <tr>
@@ -111,11 +111,11 @@
                         <td>
                             <label>Red</label>
                             <input type="radio" name="team" value="Red" class="combatant_team">
-                        
-                        
+
+
                             <label>Blue</label>
                             <input type="radio" name="team" value="Blue" class="combatant_team">
-                        
+
                             <span class="fa fa-question" data-toggle="tooltip" title="The team the creature is on."></span>
                         </td>
                     </tr>
@@ -145,8 +145,8 @@
                         <td class=clear>
                             <input type=text id=attack_parameters>
                             <span class="fa fa-question"
-                                           data-toggle="tooltip" title="This is a tad complicated, sorry. Technically it is a list of list. It is a series of values between square brackets between square brakets, <i>e.g.</i> [[*club*, 2, 0, 4], [*club*, 2, 0, 4]]. Each square bracket block (list) denoted a part of an attack, namely a single attack will have only one, <i>e.g.</i> [[*sword of a thousand truths*, 7, 5, 16]], while a multiattack of two will have two as in the first example. The first element is a name, which is useless here as narration is disabled. The second is the attack bonus, the third is the damage bonus and the following are the dice. So [[*Batleth*,2,0,8,8]] is a +2, 2d8 and a [[*flaming greatsword*,3,1,6,6,4]] is a +3 2d6+d4+1.<br/> There is an encoding issue that I can only resolve by changing the quote of the string to asterisk."
-                                           data-tooltip-position="bottom middle"></span>
+                                  data-toggle="tooltip" title="This is a tad complicated, sorry. Technically it is a list of list. It is a series of values between square brackets between square brakets, <i>e.g.</i> [[*club*, 2, 0, 4], [*club*, 2, 0, 4]]. Each square bracket block (list) denoted a part of an attack, namely a single attack will have only one, <i>e.g.</i> [[*sword of a thousand truths*, 7, 5, 16]], while a multiattack of two will have two as in the first example. The first element is a name, which is useless here as narration is disabled. The second is the attack bonus, the third is the damage bonus and the following are the dice. So [[*Batleth*,2,0,8,8]] is a +2, 2d8 and a [[*flaming greatsword*,3,1,6,6,4]] is a +3 2d6+d4+1.<br/> There is an encoding issue that I can only resolve by changing the quote of the string to asterisk."
+                                  data-tooltip-position="bottom middle"></span>
                         </td>
                     </tr>
 
@@ -155,7 +155,7 @@
                         <td class=clear>
                             <input type="number" id=healing_spells value="0" min="0">
                             <span class="fa fa-question"
-                                          data-toggle="tooltip" title="Number of healing word spells (cantrip, only)"></span>
+                                  data-toggle="tooltip" title="Number of healing word spells (cantrip, only)"></span>
                         </td>
                     </tr>
                     <tr>
@@ -163,7 +163,7 @@
                         <td class=clear>
                             <input type="number" id=healing_dice value="0" min="0"> <!--drop down options?-->
                             <span class="fa fa-question"
-                                          data-toggle="tooltip" title="number without the d. d4 is the default."></span>
+                                  data-toggle="tooltip" title="number without the d. d4 is the default."></span>
                         </td>
                     </tr>
                     <tr>
@@ -345,8 +345,8 @@
                             <td>
                                 <input type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()">
                                 <span class="fa fa-question"
-                                               data-toggle="tooltip" title="An attempt to simplify attack parameters with the intention of adding logic to add automatically figure out most of the other values"
-                                               data-tooltip-position="bottom middle"></span><br />
+                                      data-toggle="tooltip" title="An attempt to simplify attack parameters with the intention of adding logic to add automatically figure out most of the other values"
+                                      data-tooltip-position="bottom middle"></span><br />
                             </td>
                         </tr>
                         <tr>
@@ -382,27 +382,36 @@
         <div class="card">
             <h3>Lineup</h3>
             <div style="padding:5px">
-                <div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
+                <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <br /><br />
-                </div>
+                </div>-->
                 <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
                 </div>
             </div>
             <br />
-            <button onclick="duel()"><i class="fa fa-bolt"></i> Calculate</button> <!--I kinda want this button to cause the modal to be shown too... and not when the data gets returned-->
+            <button onclick="duel()"><i class="fa fa-bolt"></i> Calculate</button>
             <button onclick='rosterTable("hard")'>
                 <i class="fa fa-trash-o"></i>
                 Clear
             </button>
+            <button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>
             <br />
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
     </div>
-    <div id="result" class="modal">
-        <h3>Results<i class="fa fa-chevron-up" id="OFF_result" onclick="flip('result',0)"></i><i class="fa fa-chevron-down" id="ON_result" onclick="flip('result',1)"></i></h3>
-    </div>
-    
+    <!-- Attempting to use Bootstrap modal : https://www.w3schools.com/bootstrap/bootstrap_modal.asp -->
+    <div class="modal" id="myModal" role="dialog">
+        <div class="modal-dialogue">
+            <div id="result" class="modal-body">
+                <h3>Results<i class="fa fa-chevron-up" id="OFF_result" onclick="flip('result',0)"></i><i class="fa fa-chevron-down" id="ON_result" onclick="flip('result',1)"></i></h3>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div><!--end modal--> 
 </div>
 
 
