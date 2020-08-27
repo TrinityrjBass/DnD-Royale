@@ -14,6 +14,7 @@ from . import app, DnD, creature
 print("loading views file")
 breadcrumb = os.listdir()
 print("working from: " + str(breadcrumb)) #for finding out where Azure is launching from 
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -51,9 +52,11 @@ def sendindex():
     print("SendIndex") #for debugging
     # Read creatures from bestiary  
     #root = 'static/content/'
-    #creaturelist =creature.Creature.load_beastiary('DnDRoyale/creatures.csv')
+    
     creaturelist = ''
-    with open('DnDRoyale/creatures.csv', newline='') as csvfile:
+    #creaturelist =creature.Creature.load_beastiary('DnDRoyale/creatures.csv')
+    #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
+    with open('creatures.csv', encoding='utf-8', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []
