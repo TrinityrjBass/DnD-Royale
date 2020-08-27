@@ -47,12 +47,20 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
+.modal{
+    position:fixed;
+    left: 30%;
+    top: 20px;
+    bottom: auto;
+    background-color:white;
+    width:fit-content;
+}
 /* Modal Styles*/
-.modal {
+/*.modal {
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 100px;
     width: 24%; /* Full width */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */*/
+/*}*/

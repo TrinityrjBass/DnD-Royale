@@ -81,10 +81,12 @@ function duel_t() {
 
 function Output(text) {
     // would like to add some logic here to only show error if unsuccessful simulation
-    
+    // Add 'sample encounter data' from output to be viewable somehow.
     let modal = $("#result");
 
     $("#result").show();
+    $("#myModal").modal("toggle")
+    $("#showInfo").show();
     modal.append('<div id="OUT_battles"></div>')
     modal.append('<div id="OUT_rounds"></div>')
     modal.append('<div id="OUT_prediction"></div>')
@@ -433,6 +435,7 @@ function initial() {
     $("#ON_result").hide();
     $("#DIV_result").hide();
     $("#OUT_sample").hide();
+    $("#showInfo").hide();
     // create roster table and set some variables
     rosterTable("hard");
     // iniitalize tooltips
@@ -492,6 +495,10 @@ function findCreatureByUid(creature) {
 // generic print function for debugging
 function print(s) {
     console.log(s);
+}
+
+function showModal() {
+    $("#myModal").modal("toggle");
 }
 
 // is called after simulation is run (prett sure anyways)
