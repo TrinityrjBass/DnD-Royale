@@ -63,14 +63,16 @@ class Creature:
         * max_morale
         * current_morale
         """
-        
+        # I like this way better since it yields a dict by default
+        # check here https://www.youtube.com/watch?v=efSjcrp87OY
         try:
             import csv
             r = csv.reader(open(path, encoding='utf-8'))
+            #dr = csv.DictReader(path)
             headers = next(r)
             beastiary = {}
-            for line in r:
-                beast = {h: line[i] for i, h in enumerate(headers) if line[i]}
+            for row in r:
+                beast = {h: row[i] for i, h in enumerate(headers) if row[i]}
                 if 'name' in beast:
                     beastiary[beast['name']] = beast
             return beastiary
