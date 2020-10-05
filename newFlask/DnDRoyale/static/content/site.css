@@ -53,7 +53,9 @@ input[type="checkbox"].input-validation-error {
     top: 20px;
     bottom: auto;
     background-color:white;
+    overflow-y: scroll;
     width:fit-content;
+    height: auto; /*-webkit-fill-available;*/
 }
 /* Modal Styles*/
 /*.modal {
