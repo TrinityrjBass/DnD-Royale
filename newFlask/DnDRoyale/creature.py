@@ -12,7 +12,7 @@ class Creature:
     """
     Creature class handles the creatures and their actions and some interactions with the encounter.
     """
-    @staticmethod
+    #@staticmethod
     def load_beastiary(path):
         """
         `load_beastiary(path)` (formerly just `_beastiary`) is a function while beastiary is the attribute it fills.
@@ -67,20 +67,27 @@ class Creature:
         # check here https://www.youtube.com/watch?v=efSjcrp87OY
         try:
             import csv
-            r = csv.reader(open(path, encoding='utf-8'))
+            #r = csv.reader(open(path, encoding='utf-8'))
+            r = csv.reader(open(path, encoding='utf-8-sig'))
             #dr = csv.DictReader(path)
+
             headers = next(r)
+            # print(headers)
+
             beastiary = {}
             for row in r:
                 beast = {h: row[i] for i, h in enumerate(headers) if row[i]}
                 if 'name' in beast:
                     beastiary[beast['name']] = beast
+
+            print("beastiary found")
             return beastiary
+
         except Exception as e:
             warnings.warn('Beastiary error, expected path ' + path + ' error ' + str(e))
             return {}
 
-    beastiary = load_beastiary.__func__('DnDRoyale/creatures.csv')
+    beastiary = load_beastiary('DnDRoyale/creatures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
 
     def __init__(self, wildcard, **kwargs): 
@@ -96,20 +103,27 @@ class Creature:
         >>> print(Creature(Creature('aboleth'), ac=20).__dict__)
         `{'abilities': None, 'dex': 10, 'con_bonus': 10, 'cr': 17, 'xp': 5900, 'ac': 20, 'starting_healing_spells': 0, 'starting_hp': 135, 'condition': 'normal', 'initiative': <__main__.Dice object at 0x1022542e8>, 'str': 10, 'wis': 10, 'ability_bonuses': {'int': 0, 'cha': 0, 'dex': 0, 'con': 0, 'str': 0, 'wis': 0}, 'custom': [], 'hd': <__main__.Dice object at 0x102242c88>, 'hurtful': 36.0, 'tally': {'rounds': 0, 'hp': 0, 'battles': 0, 'hits': 0, 'damage': 0, 'healing_spells': 0, 'dead': 0, 'misses': 0}, 'hp': 135, 'proficiency': 5, 'cha_bonus': 10, 'able': 1, 'healing_spells': 0, 'copy_index': 1, 'int': 10, 'concentrating': 0, 'wis_bonus': 10, 'con': 10, 'int_bonus': 10, 'sc_ab': 'con', 'str_bonus': 10, 'level': 18, 'settings': {}, 'arena': None, 'dex_bonus': 10, 'log': '', 'cha': 10, 'dodge': 0, 'alt_attack': {'attack': None, 'name': None}, 'alignment': 'lawful evil ', 'attacks': [{'attack': <__main__.Dice object at 0x1022545f8>, 'damage': <__main__.Dice object at 0x1022545c0>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x102254668>, 'damage': <__main__.Dice object at 0x102254630>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x1022546d8>, 'damage': <__main__.Dice object at 0x1022546a0>, 'name': 'tentacle'}], 'attack_parameters': [['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6]], 'buff_spells': 0, 'temp': 0, 'name': 'aboleth'}`
         """
+        # TB debugging -> getting code path of calls
+        # print("_init_, wildcard : " + wildcard )
         self.log = ""
         if not kwargs and type(wildcard) is str:
+            print("filling from beastiary - no kwargs")
             self._fill_from_beastiary(wildcard)
         elif type(wildcard) is dict:
-             self._initialise(**wildcard) # new attempt
+            print("this wildcard is a dict")
+            self._initialise(**wildcard) # new attempt
             # self._fill_from_dict(wildcard) # OG
             #if not kwargs == {}: # seeing if commenting this out actually messes anything up
             #    print("dictionary passed followed by unpacked dictionary error")
         elif kwargs and type(wildcard) is str:
+            print("kwargs, and also this wildcard is str")
             if wildcard in self.beastiary:
+                print("this wildcard is in the beastiary")
                 self._initialise(base=wildcard, **kwargs)
             else:
                 self._initialise(name=wildcard, **kwargs)
         elif type(wildcard) is Creature:
+            print("this wildcard is a Creature")
             self._initialise(base=wildcard, **kwargs)
         else:
             warnings.warn("UNKNOWN COMBATTANT:" + str(wildcard))
@@ -119,6 +133,7 @@ class Creature:
             self._fill_from_preset("cthulhu")
 
     def getattacks(self):
+        # get use attacks from user, if none, get from bestiary, if none, figure appropriate attack : fist/claw/slam and params
         print("loading attack information")
         self.attacks = []
         self.hurtful = 0
@@ -126,6 +141,7 @@ class Creature:
             # Benefit of doubt. Given 'em a dagger . <-- but if you give them a dagger... then they will never use their fist (listed below)
             self.settings['attack_parameters'] = 'punch' # give them fisticuffs!
         if type(self.settings['attack_parameters']) is str:
+            print("attack parameters are string")
             try:
                 import json
                 x = json.loads(self.settings['attack_parameters'].replace("*", "\""))
@@ -160,12 +176,15 @@ class Creature:
                     raise Exception("Cannot figure out what is: " + self.settings['attack_parameters'] + str(
                         type(self.settings['attack_parameters'])))
         elif type(self.settings['attack_parameters']) is list:
+            print("attacks are a list, debug for more info")
             self.attack_parameters = self.settings['attack_parameters']
             self._attack_parse(self.attack_parameters)
         else:
             raise Exception('Could not determine weapon')
+        print("attack is : " + str(self.attacks[0]))
 
     def getmorale(self):
+        print("getting morale")
         if 'cr' in self.settings: 
             self.cr = self.settings['cr']
         elif 'level' in self.settings:
@@ -250,7 +269,7 @@ class Creature:
             self.sc_ab = max('wis', 'int', 'cha',
                              key=lambda ab: self.ability_bonuses[ab])  # Going for highest. seriously?!
             print(
-                "Please specify spellcasting ability of " + self.name + self.id + " next time, this time " + self.sc_ab + " was used as it was biggest.")
+                "Please specify spellcasting ability of " + self.name + " " + str(self.id) + " next time, this time " + self.sc_ab + " was used as it was biggest.")
         else:
             self.sc_ab = 'con'  # TODO fix this botch up.
         if not 'healing_bonus' in self.settings:
@@ -267,6 +286,7 @@ class Creature:
             self.healing_spells = 0
 
     def getHd(self):
+        print("getting hd")
         self.hd = None
         if 'hd' in self.settings.keys():
             if type(self.settings['hd']) is DnD.Dice:
@@ -294,6 +314,7 @@ class Creature:
             self.hd = DnD.Dice(self.ability_bonuses['con'], 8, avg=True, role="hd")
 
     def getAltAttack(self):
+        print("alt attacks")
         if 'alt_attack' in self.settings and type(self.settings['alt_attack']) is list:
             self.alt_attack = {'name': self.settings['alt_attack'][0],
                                'attack': DnD.Dice(self.settings['alt_attack'][1], 20)}  # CURRENTLY ONLY NETTING IS OPTION!
@@ -304,6 +325,7 @@ class Creature:
 
         #I dont' think I need this any more
     def getAlignment(self):
+        print("alignments")
         #if 'alignment' not in self.settings:
         #    self.settings['alignment'] = "unassigned mercenaries" 
         #self.alignment = self.settings['alignment']
@@ -315,6 +337,7 @@ class Creature:
         
 
     def getInternalStuff(self):
+        print("internals")
         # internal stuff
         self.tally = {'damage': 0, 'hits': 0, 'dead': 0, 'misses': 0, 'battles': 0, 'rounds': 0, 'hp': 0,
                       'healing_spells': 0}
@@ -326,6 +349,7 @@ class Creature:
         self.temp = 0
 
     def getBuffSpells(self):
+        print("buff spells?")
         self.buff_spells = None
         if 'buff_spells' in self.settings:
             self.buff_spells = int(self.settings['buff_spells'])
@@ -366,23 +390,34 @@ class Creature:
                 # Should look into filling all fields that are given in a custom creature before checking the base creature and filling in the remaining fields
                 # But how do you determine a custom creature? I think a custom creature is going to be a dict. but a MM creature will be a string???? 
                 # so the check could be if it's a dic or string. if it's string, then fill from MM, if it's a dic, fill given fields, if no base is given, fill from commoner or try to figure it out? <- new functionality
-        if settings:
-            self.settings = Creature.clean_settings(settings)
-        else:
-            self._fill_from_preset('commoner')  # or Cthulhu?
-            print("EMPTY CREATURE GIVEN. SETTING TO COMMONER")
-            return 0
 
-        # Mod of preexisting
+        # TB debugging -> getting code path of calls
+        print("_initialise")
+        self.settings = Creature.clean_settings(settings)
+        # TB commenting out to see how it impacts simulation
+        #if settings:
+        #    self.settings = Creature.clean_settings(settings)
+        #else:
+        #    self._fill_from_preset('commoner')  # or Cthulhu?
+        #    print("EMPTY CREATURE GIVEN. SETTING TO COMMONER")
+        #    return 0
+
+
+        # Mod of preexisting ## TB there will ALWAYS be a 'base' now.
         if 'base' in self.settings:
             #Sanify first and make victim
             if type(self.settings['base']) is str:
+            # TB debugging -> getting code path of calls
+                print("self.settings base is string type")
                 victim = Creature(
                     self.settings['base'])  # generate a preset and get its attributes. Seems a bit wasteful.
             elif type(self.settings['base']) is Creature:
+                # TB debugging -> getting code path of calls
+                print("self.settings base is Creature type")
                 victim = self.settings['base']
             else:
                 raise TypeError
+
             #copy all
             #victim.ability_bonuses #in case the user provided with ability scores, which are overridden by adbility bonues
             base = {x: getattr(victim, x) for x in dir(victim) if getattr(victim, x) and x.find("__") == -1 and x.find("_") != 0 and x != 'beastiary'}
@@ -394,12 +429,12 @@ class Creature:
                 else:
                     base[k] = v
             self.settings = base
-
+        #This appears to be moving data from self.settings to be a child of self
         # Name etc.
         self._set('name', 'nameless')
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
-        self.id = 0 # should get overwritten when loaded into combattants list.
+        self.id = 0 # value should get overwritten when loaded into combattants list.
 
         # proficiency. Will be overridden if not hp is provided.
         self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
@@ -415,19 +450,22 @@ class Creature:
         self.getInternalStuff()
         self.getBuffSpells()
 
-        ##backdoor and overider
-        self._set('custom', [])
-        for other in self.custom:
-            if other == "conc_fx":
-                getattr(self, self.settings['conc_fx'])
-            else:
-                self._set(other)
-
+        ##backdoor and overider  TB commenting out to see how it affects operation
+        #self._set('custom', [])
+        #for other in self.custom:
+        #    if other == "conc_fx":
+        #        getattr(self, self.settings['conc_fx'])
+        #    else:
+        #        self._set(other)
+        # TB debugging -> getting code path of calls
+        print("end of _initialise")
         self.arena = None
-        self.settings = {}
+        #self.settings = {}
 
     @staticmethod
     def clean_settings(dirtydex):
+        # TB debugging -> getting path of calls
+        print("clean_settings")
         """
         Sanify the settings
         :return: a cleaned dictionary
@@ -682,7 +720,8 @@ class Creature:
 
 
         else:
-            self._initialise(name="Commoner", alignment="evil",
+             # TB this commoner is causing problems. attack parameters do not get overridden
+            self._initialise(name="Default", alignment="evil",
                              ac=10, hp=4,
                              attack_parameters=[['club', 2, 0, 4]])
 
@@ -726,7 +765,6 @@ class Creature:
         :return: None
         """
 
-        # may need to add Morale here??
         for attr in abilities:
             attr = attr[0:3].lower() #just in case
             if attr in self.abilities:
@@ -748,18 +786,16 @@ class Creature:
                     pass
                 elif attr == "cha":
                     pass
-
-
-
             else:
                 raise ValueError('Unrecognised ability')
 
-    def copy(self):
-        """
-        :return: a copy of the creature. with an altered name.
-        """
-        self.copy_index += 1
-        return Creature(self, name=self.name + ' ' + str(self.copy_index))
+            # TB There are no other references to this
+    #def copy(self):
+    #    """
+    #    :return: a copy of the creature. with an altered name.
+    #    """
+    #    self.copy_index += 1
+    #    return Creature(self, name=self.name + ' ' + str(self.copy_index))
 
     def _attack_parse(self, attack_parameters):
         """
@@ -901,7 +937,7 @@ class Creature:
             weakling.heal(self.healing.roll(), verbose)
             self.healing_spells -= 1
 
-    def multiattack(self, verbose=0, assess=0):
+    def multiattack(self, verbose=1, assess=0):
         if assess:
             return 0  # the default
         for i in range(len(self.attacks)):
@@ -916,11 +952,13 @@ class Creature:
             if self.attacks[i]['attack'].roll(verbose) >= opponent.ac:
                 # self.attacks[i]['damage'].crit = self.attacks[i]['attack'].crit  #Pass the crit if present.
                 h = self.attacks[i]['damage'].roll(verbose)
+                print("damage done is " + str(h))
                 opponent.take_damage(h, verbose)
-                # check to see if the opponent survived the last hit, if not, win
-                if opponent.hp < 1 : raise self.arena.Victory()
+                # TB oppenent check hp was here, but moved
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
+                # check to see if the opponent survived the last hit, if not, win
+                if opponent.hp < 1 : raise self.arena.Victory()
             else:
                 self.tally['misses'] += 1
 
