@@ -93,12 +93,7 @@ function Output(text) {
     modal.append('<div id="OUT_notes"></div>')
     modal.append('<div id="OUT_team"></div>')
     modal.append('<div id="OUT_combattant"></div>')
-    //$("#OUT_battles").html("");
-    //$("#OUT_rounds").html("");
-    //$("#OUT_prediction").html("");
-    //$("#OUT_notes").html("");
-    //$("#OUT_team").html("");
-    //$("#OUT_combattant").html("");
+
     $("#status").html("Calculations complete");
     flip("result", 0);
     console.log(text);
@@ -129,7 +124,7 @@ function Output(text) {
     t += "</tbody></table>";
     $("#OUT_team").html(t);
     cmax = 100 / 6;
-    c = "<table class=res><thead><tr>" +
+    c = "<table class='res table table-hover'><thead><tr>" +
         "<th width='" + cmax + "%'>Combattant</th>" +
         "<th width='" + cmax + "%'>Team</th>" +
         "<th width='" + cmax + "%'>avg damage</th>" +
@@ -436,6 +431,7 @@ function initial() {
     $("#DIV_result").hide();
     $("#OUT_sample").hide();
     $("#showInfo").hide();
+    $("#Off_roster").hide();
     // create roster table and set some variables
     rosterTable("hard");
     // iniitalize tooltips

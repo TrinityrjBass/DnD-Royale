@@ -14,7 +14,7 @@
             <div class="col-lg-2 col-sm-12">
                 <!-- <iframe src="https://ghbtns.com/github-btn.html?user=matteoferla&repo=DnD-battler&type=star&count=true&size=small"
                     frameborder="0" scrolling="0" width="160px" height="30px"></iframe> -->
-                <a href="https://github.com/matteoferla/DnD-battler/" target="_blank" class="btn btn-outline-primary w-100 pb-1">
+                <a href="https://github.com/TrinityrjBass/DnD-Royale/tree/master/newFlask" target="_blank" class="btn btn-outline-primary w-100 pb-1">
                     <i class="fab fa-github"></i> GitHub
                     <span class="fa-layers fa-fw">
                         <i class="fas fa-star"></i>
@@ -29,36 +29,31 @@
             <div class="col-lg-10 offset-lg-1 col-sm-12 text-justify">
                 <p style="text-align:justify; text-align-last:center;">
                     <span style="float: left; color: #903; font-size: 64px; line-height: 48px; padding-top: 0px; padding-right: 6px; padding-left: 3px; font-family: Georgia;">T</span>
-                    HIS online tool calculates the victory probabilities in a D&amp;D encounter. It relies on <a href="https://github.com/matteoferla/DnD-battler" target="_blank">a python script<i class="far fa-external-link-square"></i></a>,
-                    which simulates an encounter 1,000 times for statistical accuracy. The characters can be inputted in a
-                    variety of ways ranging from a preset to an incomplete list of parameters, which the code will either
-                    calculate from others or default to the value of a commoner. The presets are based on <a href="https://raw.githubusercontent.com/matteoferla/DnD-battler/master/beastiary.csv">
-                        a monster manual table ("beastiary.csv")
+                    HIS online tool calculates the victory probabilities in a D&amp;D encounter. It relies on a python script,
+                    which simulates an encounter 1,000 times for statistical accuracy. The combatants can be selected from 
+                    a preset list with their original stat blocks as found in the Monster Manual, or the user can choose to modify any or all of the original stats.
+                    The presets are based on a monster manual table ("beastiary.csv").
                         <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
-                    </a> it references a
-                    series of assumptions (tactical decisions) detailed in the <a href="#work">Workings section</a> and in more
-                    technical detail in the <a href="https://github.com/matteoferla/DnD-battler" target=_blank>
-                        documentation
-                        of the code <i class="far fa-external-link-square"></i>
-                    </a>. For example, due to the complexity of the tactical decisions involved, which human players
-                    often fail at, the encounters are performed with the assumption that everyone borders everyone. The script
-                    is 5e focused in the way it handles crits, conditions, advantages and disadvantages.
+                    </a> Due to the complexity of the tactical decisions involved, which human players
+                    often fail at, the encounters are performed with the assumption that everyone borders everyone. 
+                    <br />The simulator based on the 5e rules in the way it handles crits, conditions, advantages and disadvantages.
                 </p>
                 <p style="text-align:justify; text-align-last:center;">
-                    Here are provided three ways to input the list of
-                    combattants. The first is picking creatures from the beastiary table, the second relies on a set of
-                    hardcoded creatures, many which have not yet been moved to the beastiary table and the third allows
-                    custom creatures to be added. The latter is a tad limited: for example nets, <i>barkskin</i> and rage
-                    cannot be added despite the fact that the presets "netsharpshooter", "druid" and "barbarian" use them.<br />
-                    NB. The program times out after 10 seconds, therefore if the battles are lengthy (<i>e.g.</i> one good
-                    tarrasques vs. one evil tarrasques) it will have less than the default 1,000 rounds.
+                    Instructions on how to start a simple encounter : <br />
+                    Select a creature from the dropdown options in the "Option A" section.<br />
+                    Determine how many of these creatures you would like to fight as well as what team they are on (don't worry, you can change anything at any time before the simulation starts). <br />
+                    Click the "Add" button when you are ready to add the creatures.<br />
+                    Review, remove, and/or change teams of any combatants you have added in the "Lineup" section.<br />
+                    When you are ready, click the "Calculate" button.<br />
+                    CAUTION : the more creatures you add to the simulation, the longer each battle will be and you may get a limited data set as the app times out after 10 seconds regardless of the number of battles fought.
+
                 </p>
             </div><!--abs-->
         </div><!--abs row-->
     </div>
 </div>
 
-<div class="card-columns">
+<div class="container card-columns">
     <!--Import from index.html from dndencountersimulator side-->
     <div class="col-sm-6">
         <!--option a and b-->
@@ -380,11 +375,13 @@
             </div>
         </div><!--attack tool-->
         <div class="card">
-            <h3>Lineup</h3>
-            <div style="padding:5px">
+            <h3>
+                Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
+            </h3>
+            <div id="DIV_roster"style="padding:5px">
                 <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
-                    <br /><br />
-                </div>-->
+            <br /><br />
+        </div>-->
                 <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
                 </div>
@@ -395,22 +392,31 @@
                 <i class="fa fa-trash-o"></i>
                 Clear
             </button>
-            <button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>
+            <!--<button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>-->
+            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fa fa-bolt"></i>Show Data</button>
             <br />
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
     </div>
     <!-- Attempting to use Bootstrap modal : https://www.w3schools.com/bootstrap/bootstrap_modal.asp -->
     <div class="modal" id="myModal" role="dialog">
-        <div class="modal-dialogue">
-            <div id="result" class="modal-body">
-                <h3>Results<i class="fa fa-chevron-up" id="OFF_result" onclick="flip('result',0)"></i><i class="fa fa-chevron-down" id="ON_result" onclick="flip('result',1)"></i></h3>
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h3 class="modal-title">Results<i class="fa fa-chevron-up" id="OFF_result" onclick="flip('result',0)"></i><i class="fa fa-chevron-down" id="ON_result" onclick="flip('result',1)"></i></h3>
+
+                </div>
+                <div id="result" class="modal-body">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
         
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+        
     </div><!--end modal--> 
 </div>
 

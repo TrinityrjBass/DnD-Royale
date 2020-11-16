@@ -52,17 +52,18 @@ input[type="checkbox"].input-validation-error {
     left: 30%;
     top: 20px;
     bottom: auto;
-    background-color:white;
+    background-color: white;
     overflow-y: scroll;
     width:fit-content;
-    height: auto; /*-webkit-fill-available;*/
+    height: 700px; /* I dont' like the absolute value here*/
 }
-/* Modal Styles*/
-/*.modal {
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 100px;
-    width: 24%; /* Full width */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */*/
-/*}*/
+
+#OUT_combattant{
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+.modal-dialogue {
+    height: auto;
+}
+
