@@ -63,10 +63,11 @@
             Pick a default creature from the dropdown list<br />
             <div class="card-body">
                 <input type="number" id="numberOfA" value="1" min="1" style="width:4em" />
-                <select id=drop onchange="$('#base').val($('#drop').val())">
+                <select id=drop onchange="updateCustomBase()">
                     <option value="cthulhu">Select creature</option><!--LABEL-->
                     {{list | safe }}
                 </select>
+                <br />
                 <label>Red</label>
                 <input type="radio" name="team" value="Red" class="combatant_team">
 
@@ -88,7 +89,7 @@
                     <tr>
                         <td class=clear>Name:</td>
                         <td class=clear>
-                            <input type=text id="name">
+                            <input class="input-sm" type=text id="name">
                             <span class="fa fa-question"
                                   data-toggle="tooltip" title="The name of the creature. This is used for the summary and identical names can be used."></span>
                         </td>
@@ -96,7 +97,7 @@
                     <tr>
                         <td class=clear>Base creature:</td>
                         <td class=clear>
-                            <input type=text id=base>
+                            <input class="input-sm" type=text id=base placeholder="commoner" disabled>
                             <span class="fa fa-question"
                                   data-toggle="tooltip" title="The base creature that you would like to modify attributes of. You can type this in, or select the creature from the drop down in Option A and it will auto-fill here."></span>
                         </td>
@@ -117,28 +118,28 @@
                     <tr>
                         <td class=clear>HP:</td>
                         <td class=clear>
-                            <input type="number" id=hp value="0" min="0">
+                            <input class="input-sm" type="number" id=hp value="0" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="hit points"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>AC:</td>
                         <td class=clear>
-                            <input type="number" id=ac value="10" min="0">
+                            <input class="input-sm" type="number" id=ac value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="armour class"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Initiative bonus:</td>
                         <td class=clear>
-                            <input type="number" id=initiative_bonus value="1" min="0">
+                            <input class="input-sm" type="number" id=initiative_bonus value="1" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="initiative bonus"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Attack parameters:</td>
                         <td class=clear>
-                            <input type=text id=attack_parameters>
+                            <input class="input-sm" type=text id=attack_parameters>
                             <span class="fa fa-question"
                                   data-toggle="tooltip" title="This is a tad complicated, sorry. Technically it is a list of list. It is a series of values between square brackets between square brakets, <i>e.g.</i> [[*club*, 2, 0, 4], [*club*, 2, 0, 4]]. Each square bracket block (list) denoted a part of an attack, namely a single attack will have only one, <i>e.g.</i> [[*sword of a thousand truths*, 7, 5, 16]], while a multiattack of two will have two as in the first example. The first element is a name, which is useless here as narration is disabled. The second is the attack bonus, the third is the damage bonus and the following are the dice. So [[*Batleth*,2,0,8,8]] is a +2, 2d8 and a [[*flaming greatsword*,3,1,6,6,4]] is a +3 2d6+d4+1.<br/> There is an encoding issue that I can only resolve by changing the quote of the string to asterisk."
                                   data-tooltip-position="bottom middle"></span>
@@ -148,7 +149,7 @@
                     <tr>
                         <td class=clear>Number of healing spells:</td>
                         <td class=clear>
-                            <input type="number" id=healing_spells value="0" min="0">
+                            <input class="input-sm" type="number" id=healing_spells value="0" min="0">
                             <span class="fa fa-question"
                                   data-toggle="tooltip" title="Number of healing word spells (cantrip, only)"></span>
                         </td>
@@ -156,7 +157,7 @@
                     <tr>
                         <td class=clear>Healing dice:</td>
                         <td class=clear>
-                            <input type="number" id=healing_dice value="0" min="0"> <!--drop down options?-->
+                            <input class="input-sm" type="number" id=healing_dice value="0" min="0"> <!--drop down options?-->
                             <span class="fa fa-question"
                                   data-toggle="tooltip" title="number without the d. d4 is the default."></span>
                         </td>
@@ -164,56 +165,56 @@
                     <tr>
                         <td class=clear>Healing bonus:</td>
                         <td class=clear>
-                            <input type="number" id=healing_bonus value="0" min="0">
+                            <input class="input-sm" type="number" id=healing_bonus value="0" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="the bonus to your heal"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Str:</td>
                         <td class=clear>
-                            <input type="number" id=str value="10" min="0">
+                            <input class="input-sm" type="number" id=str value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Dex:</td>
                         <td class=clear>
-                            <input type="number" id=dex value="10" min="0">
+                            <input class="input-sm" type="number" id=dex value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Con:</td>
                         <td class=clear>
-                            <input type="number" id=con value="10" min="0">
+                            <input class="input-sm" type="number" id=con value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Int:</td>
                         <td class=clear>
-                            <input type="number" id=int value="10" min="0">
+                            <input class="input-sm" type="number" id=int value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Wis:</td>
                         <td class=clear>
-                            <input type="number" id=wis value="10" min="0">
+                            <input class="input-sm" type="number" id=wis value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Cha:</td>
                         <td class=clear>
-                            <input type="number" id=cha value="10" min="0">
+                            <input class="input-sm" type="number" id=cha value="10" min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>CR:</td>
                         <td class="clear">
-                            <input list="CombatRating" id="CR" name="browser" min="0" max="30" required>
+                            <input class="input-sm" list="CombatRating" id="CR" name="browser" min="0" max="30" required>
                             <datalist id="CombatRating">
                                 <option value=.125>
                                 <option value=.25>
@@ -281,7 +282,7 @@
                         <tr>
                             <td><label>Weapon</label></td>
                             <td>
-                                <input list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams()">
+                                <input class="input-sm" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams()">
                                 <datalist id="weapons">
                                     <option value="club">
                                     <option value="great club">
@@ -321,7 +322,7 @@
                                 <label>To Hit Modifier</label>
                             </td>
                             <td>
-                                <input type="number" placeholder="To Hit" id=attack_hit onchange="figureAtkParams()">
+                                <input class="input-sm" type="number" placeholder="To Hit" id=attack_hit onchange="figureAtkParams()">
                             </td>
                         </tr>
                         <tr>
@@ -329,7 +330,7 @@
                                 <label>Attack Die</label>
                             </td>
                             <td>
-                                <input type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled>
+                                <input class="input-sm" type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled>
                                 <i class="fa fa-question"
                                    data-toggle="tooltip" title="Damage Die of selected weapon. will only be automatically figured if left empty. Will use any valid input user has entered"
                                    data-tooltip-position="bottom middle"></i>
@@ -338,7 +339,7 @@
                         <tr>
                             <td><label>Modifier</label></td>
                             <td>
-                                <input type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()">
+                                <input class="input-sm" type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()">
                                 <span class="fa fa-question"
                                       data-toggle="tooltip" title="An attempt to simplify attack parameters with the intention of adding logic to add automatically figure out most of the other values"
                                       data-tooltip-position="bottom middle"></span><br />
@@ -393,7 +394,7 @@
                 Clear
             </button>
             <!--<button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>-->
-            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fa fa-bolt"></i>Show Data</button>
+            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fa fa-bolt"></i> Show Data</button>
             <br />
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
