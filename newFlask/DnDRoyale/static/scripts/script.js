@@ -1,40 +1,5 @@
 // hosted file
 
-// dictionary to hold weapons and their damage dice type. used to compile the new version of attack parameters
-var armory = {
-    'club': 4,
-    'great club': 8,
-    'dagger': 4,
-    'short sword': 6,
-    'long sword': 8,
-    'bastard sword': 10,
-    'great sword': 12,
-    'rapier': 8,
-    'scimitar': 6,
-    'sickle': 4,
-    'hand axe': 6,
-    'battle axe': 8,
-    'war axe': 10,
-    'great axe': 12,
-    'javelin': 6,
-    'spear': 6,
-    'flail': 8,
-    'glaive': 10,
-    'halberd': 10,
-    'lance': 12,
-    'pike': 10,
-    'trident': 6,
-    'war pick': 8,
-    'light hammer': 4,
-    'mace': 6,
-    'war hammer': 8,
-    'quaterstaff': 6,
-    'morningstar': 8,
-    'whip': 4,
-    'claws': 8,
-    'bite': 10
-};
-
 var num_entities = 0; // tracks the number of creatures currently in the roster. Not really needed now, but maybe when we test with a large amount of creatures.
 var uniquenum = 0; // used to give each creature a unique number1
 var lineup = [];// used to be window.lineup
@@ -238,76 +203,6 @@ function getCustomCreature() {
     return newCreature;
 }
 
-function figureAtkParams() {
-    var w = $("#weapon").val();
-    var th = $("#attack_hit").val();
-    var dMod = $("#attack_dmgmod").val();
-    var dice = armory[w];
-
-    if (dice) {
-        $("#attack_dicedmg").val(dice);
-        $("#attack_dicedmg").prop("disabled", true);
-    } else {
-        $("#attack_dicedmg").prop("disabled", false);
-        dice = $("#attack_dicedmg").val();
-    }
-
-    // if there's a value in the To Hit field, they must want that one to be used, so we will leave it alone.
-    if (th == "") {
-        // call method to figure to hit from st or dx (should add... somthing to indicate which one... slapdash for the moment)
-        // getToHit(); // for a later implementation
-        th = 0;
-    }
-
-    if (dMod == "") {
-        dMod = 0;
-    }
-
-    var r = w + ", " + th + ", " + dMod + ", " + dice;
-    $('#aParams').text("[" + r + "]");
-    // call method to figure Damage modifier for a later implementation
-}
-
-function clearWeapons() {
-    $("#weapon").val("");
-}
-
-function weaponDice() {
-    var w = $("#weapon").val();
-    for (var arm in armory) {
-        if (arm == w) {
-            $("#attack_dicedmg").val(armory[w]);
-            return
-        }
-    }
-}
-
-// for a later implementation
-function getToHit() {
-    //get st score...for now. worry about dx melee later
-    //calculate modifier
-}
-
-function queueAttack() {
-    // move new attack parameter to attack list
-    var c = '';
-    if ($("#attacks").text().length > 1) {
-        c = ','
-    }
-    $("#attacks").append(c + $("#aParams").text());
-}
-
-function saveAttack() {
-    // move attack list to attack parameters field in custom combatant
-    var s = '[' + $("#attacks").text() + ']';
-    $("#attack_parameters").val(s);
-}
-
-function clearAttacks() {
-    // clears the attack queue
-    $("#attacks").text("");
-}
-
 function calcBR(v) {
     if (v > 4) {
         var t = 1;
@@ -412,6 +307,14 @@ function clearB() {
     })
 }
 
+function updateCustomBase() {
+    let baseCreature = $('#drop').val();
+    if (baseCreature == 'cthulhu') {
+        $('#base').val('commoner');
+    } else 
+        $('#base').val(baseCreature);
+}
+
 function initial() {
     $("#def").keyup(function (event) { if (event.keyCode == 13) { AddB(); } });
     $("#confA").hide();
@@ -431,7 +334,7 @@ function initial() {
     $("#DIV_result").hide();
     $("#OUT_sample").hide();
     $("#showInfo").hide();
-    $("#Off_roster").hide();
+    $("#OFF_roster").hide();
     // create roster table and set some variables
     rosterTable("hard");
     // iniitalize tooltips
@@ -497,50 +400,6 @@ function showModal() {
     $("#myModal").modal("toggle");
 }
 
-// is called after simulation is run (prett sure anyways)
-//function give_lineup_results(result) {
-//    /// accepts 2 lists/dictionaries/arrays (not sure), one of combatants and their alignment, one of the unique alignments
-//    Plotly.newPlot('lineup_graph', result.sides, { title: 'HP per side (the 2nd crudest metric of balance)' }); // xp may be a better metric as CR is a little abstract
-
-//    // create empty table in lineup_side
-//    $('#lineup_side').html('<table style="width: 100%"><thead><tr><th>Name</th></tr></thead><tbody></tbody></table>');
-//    $('#lineup_code').html(JSON.stringify(lineup));
-//    var sides = result.sides[0].labels;
-//    // Add 'other' as team option
-//    if (!sides.includes('other')) { sides.push('other'); }
-//    sides.forEach(function (side) {
-//        $('#lineup_side thead tr').append('<th>' + side + '</th>');
-//    });
-//    result.combatants.forEach(function (combatant, index) {
-//        // add new row to table
-//        $('#lineup_side tbody').append('<tr></tr>');
-//        // add combattant to bottom/last row of table
-//        $('#lineup_side tr:last').append('<td>' + combatant.name + ' <span class="kill_me" onclick="removeCombattant(' + index + ')"><i class="far fa-trash"></i></span></td>');
-//        // add team selection radio buttons for each available team
-//        sides.forEach(function (side) {
-//            var clean = combatant.name.split(' #')[0] + 'x'.repeat(parseInt(combatant.name.split(' #')[1]));
-//            $('#lineup_side tr:last').append('<td><input type="radio" name="' + clean + '" value="' + side + '" class="combatant_side" data-fullname="' + combatant.name + '" ></td>');
-//            $(':radio[name="' + clean + '"][value="' + combatant.side + '"]').prop("checked", true);
-//        });
-//        $('.combatant_side').change(function () {
-//            if ($(this).prop("checked", true)) {
-//                for (var i = 0; i < lineup.length; i++) {
-//                    if (!!lineup[i].sub) { //string
-//                        if (lineup[i] == $(this).attr('data-fullname')) {
-//                            lineup[i] = { base: $(this).attr('data-fullname'), alignment: $(this).attr('value'), name: $(this).attr('data-fullname') }
-//                        }
-//                    } else { // dict.
-//                        if (lineup[i]['name'] == $(this).attr('data-fullname')) {
-//                            lineup[i]['alignment'] = $(this).attr('value');
-//                        }
-//                    }
-//                }
-//            }
-//            update_lineup();
-//        });
-//    });
-//}
-
 function display_rosters(lineup) {
     // grab data for plotly graph... for later
 
@@ -605,30 +464,7 @@ function rosterTable(s) {
 
 
 function update_lineup() {
-    /// doing a look up by name of each combatant. Returns an array (2 arrays?) that contain name and alignment, and another of each alignment involved 
-    // we may be able to skip a lot of this if we always only have 2 teams to assign members to (esp if we don't care about alignments)
-    //fix_doubles();
-
     display_rosters(lineup);
-    // should make a dict {name: team: number:} for each combatant in the linup.
-    // make use of fix_doubles() to ensure that nothing bad happens when the user adds a creature that's already been added
-    // ie : ape, ant, ape
-
-
-    // Then... we just need to add the new member to the lineup, change the give_lineup_results function to run the names in lineup
-    // and create a radio box for each combatant (god help us for large armies)... This is where preselecting the team team will save a lot of time and effort for the user
-    //var proportions = {}; // did nothing...??
-
-    //$.ajax({
-    //    url: "ajax_lineup",
-    //    type: 'POST',
-    //    dataType: 'json',
-    //    data: JSON.stringify(lineup),
-    //    success: give_lineup_results,
-    //    error: function () {
-    //        $("#status").html('<div class="alert alert-danger" role="alert"><i class="far fa-skull-crossbones"></i> Oh Snap. Nothing back.</div>');
-    //    }
-    //});
 }
 
 $(document).ready(function () {
