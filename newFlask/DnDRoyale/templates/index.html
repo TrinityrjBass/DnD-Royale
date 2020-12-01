@@ -118,21 +118,21 @@
                     <tr>
                         <td class=clear>HP:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=hp value="0" min="0">
+                            <input class="input-sm" type="number" id=hp min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="hit points"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>AC:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=ac value="10" min="0">
+                            <input class="input-sm" type="number" id=ac min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="armour class"></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Initiative bonus:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=initiative_bonus value="1" min="0">
+                            <input class="input-sm" type="number" id=initiative_bonus min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="initiative bonus"></span>
                         </td>
                     </tr>
@@ -172,42 +172,42 @@
                     <tr>
                         <td class=clear>Str:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=str value="10" min="0">
+                            <input class="input-sm" type="number" id=str min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Dex:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=dex value="10" min="0">
+                            <input class="input-sm" type="number" id=dex min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Con:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=con value="10" min="0">
+                            <input class="input-sm" type="number" id=con min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Int:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=int value="10" min="0">
+                            <input class="input-sm" type="number" id=int min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Wis:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=wis value="10" min="0">
+                            <input class="input-sm" type="number" id=wis min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Cha:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=cha value="10" min="0">
+                            <input class="input-sm" type="number" id=cha min="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>
                         </td>
                     </tr>
@@ -282,38 +282,39 @@
                         <tr>
                             <td><label>Weapon</label></td>
                             <td>
-                                <input class="input-sm" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams()">
+                                <input class="input-sm" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams(this)">
                                 <datalist id="weapons">
-                                    <option value="club">
-                                    <option value="great club">
-                                    <option value="dagger">
-                                    <option value="short sword">
-                                    <option value="long sword">
-                                    <option value="bastard sword">
-                                    <option value="great sword">
-                                    <option value="rapier">
-                                    <option value="scimitar">
-                                    <option value="sickle">
-                                    <option value="hand axe">
-                                    <option value="war axe">
-                                    <option value="great axe">
-                                    <option value="javelin">
-                                    <option value="spear">
-                                    <option value="flail">
-                                    <option value="glaive">
-                                    <option value="halberd">
-                                    <option value="lance">
-                                    <option value="pike">
-                                    <option value="trident">
-                                    <option value="war pick">
-                                    <option value="light hammer">
-                                    <option value="mace">
-                                    <option value="war hammer">
-                                    <option value="quarterstaff">
-                                    <option value="morningstar">
-                                    <option value="whip">
-                                    <option value="claws">
-                                    <option value="bite">
+                                    <option value="club" data-die="4">
+                                    <option value="great club" data-die="8">
+                                    <option value="dagger" data-die="4">
+                                    <option value="short sword" data-die="6">
+                                    <option value="long sword" data-die="8">
+                                    <option value="bastard sword" data-die="10">
+                                    <option value="great sword" data-die="12">
+                                    <option value="rapier" data-die="8">
+                                    <option value="scimitar" data-die="6">
+                                    <option value="sickle" data-die="4">
+                                    <option value="hand axe" data-die="6">
+                                    <option value="battle axe" data-die="8">
+                                    <option value="battle axe" data-die="10">
+                                    <option value="great axe" data-die="12">
+                                    <option value="javelin" data-die="6">
+                                    <option value="spear" data-die="6">
+                                    <option value="flail" data-die="8">
+                                    <option value="glaive" data-die="10">
+                                    <option value="halberd" data-die="10">
+                                    <option value="lance" data-die="12">
+                                    <option value="pike" data-die="10">
+                                    <option value="trident" data-die="6">
+                                    <option value="war pick" data-die="8">
+                                    <option value="light hammer" data-die="4">
+                                    <option value="mace" data-die="6">
+                                    <option value="war hammer" data-die="8">
+                                    <option value="quarterstaff" data-die="6">
+                                    <option value="morningstar" data-die="8">
+                                    <option value="whip" data-die="4">
+                                    <option value="claws"data-die="8">
+                                    <option value="bite" data-die="10">
                                 </datalist>
                             </td>
                         </tr>
@@ -360,7 +361,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button onclick="queueAttack()"><i class="fa fa-shopping-cart"></i> Add</button>
+                                <button onclick="queueAttack()"><i class="fa fa-shopping-cart"></i> Add to parameters</button>
                             </td>
                         </tr>
                     </table>
