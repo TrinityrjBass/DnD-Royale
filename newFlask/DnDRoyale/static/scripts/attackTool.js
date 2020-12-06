@@ -25,7 +25,7 @@ function figureAtkParams(opt) {
         dMod = 0;
     }
 
-    var r = w + ", " + th + ", " + dMod + ", " + dice;
+    var r = '"' + w + '", ' + th + ", " + dMod + ", " + dice;
     $('#aParams').text("[" + r + "]");
     // call method to figure Damage modifier for a later implementation
 }
