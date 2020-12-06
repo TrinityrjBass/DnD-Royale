@@ -89,6 +89,7 @@ class Creature:
 
     beastiary = load_beastiary('DnDRoyale/creatures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
+    debug = True
 
     def __init__(self, wildcard, **kwargs): 
         """
@@ -103,8 +104,6 @@ class Creature:
         >>> print(Creature(Creature('aboleth'), ac=20).__dict__)
         `{'abilities': None, 'dex': 10, 'con_bonus': 10, 'cr': 17, 'xp': 5900, 'ac': 20, 'starting_healing_spells': 0, 'starting_hp': 135, 'condition': 'normal', 'initiative': <__main__.Dice object at 0x1022542e8>, 'str': 10, 'wis': 10, 'ability_bonuses': {'int': 0, 'cha': 0, 'dex': 0, 'con': 0, 'str': 0, 'wis': 0}, 'custom': [], 'hd': <__main__.Dice object at 0x102242c88>, 'hurtful': 36.0, 'tally': {'rounds': 0, 'hp': 0, 'battles': 0, 'hits': 0, 'damage': 0, 'healing_spells': 0, 'dead': 0, 'misses': 0}, 'hp': 135, 'proficiency': 5, 'cha_bonus': 10, 'able': 1, 'healing_spells': 0, 'copy_index': 1, 'int': 10, 'concentrating': 0, 'wis_bonus': 10, 'con': 10, 'int_bonus': 10, 'sc_ab': 'con', 'str_bonus': 10, 'level': 18, 'settings': {}, 'arena': None, 'dex_bonus': 10, 'log': '', 'cha': 10, 'dodge': 0, 'alt_attack': {'attack': None, 'name': None}, 'alignment': 'lawful evil ', 'attacks': [{'attack': <__main__.Dice object at 0x1022545f8>, 'damage': <__main__.Dice object at 0x1022545c0>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x102254668>, 'damage': <__main__.Dice object at 0x102254630>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x1022546d8>, 'damage': <__main__.Dice object at 0x1022546a0>, 'name': 'tentacle'}], 'attack_parameters': [['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6]], 'buff_spells': 0, 'temp': 0, 'name': 'aboleth'}`
         """
-        # TB debugging -> getting code path of calls
-        # print("_init_, wildcard : " + wildcard )
         self.log = ""
         if not kwargs and type(wildcard) is str:
             print("filling from beastiary - no kwargs")
@@ -135,13 +134,14 @@ class Creature:
     def getattacks(self):
         # get use attacks from user, if none, get from bestiary, if none, figure appropriate attack : fist/claw/slam and params
         print("loading attack information")
-        self.attacks = []
+        # self.attacks = []
         self.hurtful = 0
+        # custom creature that wants default attacks
         if not 'attack_parameters' in self.settings:
-            # Benefit of doubt. Given 'em a dagger . <-- but if you give them a dagger... then they will never use their fist (listed below)
-            self.settings['attack_parameters'] = 'punch' # give them fisticuffs!
-        if type(self.settings['attack_parameters']) is str:
-            print("attack parameters are string")
+            self.settings['attack_parameters'] = self.beastiary['attack_parameters']
+
+        if self.settings['attack_parameters'] == '': # TB
+            print("___----==== NO ATTACK PARAMETERS/ATTACK PARAMETER ERROR ====----____")
             try:
                 import json
                 x = json.loads(self.settings['attack_parameters'].replace("*", "\""))
@@ -170,23 +170,46 @@ class Creature:
                         chosen_ab = self.ability_bonuses[max('str', 'dex', key=lambda ab: self.ability_bonuses[ab])]
                         self.attack_parameters = [[w, self.proficiency + chosen_ab, chosen_ab, weapons[w]]]
                         self._attack_parse(self.attack_parameters)
-                        self.log += "Weapon matched by str to " + w + N
+                        self.log += "Weapon matched by " + chosen_ab + " to " + w + N
                         break
                 else:
                     raise Exception("Cannot figure out what is: " + self.settings['attack_parameters'] + str(
-                        type(self.settings['attack_parameters'])))
-        elif type(self.settings['attack_parameters']) is list:
-            print("attacks are a list, debug for more info")
-            self.attack_parameters = self.settings['attack_parameters']
-            self._attack_parse(self.attack_parameters)
-        else:
-            raise Exception('Could not determine weapon')
+                    type(self.settings['attack_parameters'])))
+        if not type(self.settings['attack_parameters'][0]) is str:
+            self.settings['attack_parameters'][0] = str(self.settings['attack_parameters'][0])
+
+        self.attack_parameters = self._attack_parse(self.settings['attack_parameters'])
+        #elif type(self.base['attack_parameters']) is list:
+        #    print("attacks are a list, debug for more info")
+        #    self.attack_parameters = self.base['attack_parameters']
+        #    self._attack_parse(self.attack_parameters)
+        #else:
+        #    raise Exception('Could not determine weapon')
+            
         print("attack is : " + str(self.attacks[0]))
+
+    def getAbilityScores(self):
+        for a in self.ability_names: 
+            if a in self.settings.keys() and int(self.settings[a]) != 0: # IF custom ability score is provided
+                self.abilities[a] = int(self.settings[a])
+            else: # ELSE get it from bestiary
+                self.abilities[a] = int(self.beastiary[a])
+                #will also need to get ability mods
+                
+    def getAbilityModifiers(self):
+        # Ability scores have already been determined. Figure from known
+        for mod in self.ability_names: 
+            self.ability_bonuses[mod] = int((self.abilities[mod] - 10) // 2)
 
     def getmorale(self):
         print("getting morale")
+        morale = 0
+        # TB Need to check this code to make sure everything is correct... also this needs to be made into separate methods
         if 'cr' in self.settings: 
             self.cr = self.settings['cr']
+        elif 'cr' in self.beastiary:
+            self.cr = self.beastiary['cr']
+            morale = self.beastiary['max_morale']
         elif 'level' in self.settings:
             # TODO check maths on MM.
             if int(self.settings['level']) > 1:
@@ -194,16 +217,19 @@ class Creature:
             else:
                 self.cr = 0.5
         else:
-            self.settings['cr'] = 1 # Use 1 as a default value if none is given
+            self.settings['cr'] = 1 # Use 1 as a default value if none is given #TB NO NO NO... Get it from the bestiary!!
             # self.cr = 1
         # Check/set Morale
+        if 'max_morale' in self.settings: # TB There's no 'max_morale field on the font end
+            morale = self.settings['max_morale']
+
         #this is where the value is validated or found and assigned max_morale
         # BREAK OUT INTO OWN METHOD
         # could do cr and br assignments in one block. If there is no Cr, there's not going to be a Br
         if 'br' in self.settings:
             self.max_morale = int(self.settings['br'])
             self.current_morale = int(self.settings['br'])
-        else : 
+        else: 
             self.settings['max_morale'] = 0
             self.max_morale = 0
             self.current_morale = 0
@@ -211,9 +237,9 @@ class Creature:
         print("getting Morale value")
         # IF creature is not in Beasiary or if Custom Combatant is given, find proper morale value
         if self.max_morale =='' or int(self.max_morale) == 0:
-            morale = 0
+            # morale = 0
             # if morale is 0 or null, then check the CR and figure BR from that (do I need a fallback option?)
-            _cr = float(self.settings['cr'])
+            _cr = float(self.cr)
             if _cr < 2.0:
                 morale = 1
             elif _cr > 1.0 and _cr < 6.0:
@@ -236,44 +262,55 @@ class Creature:
                 morale = 99 # 99 for testing
         
             # setup max morale and set current morale to max morale (since they start out at max)
-            # self.settings['max_morale'] = morale 
-            # self.settings['current_morale'] = morale 
-            self.current_morale = morale
-            self.max_morale = morale
+        print(self.name + " has " + str(morale) + "morale") 
+        self.current_morale = morale
+        self.max_morale = morale
+
+    def getTeam(self):
+        #recording the different teams... thought they should only be 'Red' and 'Blue'... I think  
+        self.team = self.settings['team']
 
     def getHp(self):
         print("getting HP value")
-        if 'hp' in self.settings.keys():
+        if 'hp' in self.settings.keys() and int(self.settings['hp']) != 0 and self.settings['hp'] != '': # IF custom setting
             self.hp = int(self.settings['hp'])
             self.starting_hp = self.hp
-        elif self.settings['level']:
-            self.set_level()
-        else:
-            raise Exception('Cannot make character without hp or hd + level provided')
-        
+        else: # ELSE default values
+            self.hp = int(self.beastiary['hp'])
+            self.starting_hp = self.hp
+        #else:
+        #    raise Exception('Cannot make character without hp or hd + level provided')
+
+    def getAc(self):
         print("getting ac, initiative, spell ability bonus...")
         # AC
-        if not 'ac' in self.settings.keys():
-            self.settings['ac'] = 10 + self.ability_bonuses['dex']
-        self.ac = int(self.settings['ac'])
+        if 'ac' in self.settings.keys() and int(self.settings['ac']) != 0: # IF custom setting and default is NOT desired
+            self.ac = int(self.settings['ac'])
+        else: # ELSE default value
+            self.ac = int(self.beastiary['ac'])
         
+    def getInitiative(self):
         # init
-        if not 'initiative_bonus' in self.settings:
-            self.settings['initiative_bonus'] = self.ability_bonuses['dex']
-        self.initiative = DnD.Dice(int(self.settings['initiative_bonus']), 20, role="initiative")
+        if 'initiative_bonus' in self.settings: # IF custom
+            self.initiative_bonus = self.ability_bonuses['dex']
+        elif self.beastiary['initiative_bonus']: #ELSE Default
+            self.initiative_bonus = int(self.beastiary['initiative_bonus'])
+        else: #ELSE backup default
+           self.initiative_bonus = int(self.beastiary['ab_dex'])
+        self.initiative = DnD.Dice(int(self.initiative_bonus), 20, role="initiative")
         
-        ##spell casting ability_bonuses
-        if 'sc_ability' in self.settings:
-            self.sc_ab = self.settings['sc_ability'].lower()
-        elif 'healing_spells' in self.settings or 'buff_spells' in self.settings:
-            self.sc_ab = max('wis', 'int', 'cha',
-                             key=lambda ab: self.ability_bonuses[ab])  # Going for highest. seriously?!
-            print(
-                "Please specify spellcasting ability of " + self.name + " " + str(self.id) + " next time, this time " + self.sc_ab + " was used as it was biggest.")
-        else:
-            self.sc_ab = 'con'  # TODO fix this botch up.
-        if not 'healing_bonus' in self.settings:
-            self.settings['healing_bonus'] = self.ability_bonuses[self.sc_ab]
+    def getSpellCasting(self):
+        ## spell casting ability_bonuses ## should be able to have NO spell ability. 
+        ## need to be able to use custom or fall back on bestiary value ... or default custom (option A)
+        spells = ''
+        if not 'spellCasting' in self.settings: # IF it's default
+                spells = "None" # self.beastiary['sc_ability'] # get from Bestiary... but it's going to be ...so We'll just make it "None" for now 
+        elif self.settings['spellCasting'] != "None": #IF custom
+            casting = self.settings['spellCasting']
+            if casting == 'Intelligence': spells = "int"
+            elif casting == 'Wisdom' : spells = "wis"
+            elif casting == 'Charisma' : spells = "cha"
+            else : spells = "None"
         if 'healing_spells' in self.settings:
             self.starting_healing_spells = int(self.settings['healing_spells'])
             self.healing_spells = self.starting_healing_spells
@@ -285,25 +322,50 @@ class Creature:
             self.starting_healing_spells = 0
             self.healing_spells = 0
 
+        self.sc_ab = spells
+
+        ## TB After spell casting is entered in into the bestiary this method will need to be added to
+
+        #    self.sc_ab = self.settings['sc_ability'].lower()
+        #elif 'healing_spells' in self.settings or 'buff_spells' in self.settings:
+        #    self.sc_ab = max('wis', 'int', 'cha',
+        #                     key=lambda ab: self.ability_bonuses[ab])  # Going for highest.
+        #    print(
+        #        "Please specify spellcasting ability of " + self.name + " " + str(self.id) + " next time, this time " + self.sc_ab + " was used as it was biggest.")
+        #else:
+        #    self.sc_ab = 'con'  # TODO fix this botch up.
+        #if not 'healing_bonus' in self.base:
+        #    self.base['healing_bonus'] = self.ability_bonuses[self.sc_ab]
+        #if 'healing_spells' in self.base:
+        #    self.starting_healing_spells = int(self.base['healing_spells'])
+        #    self.healing_spells = self.starting_healing_spells
+        #    if not 'healing_dice' in self.base:
+        #        self.base['healing_dice'] = 4  # healing word.
+        #    self.healing = DnD.Dice(int(self.base['healing_bonus']), int(self.base['healing_dice']),
+        #                        role="healing")  ##Healing dice can't crit or have adv.
+        #else:
+        #    self.starting_healing_spells = 0
+        #    self.healing_spells = 0
+
     def getHd(self):
         print("getting hd")
         self.hd = None
-        if 'hd' in self.settings.keys():
-            if type(self.settings['hd']) is DnD.Dice:
-                self.hd = self.settings['hd']  # we're dealing with a copy of a beastiary obj.
+        if 'hd' in self.base.keys():
+            if type(self.base['hd']) is DnD.Dice:
+                self.hd = self.base['hd']  # we're dealing with a copy of a beastiary obj.
             else:
-                self.hd = DnD.Dice(self.ability_bonuses['con'], int(self.settings['hd']), avg=True, role="hd")
-        elif 'size' in self.settings.keys():
+                self.hd = DnD.Dice(self.ability_bonuses['con'], int(self.base['hd']), avg=True, role="hd")
+        elif 'size' in self.base.keys():
             size_cat = {"small": 6, "medium": 8, "large": 10, "huge": 12}
-            if self.settings['size'] in size_cat.keys():
-                self.hd = DnD.Dice(self.ability_bonuses['con'], size_cat[self.settings['size']], avg=True, role="hd")
-        elif 'hp' in self.settings and 'level' in self.settings:
+            if self.base['size'] in size_cat.keys():
+                self.hd = DnD.Dice(self.ability_bonuses['con'], size_cat[self.base['size']], avg=True, role="hd")
+        elif 'hp' in self.base and 'level' in self.base:
             #Guess based on hp and level. It is not that dodgy really as the manual does not use odd dice.
             # hp =approx. 0.5 HD * (level-1) + HD + con * level
             # HD * (0.5* (level-1)+1) = hp - con*level
             # HD = (hp - con*level)/(level+1)
-            bestchoice=(int(self.settings['hp'])-int(self.ability_bonuses['con']) * int(self.settings['level']))/((int(self.settings['level'])+1))
-            print(int(self.settings['hp']),int(self.ability_bonuses['con']), int(self.settings['level']))
+            bestchoice=(int(self.base['hp'])-int(self.ability_bonuses['con']) * int(self.base['level']))/((int(self.base['level'])+1))
+            print(int(self.base['hp']),int(self.ability_bonuses['con']), int(self.base['level']))
             print("choice HD...",bestchoice)
             #print("diagnosis...",self.ability_bonuses)
             warnings.warn('Unfinished case to guess HD. so Defaulting hit dice to d8 instead') #TODO finish
@@ -313,7 +375,7 @@ class Creature:
             warnings.warn('Insufficient info: defaulting hit dice to d8')
             self.hd = DnD.Dice(self.ability_bonuses['con'], 8, avg=True, role="hd")
 
-    def getAltAttack(self):
+    def getAltAttack(self): # There are currently no alt attacks implemented. Breath weapons and spells are being planned 
         print("alt attacks")
         if 'alt_attack' in self.settings and type(self.settings['alt_attack']) is list:
             self.alt_attack = {'name': self.settings['alt_attack'][0],
@@ -322,19 +384,7 @@ class Creature:
             self.alt_attack = {'name': None, 'attack': None}
         # last but not least
         print("Assessing alignment")
-
-        #I dont' think I need this any more
-    def getAlignment(self):
-        print("alignments")
-        #if 'alignment' not in self.settings:
-        #    self.settings['alignment'] = "unassigned mercenaries" 
-        #self.alignment = self.settings['alignment']
-
-        #recording the different teams... thought they should only be 'Red' and 'Blue'... I think 
-        if 'team' not in self.settings:
-            self.settings['team'] = "unassigned mercenaries" 
-        self.team = self.settings['team']
-        
+       
 
     def getInternalStuff(self):
         print("internals")
@@ -382,71 +432,41 @@ class Creature:
                  healing_spells=0, healing_dice=4, healing_bonus=None, ability_bonuses=[0, 0, 0, 0, 0, 0], sc_ability='wis',
                  buff='cast_nothing', buff_spells=0, log=None, xp=0, hd=6, level=1, proficiency=2
                  """
-                 #This method does : 
-                 #    checks if there are settings,
-                #if there are, call 'clean_settings' (sanify == to make healthy)
-                #else use 'commoner' as a base
-
-                # Should look into filling all fields that are given in a custom creature before checking the base creature and filling in the remaining fields
-                # But how do you determine a custom creature? I think a custom creature is going to be a dict. but a MM creature will be a string???? 
-                # so the check could be if it's a dic or string. if it's string, then fill from MM, if it's a dic, fill given fields, if no base is given, fill from commoner or try to figure it out? <- new functionality
-
         # TB debugging -> getting code path of calls
         print("_initialise")
-        self.settings = Creature.clean_settings(settings)
-        # TB commenting out to see how it impacts simulation
-        #if settings:
-        #    self.settings = Creature.clean_settings(settings)
-        #else:
-        #    self._fill_from_preset('commoner')  # or Cthulhu?
-        #    print("EMPTY CREATURE GIVEN. SETTING TO COMMONER")
-        #    return 0
+        # TB settings is ONLY user settings/from app
+        self.settings = settings
+        # set up for creature abilities
+        self.abilities = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha': 0}
+        self.ability_bonuses = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha': 0}
+
+        #load entry from bestiary -- default values
+        self.beastiary = self.beastiary[self.settings['base']] 
+        # TB Need to add check for user input before assigning all default values
 
 
-        # Mod of preexisting ## TB there will ALWAYS be a 'base' now.
-        if 'base' in self.settings:
-            #Sanify first and make victim
-            if type(self.settings['base']) is str:
-            # TB debugging -> getting code path of calls
-                print("self.settings base is string type")
-                victim = Creature(
-                    self.settings['base'])  # generate a preset and get its attributes. Seems a bit wasteful.
-            elif type(self.settings['base']) is Creature:
-                # TB debugging -> getting code path of calls
-                print("self.settings base is Creature type")
-                victim = self.settings['base']
-            else:
-                raise TypeError
-
-            #copy all
-            #victim.ability_bonuses #in case the user provided with ability scores, which are overridden by adbility bonues
-            base = {x: getattr(victim, x) for x in dir(victim) if getattr(victim, x) and x.find("__") == -1 and x.find("_") != 0 and x != 'beastiary'}
-            base['ability_bonuses']={}
-            #base.update(**self.settings)
-            for (k,v) in self.settings.items():
-                if type(v) is dict:
-                    base[k].update(v)
-                else:
-                    base[k] = v
-            self.settings = base
-        #This appears to be moving data from self.settings to be a child of self
-        # Name etc.
-        self._set('name', 'nameless')
+        #self.level = self.settings['level']
+        #self.xp = self.settings['xp']
+        self._set('name', self.beastiary['name'])
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
-        self.id = 0 # value should get overwritten when loaded into combattants list.
+        self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
 
         # proficiency. Will be overridden if not hp is provided.
-        self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
-
-        # set abilities
-        self._initialise_abilities()
-        # self.getHd() #Idon't think that this is used...or needed yet
+        # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
+        setattr(self, 'proficiency', int(1 + round(self.level / 4)))
+ 
+        self.getAbilityScores() # new function 
+        self.getAbilityModifiers() # new function 
+        # self.getHd() #Idon't think that this is used....unless used as a sub for lv, but .base references need to be taken out
         self.getHp()
+        self.getAc()
+        self.getInitiative()
+        self.getSpellCasting()
         self.getattacks()
         self.getmorale()
+        self.getTeam()
         self.getAltAttack()
-        self.getAlignment()
         self.getInternalStuff()
         self.getBuffSpells()
 
@@ -460,6 +480,8 @@ class Creature:
         # TB debugging -> getting code path of calls
         print("end of _initialise")
         self.arena = None
+        if self.debug == True:
+            print(self.log)
         #self.settings = {}
 
     @staticmethod
@@ -500,7 +522,6 @@ class Creature:
                 pass
             else:
                 cleandex[k] = lowerdex[k]
-        #print("debug... ",cleandex['ability_bonuses'])
         return cleandex
 
     def _set(self, item, alt=None, expected_type='string'):
@@ -516,8 +537,11 @@ class Creature:
                 setattr(self, item, self.settings[item])
             elif expected_type == 'int':
                 setattr(self, item, int(self.settings[item]))
+        elif expected_type == 'string':
+            #setattr(self, item, alt)
+            setattr(self, item, self.beastiary[item])
         else:
-            setattr(self, item, alt)
+            setattr(self, item, int(self.beastiary[item]))
 
     def _initialise_abilities(self):
         """
@@ -529,7 +553,7 @@ class Creature:
         print("loading ability scores")
         self.ability_bonuses = {n: 0 for n in self.ability_names} #default for no given ability score is 10 (bonus = 0) as per manual.
         self.abilities = {n: 10 for n in self.ability_names}
-        for ability in self.settings['abilities']: #a dictionary within a dictionary
+        for ability in self.settings['abilities']:
             if ability in self.settings['ability_bonuses']:
                 if 10+self.settings['ability_bonuses'][ability]*2 != self.settings['abilities'][ability] and 10+self.settings['ability_bonuses'][ability]*2 +1 != self.settings['abilities'][ability]:
                     warnings.warn('Mismatch: both ability score and bonus provided, ' \
@@ -558,156 +582,7 @@ class Creature:
         :param name: the name of creature.
         :return: the stored creature.
         """
-        if name == "netsharpshooter":
-            self._initialise(name="netsharpshooter",
-                             alignment="good",
-                             hp=18, ac=18, hd = 8,
-                             initiative_bonus=2,
-                             healing_spells=6, healing_bonus=3, healing_dice=4, sc_ability="cha",
-                             attack_parameters=[['rapier', 4, 2, 8]], alt_attack=['net', 4, 0, 0], level=3)
-        elif name == "bard":
-            self._initialise(name="Bard", alignment="good",
-                             hp=18, ac=18,
-                             healing_spells=6, healing_bonus=3, healing_dice=4,
-                             initiative_bonus=2,
-                             attack_parameters=[['rapier', 4, 2, 8]], level=3)
-
-        elif name == "generic_tank":
-            self._initialise(name="generic tank", alignment="good",
-                             hp=20, ac=17,
-                             initiative_bonus=2,
-                             attack_parameters=[['great sword', 5, 3, 6, 6]], level=3)
-
-        elif name == "mega_tank":
-            self._initialise(name="mega tank", alignment="good",
-                             hp=24, ac=17,
-                             initiative_bonus=2,
-                             attack_parameters=[['great sword', 5, 3, 10]], level=3)
-
-        elif name == "a_b_dragon":
-            self._initialise(name="Adult black dragon (minus frightful)", alignment="evil",
-                             ac=19, hp=195, initiative_bonus=2,
-                             attack_parameters=[['1', 11, 6, 10, 10], ['2', 11, 6, 6, 6], ['2', 11, 4, 6, 6]])
-
-        elif name == "y_b_dragon":
-            self._initialise(name="Young black dragon", alignment="evil",
-                             ac=18, hp=127,
-                             initiative_bonus=2,
-                             attack_parameters=[['1', 7, 4, 10, 10, 8], ['2', 7, 4, 6, 6], ['2', 7, 4, 6, 6]])
-
-        elif name == "frost_giant":
-            self._initialise(name="Frost Giant", alignment="evil",
-                             ac=15, hp=138,
-                             attack_parameters=[['club', 9, 6, 12, 12, 12], ['club', 9, 6, 12, 12, 12]])
-
-        elif name == "hill_giant":
-            self._initialise(name="Hill Giant", alignment="evil",
-                             ac=13, hp=105,
-                             attack_parameters=[['club', 8, 5, 8, 8, 8], ['club', 8, 5, 8, 8, 8]])
-
-        elif name == "goblin":
-            self._initialise(name="Goblin", alignment="evil",
-                             ac=15, hp=7,
-                             initiative_bonus=2,
-                             attack_parameters=[['sword', 4, 2, 6]])
-
-        elif name == "hero":
-            self._initialise(name="hero", alignment="good",
-                             ac=16, hp=18,  # bog standard shielded leather-clad level 3.
-                             attack_parameters=[['longsword', 4, 2, 8]])
-
-        elif name == "antijoe":
-            self._initialise(name="antiJoe", alignment="evil",
-                             ac=17, hp=103,  # bog standard leather-clad level 3.
-                             attack_parameters=[['shortsword', 2, 2, 6]])
-
-        elif name == "joe":
-            self._initialise(name="Joe", alignment="good",
-                             ac=17, hp=103,  # bog standard leather-clad level 3.
-                             attack_parameters=[['shortsword', 2, 2, 6]])
-
-        elif name == "bob":
-            self._initialise(name="Bob", alignment="mad",
-                             ac=10, hp=8,
-                             attack_parameters=[['club', 2, 0, 4], ['club', 2, 0, 4]])
-
-        elif name == "allo":
-            self._initialise(name="Allosaurus", alignment="evil",
-                             ac=13, hp=51,
-                             attack_parameters=[['claw', 6, 4, 8], ['bite', 6, 4, 10, 10]])
-
-        elif name == "anky":
-            self._initialise("Ankylosaurus",
-                             ac=15, hp=68, alignment='evil',
-                             attack_parameters=[['tail', 7, 4, 6, 6, 6, 6]],
-                             log="CR 3 700 XP")
-
-        elif name == "my barbarian":
-            self._initialise(name="Barbarian",
-                             ac=18, hp=66, alignment="good",
-                             attack_parameters=[['greatsword', 4, 1, 6, 6], ['frenzy greatsword', 4, 1, 6, 6]],
-                             log="hp is doubled due to resistance", level=3)
-
-        elif name == "my druid":
-            self._initialise(name="Twice Brown Bear Druid",
-                             hp=86, ac=11, alignment="good",
-                             attack_parameters=[['claw', 5, 4, 8], ['bite', 5, 4, 6, 6]],
-                             ability_bonuses=[0, 0, 0, 0, 3, 0],
-                             sc_ability='wis', buff='cast_barkskin', buff_spells=4,
-                             log='The hp is bear x 2 + druid', level=3)
-
-        elif name == "inert":
-            self._initialise(name="inert", alignment="bad",
-                             ac=10, hp=20,
-                             attack_parameters=[['toothpick', 0, 0, 2]])
-
-        elif name == "test":
-            self._initialise(name="Test", alignment="good",
-                             ac=10, hp=100,
-                             attack_parameters=[['club', 2, 0, 4]])
-
-        elif name == "polar":
-            self._initialise(name="polar bear", alignment='evil',
-                             ac=12, hp=42,
-                             attack_parameters=[['bite', 7, 5, 8], ['claw', 7, 5, 6, 6]])
-
-        elif name == "paradox":
-            self._initialise(name="Paradox", alignment="evil",
-                             ac=10, hp=200,
-                             attack_parameters=[['A', 2, 0, 1]])
-
-        elif name == "commoner":
-            self._initialise(name="Commoner", alignment="good",
-                             ac=10, hp=4,
-                             attack_parameters=[['club', 2, 0, 4]])
-
-        elif name == "giant_rat":
-            self._initialise(name="Giant Rat", alignment="evil",
-                             hp=7, ac=12,
-                             initiative_bonus=2,
-                             attack_parameters=[['bite', 4, 2, 4]])
-
-        elif name == "twibear":
-            self._initialise(name="Twice Brown Bear Druid",
-                             hp=86, ac=11, alignment="good",
-                             attack_parameters=[['claw', 5, 4, 8], ['bite', 5, 4, 6]], level=3)
-
-        elif name == "barkskin_twibear":
-            self._initialise(name="Druid twice as Barkskinned Brown Bear",
-                             hp=86, ac=16, alignment="good",
-                             attack_parameters=[['claw', 5, 4, 8], ['bite', 5, 4, 6]], level=3)
-
-        elif name == "barkskin_bear":
-            self._initialise(name="Barkskinned Brown Bear", alignment="good",
-                             hp=34, ac=16,
-                             attack_parameters=[['claw', 5, 4, 8], ['bite', 5, 4, 6]], level=4, hd=10)
-
-        elif name == "giant_toad":
-            self._initialise(name="Giant Toad", alignment="evil",
-                             hp=39, ac=11,
-                             attack_parameters=[['lick', 4, 2, 10, 10]])
-
-        elif name == "cthulhu":  # PF stats. who cares. you'll die.
+        if name == "cthulhu":  # PF stats. who cares. you'll die.
             self._initialise(name="Cthulhu", alignment="beyond",
                              ac=49, hp=774, xp=9830400,
                              initiative_bonus=15,
@@ -789,14 +664,6 @@ class Creature:
             else:
                 raise ValueError('Unrecognised ability')
 
-            # TB There are no other references to this
-    #def copy(self):
-    #    """
-    #    :return: a copy of the creature. with an altered name.
-    #    """
-    #    self.copy_index += 1
-    #    return Creature(self, name=self.name + ' ' + str(self.copy_index))
-
     def _attack_parse(self, attack_parameters):
         """
         `self.attacks` has a list of attacks. Each attack is a dictionary of `name` string, `attack` Dice and `damage` Dice.
@@ -805,10 +672,11 @@ class Creature:
         :return: None (changes self.attacks)
         """
         if type(attack_parameters) is str:
+            print("attack parameters are str... importing json....?")
             import json
             attack_parameters = json.loads(attack_parameters)
         self.attacks = []
-        for monoattack in attack_parameters:
+        for monoattack in attack_parameters: # TB Monoattack is getting assigned as '['
             att = {'name': monoattack[0]}
             att['damage'] = DnD.Dice(monoattack[2], monoattack[3:], role="damage")
             att['attack'] = DnD.Dice(monoattack[1], 20, role="attack", twinned=att['damage'])
@@ -840,21 +708,23 @@ class Creature:
 
     def take_damage(self, points, verbose=1):
         self.hp -= points
-        if verbose: verbose.append(self.name + self.id + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
+        if verbose: 
+            verbose.append(self.name + self.id + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
+            print(self.name + self.id + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
             
         # Morale Check for bloodied
         if self.hp < self.starting_hp/2: 
             self.current_morale -= 1 # this will cause it to lose morale EVERY TURN while it's bloodied,
 
-        if points > 10 : self.current_morale -= 1 # pseudo critical hit
+        if points >= 10 : self.current_morale -= 1 # pseudo critical hit
         if verbose: verbose.append(self.name + self.id + ' is at ' + str(self.current_morale) + ' morale.')
 
         # if morale gets to be 0 or less, remove from combatants list (run away), else check if concentrating.
-        if self.current_morale < 1 : 
-            self.hp = 0 #psuedo death (running away)
+        if self.current_morale < 1 and self.hp > 0: 
             if verbose: verbose.append(self.name + self.id + ' lost its desire to fight and ran away from battle')
-        else : 
-            if self.concentrating:
+            self.hp = 0 #psuedo death (running away)
+        if self.hp <= 0 : '{} {} dies'.format(self.name, str(self.id))
+        if self.concentrating:
                 dc = points / 2
                 if dc < 10: dc = 10
                 if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
@@ -945,22 +815,29 @@ class Creature:
                 opponent = self.arena.find(TARGET, self)[0]
             except IndexError:
                 raise self.arena.Victory()
+            s = '{} {} attacks {} {} with {}{}'.format(self.name, self.id, opponent.name, opponent.id, self.attacks[i]['name'], str(i))
             if verbose:
                 verbose.append(self.name + self.id + ' attacks ' + opponent.name + ' with ' + str(self.attacks[i]['name']))
+            print(s)
             # This was the hit method. put here for now.
             self.attacks[i]['attack'].advantage = self.check_advantage(opponent)
-            if self.attacks[i]['attack'].roll(verbose) >= opponent.ac:
+            attackRoll = self.attacks[i]['attack'].roll(verbose)
+            if attackRoll == 999:
+                opponent.current_morale-=1
+                print("CRITICAL HIT! " + opponent.name + " loses some morale")
+            if attackRoll >= opponent.ac:
                 # self.attacks[i]['damage'].crit = self.attacks[i]['attack'].crit  #Pass the crit if present.
                 h = self.attacks[i]['damage'].roll(verbose)
                 print("damage done is " + str(h))
                 opponent.take_damage(h, verbose)
-                # TB oppenent check hp was here, but moved
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
                 # check to see if the opponent survived the last hit, if not, win
-                if opponent.hp < 1 : raise self.arena.Victory()
+                if opponent.hp < 1 : # Does this raise a victory when the FIRST creature dies??
+                    print(opponent.name + " " + str(opponent.id) + " dies")
             else:
                 self.tally['misses'] += 1
+                print('and misses')
 
     # TODO
     def check_action(self, action, verbose):
@@ -1001,7 +878,9 @@ class Creature:
             if verbose: verbose.append(self.name + self.id + ' buffs up!')
             # greater action economy: waste opponent's turn.
         elif economy and self is self.arena.find('weakest allies')[0]:
-            if verbose: verbose.append(self.name + self.id + " is dodging")
+            if verbose: 
+                verbose.append(self.name + self.id + " is dodging")
+            print(self.name + " " + self.id + " is dodging")
             self.dodge = 1
         elif economy and self.alt_attack['name'] == 'net':
             opponent = self.arena.find('fiersomest enemy alive', self)[0]
@@ -1010,7 +889,6 @@ class Creature:
             else:
                 self.multiattack(verbose)
         else:
-
             self.multiattack(verbose)
 
     # I dont' think I'll ever use this function
