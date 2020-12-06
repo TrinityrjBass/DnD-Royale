@@ -59,7 +59,7 @@
         <!--option a and b-->
         <div class="card">
             <!--option A-->
-            <h3>Option A: add default combattant from list</h3>
+            <h3>Option A: add default combatant from list</h3>
             Pick a default creature from the dropdown list<br />
             <div class="card-body">
                 <input type="number" id="numberOfA" value="1" min="1" style="width:4em" />
@@ -80,7 +80,7 @@
         </div><!--end option A-->
         <div class="card">
             <!--Option B-->
-            <h3>Option B: build combattant</h3>
+            <h3>Option B: build combatant</h3>
             <div class="card-body">
                 Build custom combatant from stats. If "base creature" field is used, no custom stats will be used, any entered will be wiped and replaced for the base creature's stats.<br />
 
@@ -375,7 +375,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <button onclick="queueAttack()"><i class="fa fa-shopping-cart"></i> Add to parameters</button>
+                                <button onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
                             </td>
                         </tr>
                     </table>
@@ -386,7 +386,7 @@
                 </p>
                 <p>
                     <button onclick="clearAttacks()"> <i class="fa fa-trash-o"></i>Clear</button>
-                    <button onclick="saveAttack()"><i class="fa fa-bolt"></i> Add to combatant</button>
+                    <button onclick="saveAttack()"><i class="fa fa-shopping-cart"></i> Add to combatant</button>
                 </p>
             </div>
         </div><!--attack tool-->
@@ -403,13 +403,13 @@
                 </div>
             </div>
             <br />
-            <button onclick="duel()"><i class="fa fa-bolt"></i> Calculate</button>
+            <button onclick="duel()"><i class="fas fa-play"></i> Calculate</button>
             <button onclick='rosterTable("hard")'>
                 <i class="fa fa-trash-o"></i>
                 Clear
             </button>
             <!--<button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>-->
-            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fa fa-bolt"></i> Show Data</button>
+            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
             <br />
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
