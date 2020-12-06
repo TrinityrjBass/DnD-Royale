@@ -145,7 +145,21 @@
                                   data-tooltip-position="bottom middle"></span>
                         </td>
                     </tr>
-
+                    <tr>
+                        <td class=clear>Spell Casting:</td>
+                        <td class=clear>
+                            <input class="input-sm" list="spellCasting" id=spell_casting placeholder="None">
+                                <datalist id="spellCasting">
+                                    <option value="None">
+                                    <option value="Intelligence">
+                                    <option value="Charisma">
+                                    <option value="Wisdom">
+                                </datalist>
+                            <span class="fa fa-question"
+                                  data-toggle="tooltip" title="If this creature can cast spells, please select what ability it uses. Wizards use Intellegence, Bards use Charisma, Clerics use Wisdom Etc."
+                                  data-tooltip-position="bottom middle"></span>
+                        </td>
+                    </tr>
                     <tr>
                         <td class=clear>Number of healing spells:</td>
                         <td class=clear>
@@ -166,48 +180,48 @@
                         <td class=clear>Healing bonus:</td>
                         <td class=clear>
                             <input class="input-sm" type="number" id=healing_bonus value="0" min="0">
-                            <span class="fa fa-question" data-toggle="tooltip" title="the bonus to your heal"></span>
+                            <span class="fa fa-question" data-toggle="tooltip" title="the bonus to your heal, if none is given the base creatures default ability modifier will be used."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Str:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=str min="0">
+                            <input class="input-sm" type="number" id=str min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Dex:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=dex min="0">
+                            <input class="input-sm" type="number" id=dex min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Con:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=con min="0">
+                            <input class="input-sm" type="number" id=con min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Int:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=int min="0">
+                            <input class="input-sm" type="number" id=int min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Wis:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=wis min="0">
+                            <input class="input-sm" type="number" id=wis min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Cha:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=cha min="0">
+                            <input class="input-sm" type="number" id=cha min="0" value="0">
                             <span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>
                         </td>
                     </tr>
