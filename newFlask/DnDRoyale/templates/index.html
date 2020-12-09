@@ -36,7 +36,7 @@
                         <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
                     </a> Due to the complexity of the tactical decisions involved, which human players
                     often fail at, the encounters are performed with the assumption that everyone borders everyone. 
-                    <br />The simulator based on the 5e rules in the way it handles crits, conditions, advantages and disadvantages.
+                    <br />The simulator is based on the 5e rules in how it handles crits, conditions, advantages and disadvantages.
                 </p>
                 <p style="text-align:justify; text-align-last:center;">
                     Instructions on how to start a simple encounter : <br />
@@ -53,11 +53,6 @@
     </div>
 </div>
 
-<div>
-    <h3>Settings</h3>
-    <label>Morale</label>
-    <input type="checkbox" name="morale" id="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low." />
-</div>
 
 <div class="container card-columns">
     <!--Import from index.html from dndencountersimulator side-->
@@ -323,7 +318,7 @@
                                     <option value="quarterstaff" data-die="6">
                                     <option value="morningstar" data-die="8">
                                     <option value="whip" data-die="4">
-                                    <option value="claws"data-die="8">
+                                    <option value="claws" data-die="8">
                                     <option value="bite" data-die="10">
                                 </datalist>
                             </td>
@@ -360,10 +355,10 @@
                             <td>
                                 <a id="aParams"></a>
                                 <!-- add ability to append attacks into this list. this
-                                This would have to include a "clear" function like lineup
-                                I would also like to add a "move" button that would wrap it up all nicely in sq brackets and automatically
-                                move the attacks into the correct field
-                                also need a way to indicate or figure automatically dx based weapons.-->
+                            This would have to include a "clear" function like lineup
+                            I would also like to add a "move" button that would wrap it up all nicely in sq brackets and automatically
+                            move the attacks into the correct field
+                            also need a way to indicate or figure automatically dx based weapons.-->
                             </td>
                         </tr>
                         <tr>
@@ -384,13 +379,23 @@
             </div>
         </div><!--attack tool-->
         <div class="card">
+            <h3>Simulation Options<i class="fa fa-chevron-up" id="OFF_options" onclick="flip('options',0)"></i><i class="fa fa-chevron-down" id="ON_options" onclick="flip('options',1)"></i></h3>
+            <div id="DIV_options">
+                <div class="card-body">
+                    <label>Morale</label>
+                    <input type="checkbox" name="morale" id="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low." />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
             <h3>
                 Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
             </h3>
-            <div id="DIV_roster"style="padding:5px">
+            <div id="DIV_roster" style="padding:5px">
                 <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
-            <br /><br />
-        </div>-->
+                <br /><br />
+            </div>-->
                 <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
                 </div>
