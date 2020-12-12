@@ -1,6 +1,5 @@
 #This may be the removed creature class, but I'm going to add it back to DnD.py for now to get things working.
 
-
 import warnings
 import math, os
 from DnDRoyale import DnD
@@ -175,16 +174,10 @@ class Creature:
                 else:
                     raise Exception("Cannot figure out what is: " + self.settings['attack_parameters'] + str(
                     type(self.settings['attack_parameters'])))
-        if not type(self.settings['attack_parameters'][0]) is str:
-            self.settings['attack_parameters'][0] = str(self.settings['attack_parameters'][0])
+        #if not type(self.settings['attack_parameters'][0]) is str: # this is taking a list and making it a string... normal creatures aren't hitting this, but it's messing up Cthulhu
+        #    self.settings['attack_parameters'][0] = str(self.settings['attack_parameters'][0])
 
         self.attack_parameters = self._attack_parse(self.settings['attack_parameters'])
-        #elif type(self.base['attack_parameters']) is list:
-        #    print("attacks are a list, debug for more info")
-        #    self.attack_parameters = self.base['attack_parameters']
-        #    self._attack_parse(self.attack_parameters)
-        #else:
-        #    raise Exception('Could not determine weapon')
             
         print("attack is : " + str(self.attacks[0]))
 
@@ -205,23 +198,11 @@ class Creature:
         print("getting morale")
         morale = 0
         # TB Need to check this code to make sure everything is correct... also this needs to be made into separate methods
+        # TB need to find CR to find the equivalent BR and therefore max_morale amount
         if 'cr' in self.settings: 
             self.cr = self.settings['cr']
-        elif 'cr' in self.beastiary:
+        elif 'cr' in self.beastiary: 
             self.cr = self.beastiary['cr']
-            morale = self.beastiary['max_morale']
-        elif 'level' in self.settings:
-            # TODO check maths on MM.
-            if int(self.settings['level']) > 1:
-                self.cr = int(self.settings['level']) - 1
-            else:
-                self.cr = 0.5
-        else:
-            self.settings['cr'] = 1 # Use 1 as a default value if none is given #TB NO NO NO... Get it from the bestiary!!
-            # self.cr = 1
-        # Check/set Morale
-        if 'max_morale' in self.settings: # TB There's no 'max_morale field on the font end
-            morale = self.settings['max_morale']
 
         #this is where the value is validated or found and assigned max_morale
         # BREAK OUT INTO OWN METHOD
@@ -229,6 +210,9 @@ class Creature:
         if 'br' in self.settings:
             self.max_morale = int(self.settings['br'])
             self.current_morale = int(self.settings['br'])
+        elif 'br' in self.beastiary:
+            self.max_morale = int(self.beastiary['br'])
+            self.current_morale = int(self.beastiary['br'])
         else: 
             self.settings['max_morale'] = 0
             self.max_morale = 0
@@ -262,7 +246,7 @@ class Creature:
                 morale = 99 # 99 for testing
         
             # setup max morale and set current morale to max morale (since they start out at max)
-        print(self.name + " has " + str(morale) + "morale") 
+        print(self.name + " has " + str(morale) + " morale") 
         self.current_morale = morale
         self.max_morale = morale
 
@@ -323,29 +307,6 @@ class Creature:
             self.healing_spells = 0
 
         self.sc_ab = spells
-
-        ## TB After spell casting is entered in into the bestiary this method will need to be added to
-
-        #    self.sc_ab = self.settings['sc_ability'].lower()
-        #elif 'healing_spells' in self.settings or 'buff_spells' in self.settings:
-        #    self.sc_ab = max('wis', 'int', 'cha',
-        #                     key=lambda ab: self.ability_bonuses[ab])  # Going for highest.
-        #    print(
-        #        "Please specify spellcasting ability of " + self.name + " " + str(self.id) + " next time, this time " + self.sc_ab + " was used as it was biggest.")
-        #else:
-        #    self.sc_ab = 'con'  # TODO fix this botch up.
-        #if not 'healing_bonus' in self.base:
-        #    self.base['healing_bonus'] = self.ability_bonuses[self.sc_ab]
-        #if 'healing_spells' in self.base:
-        #    self.starting_healing_spells = int(self.base['healing_spells'])
-        #    self.healing_spells = self.starting_healing_spells
-        #    if not 'healing_dice' in self.base:
-        #        self.base['healing_dice'] = 4  # healing word.
-        #    self.healing = DnD.Dice(int(self.base['healing_bonus']), int(self.base['healing_dice']),
-        #                        role="healing")  ##Healing dice can't crit or have adv.
-        #else:
-        #    self.starting_healing_spells = 0
-        #    self.healing_spells = 0
 
     def getHd(self):
         print("getting hd")
@@ -441,9 +402,11 @@ class Creature:
         self.ability_bonuses = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha': 0}
 
         #load entry from bestiary -- default values
-        self.beastiary = self.beastiary[self.settings['base']] 
+        if self.settings['base'] == 'cthulhu':
+            self.beastiary = self._fill_from_preset('cthulhu')
+        else:
+            self.beastiary = self.beastiary[self.settings['base']] 
         # TB Need to add check for user input before assigning all default values
-
 
         #self.level = self.settings['level']
         #self.xp = self.settings['xp']
@@ -470,14 +433,6 @@ class Creature:
         self.getInternalStuff()
         self.getBuffSpells()
 
-        ##backdoor and overider  TB commenting out to see how it affects operation
-        #self._set('custom', [])
-        #for other in self.custom:
-        #    if other == "conc_fx":
-        #        getattr(self, self.settings['conc_fx'])
-        #    else:
-        #        self._set(other)
-        # TB debugging -> getting code path of calls
         print("end of _initialise")
         self.arena = None
         if self.debug == True:
@@ -582,16 +537,36 @@ class Creature:
         :param name: the name of creature.
         :return: the stored creature.
         """
-        if name == "cthulhu":  # PF stats. who cares. you'll die.
-            self._initialise(name="Cthulhu", alignment="beyond",
-                             ac=49, hp=774, xp=9830400,
-                             initiative_bonus=15,
-                             attack_parameters=[['2 claws', 42, 23, 6, 6, 6, 6], ['4 tentacles', 42, 34, 10, 10]],
-                             alt_attack=['none', 0],
-                             healing_spells=99999, healing_dice=1, healing_bonus=30,
-                             ability_bonuses=[56, 21, 45, 31, 36, 34], sc_ability='wis',
-                             buff='cast_nothing', buff_spells=0, log=None, hd=8, level=36, proficiency=27,
-                             br=99.0)
+        if name == "cthulhu":  #TB new stats from https://dmdave.com/cthulhu/
+            return {"name":"Cthulhu", 
+                            "alignment":"beyond", 
+                            "base" :"cthulhu",
+                            "ac":25, "hp":5000, "xp":465000,
+                            "initiative_bonus":15,
+                            "attack_parameters":[
+                                ["2 claws", 19, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 
+                                ["tentacle",  19, 10, 10, 10, 10, 10, 10], 
+                                ["tentacle",  19, 10, 10, 10, 10, 10, 10],
+                                ["tentacle",  19, 10, 10, 10, 10, 10, 10], 
+                                ["tentacle",  19, 10, 10, 10, 10, 10, 10]
+                                ],
+                            "alt_attack":['none', 0],
+                            "healing_spells":99999, "healing_dice":20, "healing_bonus":30,
+                            "cha": 29, "con": 30, "dex": 12, "int": 30, "str": 30, "wis": 27,
+                            "ability_bonuses":{'cha': 9, 'con': 10, 'dex': 1, 'int': 10, 'str': 10, 'wis': 8}, "sc_ability":'int',
+                            "buff":'cast_nothing', "buff_spells":0, "log":None, "hd":20, "level":99, "cr":99, "proficiency":19,
+                            "br":99.0} #TB DM Dave says that Cthulhu is like fighting 3 CR 30 creatures. Need to do the math on what this translates to.
+        
+        # TB Original
+        #{"name":"Cthulhu", "alignment":"beyond", "base" :"cthulhu",
+        #                     "ac":49, "hp":774, "xp":9830400,
+        #                     "initiative_bonus":15,
+        #                     "attack_parameters":[['2 claws', 42, 23, 6, 6, 6, 6], ['4 tentacles', 42, 34, 10, 10]],
+        #                     "alt_attack":['none', 0],
+        #                     "healing_spells":99999, "healing_dice":1, "healing_bonus":30,
+        #                     "ability_bonuses":[56, 21, 45, 31, 36, 34], "sc_ability":'wis',
+        #                     "buff":'cast_nothing', "buff_spells":0, "log":None, "hd":8, "level":36, "proficiency":27,
+        #                     "br":99.0}
 
 
         else:
@@ -676,7 +651,7 @@ class Creature:
             import json
             attack_parameters = json.loads(attack_parameters)
         self.attacks = []
-        for monoattack in attack_parameters: # TB Monoattack is getting assigned as '['
+        for monoattack in attack_parameters:
             att = {'name': monoattack[0]}
             att['damage'] = DnD.Dice(monoattack[2], monoattack[3:], role="damage")
             att['attack'] = DnD.Dice(monoattack[1], 20, role="attack", twinned=att['damage'])
