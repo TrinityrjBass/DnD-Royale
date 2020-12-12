@@ -1,4 +1,3 @@
-// hosted file
 
 var num_entities = 0; // tracks the number of creatures currently in the roster. Not really needed now, but maybe when we test with a large amount of creatures.
 var uniquenum = 0; // used to give each creature a unique number1
@@ -18,33 +17,23 @@ function flip(name, way) {
     }
 }
 
-//function duel_t() {
+//function duel_t() { // deprecated
+//    var lineup = sessionStorage.getItem('lineup')
 //    $.ajax({
-//        method: "POST",
-//        url: "",
-//        data: []
+//        type: "POST",
+//        contentType: 'application/json',
+//        url: "/poster/",
+//        dataType: 'json',
+//        data: JSON.stringify(lineup)
 //    })
 //        .done(function (msg) {
 //            alert("Data Saved: " + msg);
 //        });
 //}
 
-function duel_t() {
-    var lineup = sessionStorage.getItem('lineup')
-    $.ajax({
-        type: "POST",
-        contentType: 'application/json',
-        url: "/poster/",
-        dataType: 'json',
-        data: JSON.stringify(lineup)
-    })
-        .done(function (msg) {
-            alert("Data Saved: " + msg);
-        });
-}
-
 function duel() {
     flip("result", 1)
+    var list = expandLineup();
     document.getElementById("status").innerHTML = "<i class='fa fa-spinner fa-pulse'></i> Simulation in progress.";
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -52,7 +41,41 @@ function duel() {
     }
     xmlhttp.open("POST", "/poster/", true); 
     xmlhttp.setRequestHeader("Content-type", "application/json");
-    xmlhttp.send(JSON.stringify(lineup));
+    xmlhttp.send(JSON.stringify(list));
+}
+
+function expandLineup() {
+    let noobs = []; // new list
+    let amount = 0; // number of creatures to by copied
+
+    for (var h = 0; h < lineup.length; h++) {
+        let c = lineup[h];
+        let keys = Object.keys(c);
+        amount = c.amount;
+
+        if (keys.includes("amount")) {
+            let i = keys.lastIndexOf("amount")// find index of amount in list
+            keys.splice(i, 1); // remove amount from list.
+            //print("amount found at index " + i);
+        }
+        for (var a = 0; a < amount; a++) { // dup creature 'a' times
+
+            var newCreature = {};
+            for (var index = 0; index < keys.length; index++) { // add attributes
+                newCreature[keys[index]] = c[keys[index]];
+            }
+            newCreature['uid'] = getUid();
+            noobs.push(newCreature);
+        }
+    }
+    print("noobs : " + noobs);
+    return noobs;
+}
+
+function getUid() {
+    let uid = uniquenum;
+    uniquenum++;
+    return uid;
 }
 
 //function Add(newbie) {
@@ -64,7 +87,7 @@ function duel() {
 // new function for adding teams
 
 function Add(newbie) {
-    uniquenum++;
+    // uniquenum++;
     lineup.push(newbie);
     print("added creature " + newbie.uid);
 }
@@ -81,10 +104,10 @@ function AddA() {
         showAlert(m);
     }
     $("#confA").show("slow");
-    for (var x = 0; x < numberOf; x++) {
-        noob = { base: newbie, name: newbie, team: team , uid: uniquenum }; 
-        Add(noob);
-    }
+
+    noob = { amount: numberOf, base: newbie, name: newbie, team: team , uid: getUid()}; 
+    Add(noob);
+
     update_lineup();
     $("#confA").hide("slow");
 }
@@ -95,20 +118,36 @@ function showAlert(s) {
 }
 
 function AddB() {
-    var numberOf = $("#numberOfC").val();
+    var numberOf = $("#numberOfB").val();
     num_entities += parseInt(numberOf);
 
     $("#confC").show("slow");
-    for (var x = 0; x < numberOf; x++) {
-        let newbie = getCustomCreature();
-        newbie.team = $("input[name='team']:checked").val();
-        newbie.uid = uniquenum;
-        print("new creature uid: " + newbie.uid);
-        Add(newbie);
-    }
+    let newbie = getCustomCreature();
+    newbie.team = $("input[name='team']:checked").val();
+    newbie.uid = getUid();
+    newbie.amount = numberOf;
+    //print("new creature uid: " + newbie.uid);
+    Add(newbie);
+    
     update_lineup();
     $("#confC").hide("slow");
 }
+
+//function AddB() {
+//    var numberOf = $("#numberOfB").val();
+//    num_entities += parseInt(numberOf);
+
+//    $("#confC").show("slow");
+//    for (var x = 0; x < numberOf; x++) {
+//        let newbie = getCustomCreature();
+//        newbie.team = $("input[name='team']:checked").val();
+//        newbie.uid = uniquenum;
+//        //print("new creature uid: " + newbie.uid);
+//        Add(newbie);
+//    }
+//    update_lineup();
+//    $("#confC").hide("slow");
+//}
 
 function getCustomCreature() {
     let newCreature = {};
@@ -117,7 +156,7 @@ function getCustomCreature() {
         var v = $("#" + key).val();
         // if the value is not null
         if (!!v) {
-            if (key != "numberOfC") {
+            if (key != "numberOfB") {
                 newCreature[key] = v;
             }
         }
@@ -241,7 +280,6 @@ function initial() {
     $("#def").keyup(function (event) { if (event.keyCode == 13) { AddB(); } });
     $("#confA").hide();
     $("#confB").hide();
-    $("#confC").hide();
     $("#failB").hide();
     sessionStorage.setItem('lineup', JSON.stringify([]));
     $("#OFF_more").hide();
@@ -315,6 +353,19 @@ function removeCombattant(i) {
 function findCreatureByUid(creature) {
     return creature.uid == selectedCreature;
 }
+
+// decrement amount of specified group of creatures in lineup
+function changeAmount(uid) {
+    // TODO change the total of num_entities
+    var id = $("#" + uid).val();
+
+    jQuery.each(lineup, function (index, c) {
+        if (c.uid == uid) {
+            c.amount = id;
+        }
+    });
+}
+
 // generic print function for debugging
 function print(s) {
     console.log(s);
@@ -325,7 +376,7 @@ function display_rosters(lineup) {
 
     // clear roster table so there aren't duplicates.
     rosterTable("soft");
-    // display creatures in lineup
+    // display creatures in lineup -- for debugging purposes
     $('#lineup').html(JSON.stringify(lineup));
 
     // add creatures to roster
@@ -334,21 +385,51 @@ function display_rosters(lineup) {
         // add new row to table for the new creature
         $('#roster tbody').append('<tr></tr>');
         // populate new row with creature
-        $('#roster tr:last').append('<td>' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
-        
-        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Red" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam('+ creature.uid + ',"Red") ></td>');
+        $('#roster tr:last').append('<td><input class="input-sm roster-input" value="' + creature.amount + '" type="number" min="0" style="width: 4em;" id="' + creature.uid + '" onChange="changeAmount(' + creature.uid + ')"> ' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
+        //$('#roster tr:last').append('<td>' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
+
+        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Red" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Red") ></td>');
         $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Blue" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Blue") ></td>');
-            // add team selection radio buttons for each available team
-            if (creature.team == "Red") {
-                $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
-            }
-            else {
-                $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
+        // add team selection radio buttons for each available team
+        if (creature.team == "Red") {
+            $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
         }
-        
+        else {
+            $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
+        }
+
     });
-    
 }
+// TB original (working) function. Saving in case of fubar
+//}function display_rosters(lineup) {
+//    // grab data for plotly graph... for later
+
+//    // clear roster table so there aren't duplicates.
+//    rosterTable("soft");
+//    // display creatures in lineup
+//    $('#lineup').html(JSON.stringify(lineup));
+
+//    // add creatures to roster
+//    jQuery.each(lineup, function (index, creature) {
+
+//        // add new row to table for the new creature
+//        $('#roster tbody').append('<tr></tr>');
+//        // populate new row with creature
+//        $('#roster tr:last').append('<td>' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
+        
+//        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Red" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam('+ creature.uid + ',"Red") ></td>');
+//        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Blue" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Blue") ></td>');
+//            // add team selection radio buttons for each available team
+//            if (creature.team == "Red") {
+//                $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
+//            }
+//            else {
+//                $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
+//        }
+        
+//    });
+    
+//}
 
 function newRoster(lineup) {
     //new function for better ui

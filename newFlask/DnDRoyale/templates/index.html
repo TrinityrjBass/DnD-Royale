@@ -159,19 +159,19 @@
                     <tr>
                         <td class=clear>Number of healing spells:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=healing_spells value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number of times creature can cast healing spell/>
+                            <input class="input-sm" type="number" id=healing_spells value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number of times creature can cast healing spell"/>
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Healing dice:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=healing_dice value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number without the d. d4 is the default.> <!--drop down options?... would like to deprecate this field in favor of actual spells-->
+                            <input class="input-sm" type="number" id=healing_dice value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number without the d. d4 is the default."> <!--drop down options?... would like to deprecate this field in favor of actual spells-->
                         </td>
                     </tr>
                     <tr>
                         <td class=clear>Healing bonus:</td>
                         <td class=clear>
-                            <input class="input-sm" type="number" id=healing_bonus value="0" min="0"  data-toggle="tooltip" data-placement="right" title="the bonus to the healing effect, if none is given the base creatures default ability modifier will be used.>
+                            <input class="input-sm" type="number" id=healing_bonus value="0" min="0"  data-toggle="tooltip" data-placement="right" title="the bonus to the healing effect, if none is given the base creatures default ability modifier will be used.">
                         </td>
                     </tr>
                     <tr>
@@ -251,7 +251,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="number" id="numberOfC" value="1" min="1" style="width:4em" />
+                            <input type="number" id="numberOfB" value="1" min="1" style="width:4em" />
                             <button onclick="AddB()"><i class="fa fa-shopping-cart"></i> Add</button>
                             <button onclick="clearB()"> <i class="fa fa-trash-o"></i>Reset</button>
                         </td>
@@ -263,7 +263,7 @@
                 <i class="fa fa-trash-o"></i>
                 Clear Fields
             </button>-->
-            <span id=confC><i class="fa fa-check"></i></span>
+            <span id=confB><i class="fa fa-check"></i></span>
             <br />
         </div><!--End option b-->
 
@@ -354,11 +354,7 @@
                             </td>
                             <td>
                                 <a id="aParams"></a>
-                                <!-- add ability to append attacks into this list. this
-                            This would have to include a "clear" function like lineup
-                            I would also like to add a "move" button that would wrap it up all nicely in sq brackets and automatically
-                            move the attacks into the correct field
-                            also need a way to indicate or figure automatically dx based weapons.-->
+                                <!-- need a way to indicate or figure automatically dx based weapons.-->
                             </td>
                         </tr>
                         <tr>
@@ -388,14 +384,14 @@
             </div>
         </div>
 
-        <div class="card">
+        <!--<div class="card"> TB original : saving in case of fubar
             <h3>
                 Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
             </h3>
             <div id="DIV_roster" style="padding:5px">
-                <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
+                <div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                 <br /><br />
-            </div>-->
+            </div>
                 <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
                 </div>
@@ -406,7 +402,29 @@
                 <i class="fa fa-trash-o"></i>
                 Clear
             </button>
-            <!--<button id="showInfo" onclick="showModal()"><i class="fa fa-bolt"></i>Show Data</button>-->
+            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
+            <br />
+        </div><!-- line up-->
+        <!--<div class="card"><p id=status></p></div>
+    </div>-->
+    <div class="card">
+            <h3>
+                Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
+            </h3>
+            <div id="DIV_roster" style="padding:5px">
+                <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
+                    <br /><br />
+                </div>--> <!--uncomment this section for debugging lineup-->
+                <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
+                    <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
+                </div>
+            </div>
+            <br />
+            <button onclick="duel()"><i class="fas fa-play"></i> Calculate</button>
+            <button onclick='rosterTable("hard")'>
+                <i class="fa fa-trash-o"></i>
+                Clear
+            </button>
             <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
             <br />
         </div><!-- line up-->
