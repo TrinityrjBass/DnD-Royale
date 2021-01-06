@@ -2,6 +2,7 @@
 var num_entities = 0; // tracks the number of creatures currently in the roster. Not really needed now, but maybe when we test with a large amount of creatures.
 var uniquenum = 0; // used to give each creature a unique number1
 var lineup = [];// used to be window.lineup
+var powerdict = {};
 var selectedCreature = 0; // used when deleting creatures from the roster table
 
 function flip(name, way) {
@@ -33,7 +34,10 @@ function flip(name, way) {
 
 function duel() {
     flip("result", 1)
+    //var options = getOptions();
     var list = expandLineup();
+    list.unshift(getOptions());
+
     document.getElementById("status").innerHTML = "<i class='fa fa-spinner fa-pulse'></i> Simulation in progress.";
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -72,6 +76,14 @@ function expandLineup() {
     return noobs;
 }
 
+function getOptions() {
+    let options = [];
+    $("#DIV_options").find('input:checked').each(function () { // get all options that are selected
+        options.push($(this).attr('name'));
+    })
+    return options;
+}
+
 function getUid() {
     let uid = uniquenum;
     uniquenum++;
@@ -100,7 +112,7 @@ function AddA() {
 
     if (num_entities >= 1000) {
         // call alert/warning
-        m = "Please be aware that adding more than 100 combatants will impact performance. Keep this in mind when running the simulation.";
+        m = "Please be aware that adding more than 1000 combatants will impact performance. Keep this in mind when running the simulation.";
         showAlert(m);
     }
     $("#confA").show("slow");
@@ -301,6 +313,17 @@ function initial() {
     rosterTable("hard");
     // iniitalize tooltips
     $('[data-toggle="tooltip]').tooltip();
+    // initialize power chart
+    loadPowerDict();
+    updateGraph();
+}
+
+function loadPowerDict() {
+    $("#drop").find('option').each(function (index, item) { // get all options that are selected
+        print(item.value); //testing if the list loads before it's looked for.
+        powerdict[item.value] = parseInt(item.getAttribute('data-xp'));
+        // opt.forEach(function(item, index){ powerdict[item.value] = parseInt(item.getAttribute("data-xp"))}) 
+    })
 }
 
 // deprecating... but might be able to be used with Plotly
@@ -354,16 +377,28 @@ function findCreatureByUid(creature) {
     return creature.uid == selectedCreature;
 }
 
-// decrement amount of specified group of creatures in lineup
+// in/decrement amount of specified group of creatures in lineup
 function changeAmount(uid) {
     // TODO change the total of num_entities
-    var id = $("#" + uid).val();
-
+    var numOf = $("#" + uid).val();
+    num_entities = 0;
+    let redPower = 0;
+    let bluePower = 0;
     jQuery.each(lineup, function (index, c) {
+        
         if (c.uid == uid) {
-            c.amount = id;
+            c.amount = numOf;
+        }
+        num_entities += c.amount; // recount number of creatures
+        // refigure power of teams
+        if (c.team == "Red") {
+            redPower += powerdict[c.name] * c.amount;
+        }
+        else {
+            bluePower += powerdict[c.name] * c.amount;
         }
     });
+    updateGraph(redPower, bluePower);
 }
 
 // generic print function for debugging
@@ -373,7 +408,8 @@ function print(s) {
 
 function display_rosters(lineup) {
     // grab data for plotly graph... for later
-
+    var redPower = 0;
+    var bluePower = 0;
     // clear roster table so there aren't duplicates.
     rosterTable("soft");
     // display creatures in lineup -- for debugging purposes
@@ -386,50 +422,25 @@ function display_rosters(lineup) {
         $('#roster tbody').append('<tr></tr>');
         // populate new row with creature
         $('#roster tr:last').append('<td><input class="input-sm roster-input" value="' + creature.amount + '" type="number" min="0" style="width: 4em;" id="' + creature.uid + '" onChange="changeAmount(' + creature.uid + ')"> ' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
-        //$('#roster tr:last').append('<td>' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
-
+        // add team selection radio buttons for each available team
         $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Red" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Red") ></td>');
         $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Blue" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Blue") ></td>');
-        // add team selection radio buttons for each available team
+        
+        let xp = powerdict[creature.base] * creature.amount;
         if (creature.team == "Red") {
             $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
+            // add xp or power value to red 
+            redPower += xp;
         }
         else {
             $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
+            // add xp or power value to blue
+            bluePower += xp;
         }
 
     });
+    updateGraph(redPower, bluePower);
 }
-// TB original (working) function. Saving in case of fubar
-//}function display_rosters(lineup) {
-//    // grab data for plotly graph... for later
-
-//    // clear roster table so there aren't duplicates.
-//    rosterTable("soft");
-//    // display creatures in lineup
-//    $('#lineup').html(JSON.stringify(lineup));
-
-//    // add creatures to roster
-//    jQuery.each(lineup, function (index, creature) {
-
-//        // add new row to table for the new creature
-//        $('#roster tbody').append('<tr></tr>');
-//        // populate new row with creature
-//        $('#roster tr:last').append('<td>' + creature.name + ' <span class="kill_me" onclick="removeCombattant(' + creature.uid + ')"><i class="fas fa-trash"></i></span></td>');
-        
-//        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Red" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam('+ creature.uid + ',"Red") ></td>');
-//        $('#roster tr:last').append('<td> <input type="radio" name="' + creature.uid + '" value="' + "Blue" + '" class="combatant_team" data-fullname="' + creature.name + '" onClick= changeTeam(' + creature.uid + ',"Blue") ></td>');
-//            // add team selection radio buttons for each available team
-//            if (creature.team == "Red") {
-//                $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
-//            }
-//            else {
-//                $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
-//        }
-        
-//    });
-    
-//}
 
 function newRoster(lineup) {
     //new function for better ui

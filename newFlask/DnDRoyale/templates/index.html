@@ -65,7 +65,7 @@
             <div class="card-body">
                 <input type="number" id="numberOfA" value="1" min="1" style="width:4em" />
                 <select id=drop onchange="updateCustomBase()">
-                    <option value="cthulhu">Select creature</option><!--LABEL-->
+                    <option data-xp="465000" value="cthulhu">Select creature</option><!--LABEL-->
                     {{list | safe }}
                 </select>
                 <br />
@@ -137,10 +137,6 @@
                         <td class=clear>
                             <input class="input-sm" type=text id=attack_parameters data-toggle="tooltip" title="Attacks need to be in square brackets, and follow the following template : ['club', toHit modifier, damage modifier, damage dice]. Please use the tool to make custom attacks."
                                   data-placement="right">
-                            <!--<span class="fa fa-question"
-                                  data-toggle="tooltip" title="Attacks need to be in square brackets, and follow the following template : ['club', toHit modifier, damage modifier, damage dice]. Please use the tool to make custom attacks.
-                                  
-                                  data-placement="right"></span>-->
                         </td>
                     </tr>
                     <tr>
@@ -379,38 +375,17 @@
             <div id="DIV_options">
                 <div class="card-body">
                     <label>Morale</label>
-                    <input type="checkbox" name="morale" id="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low." />
+                    <input type="checkbox" name="morale" id="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low. CR determines how much morale a creature has." />
                 </div>
             </div>
         </div>
+        <div class="card">
+            <h3>
+                Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
+            </h3>
+            <div id="chartContainer">
 
-        <!--<div class="card"> TB original : saving in case of fubar
-            <h3>
-                Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
-            </h3>
-            <div id="DIV_roster" style="padding:5px">
-                <div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
-                <br /><br />
             </div>
-                <div class="card-body" id="roster" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
-                    <table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>
-                </div>
-            </div>
-            <br />
-            <button onclick="duel()"><i class="fas fa-play"></i> Calculate</button>
-            <button onclick='rosterTable("hard")'>
-                <i class="fa fa-trash-o"></i>
-                Clear
-            </button>
-            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
-            <br />
-        </div><!-- line up-->
-        <!--<div class="card"><p id=status></p></div>
-    </div>-->
-    <div class="card">
-            <h3>
-                Lineup<i class="fa fa-chevron-up" id="OFF_roster" onclick="flip('roster',0)"></i><i class="fa fa-chevron-down" id="ON_roster" onclick="flip('roster',1)"></i>
-            </h3>
             <div id="DIV_roster" style="padding:5px">
                 <!--<div class="card-body" id="lineup" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     <br /><br />
