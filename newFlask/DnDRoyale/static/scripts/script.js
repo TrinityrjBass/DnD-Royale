@@ -392,10 +392,10 @@ function changeAmount(uid) {
         num_entities += c.amount; // recount number of creatures
         // refigure power of teams
         if (c.team == "Red") {
-            redPower += powerdict[c.name] * c.amount;
+            redPower += powerdict[c.base] * parseInt(c.amount);
         }
         else {
-            bluePower += powerdict[c.name] * c.amount;
+            bluePower += powerdict[c.base] * parseInt(c.amount);
         }
     });
     updateGraph(redPower, bluePower);
@@ -476,6 +476,7 @@ function rosterTable(s) {
     if (s == "hard") {
         lineup = [];
         $("#lineup").html('');
+        updateGraph(0, 0);
     }
     // create new roster table
     $("#roster").html('<table style="width: 100%"><thead><tr><th>Name</th><th>Red</th><th>Blue</th></tr></thead><tbody></tbody></table>');
