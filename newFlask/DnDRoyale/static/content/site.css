@@ -19,7 +19,7 @@ textarea {
 .card {
     box-shadow: 5px 2px 7px 2px grey;
     padding: 0.8em;
-    margin: 5px;
+    /*margin: 5px;*/
 }
 
 /* styles for validation helpers */
@@ -36,7 +36,7 @@ input.input-validation-error {
 }
 
 .input-sm {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 input[type="checkbox"].input-validation-error {
@@ -62,7 +62,7 @@ input[type="checkbox"].input-validation-error {
     bottom: auto;
     background-color: white;
     overflow-y: scroll;
-    width:fit-content;
+    width: fit-content;
     height: 700px; /* I dont' like the absolute value here*/
 }
 
