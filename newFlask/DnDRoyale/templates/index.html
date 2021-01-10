@@ -9,7 +9,7 @@
                 <img src="{{url_for('static', filename = 'content/Owlbear.png') }}" width="100%" alt="owlbear icon" />
             </div><!--icon-->
             <div class="col-lg-6 col-sm-12 align-middle">
-                <h1 style="display:inline">D&D 5e Encounter Simulator</h1>
+                <h1 style="display:inline">D&D 5e Royale Simulator</h1>
             </div><!--title-->
             <div class="col-lg-2 col-sm-12">
                 <!-- <iframe src="https://ghbtns.com/github-btn.html?user=matteoferla&repo=DnD-battler&type=star&count=true&size=small"
@@ -34,7 +34,7 @@
                     a preset list with their original stat blocks as found in the Monster Manual, or the user can choose to modify any or all of the original stats.
                     The presets are based on a monster manual table ("beastiary.csv").
                         <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
-                    </a> Due to the complexity of the tactical decisions involved, which human players
+                    Due to the complexity of the tactical decisions involved, which human players
                     often fail at, the encounters are performed with the assumption that everyone borders everyone. 
                     <br />The simulator is based on the 5e rules in how it handles crits, conditions, advantages and disadvantages.
                 </p>
@@ -95,7 +95,7 @@
                     <tr>
                         <td class=clear>Base creature:</td>
                         <td class=clear>
-                            <input class="input-sm" type=text id=base placeholder="commoner" data-toggle="tooltip" data-placement="right" title="The base creature that you would like to modify attributes of. S elect the creature from the drop down in Option A and it will auto-fill here." disabled>
+                            <input class="input-sm" type=text id=base placeholder="commoner" value="commoner" data-toggle="tooltip" data-placement="right" title="The base creature that you would like to modify attributes of. S elect the creature from the drop down in Option A and it will auto-fill here." disabled>
                         </td>
                     </tr>
                     <tr>
@@ -334,7 +334,7 @@
                             <td>
                                 <input class="input-sm" type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled>
                                 <i class="fa fa-question"
-                                   data-toggle="tooltip" title="Damage Die of selected weapon. Will be automatically figured if left empty. Multiple dice are allowed."
+                                   data-toggle="tooltip" title="Damage Die of selected weapon. Will be automatically figured if a default weapon is selected. This field will NOT be automatically filled for a custom weapon. Multiple dice are allowed."
                                    data-tplacement="right"></i>
                             </td>
                         </tr>

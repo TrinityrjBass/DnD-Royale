@@ -25,6 +25,10 @@ function figureAtkParams(opt) {
         dMod = 0;
     }
 
+    if (dice == "") {
+        dice = 0;
+    }
+
     var r = '"' + w + '", ' + th + ", " + dMod + ", " + dice;
     $('#aParams').text("[" + r + "]");
     // call method to figure Damage modifier for a later implementation
@@ -52,15 +56,24 @@ function getToHit() {
 
 function queueAttack() {
     // move new attack parameter to attack list
-    var c = '';
-    if ($("#attacks").text().length > 1) {
-        c = ','
+
+    // If it's a custom weapon AND there's no value, send alert.
+    if (!$("#attack_dicedmg").is(":disabled") && $("#attack_dicedmg").val() == "") {
+        alert("Attack Die field must not be empty. Please enter a number that represents the dice you would like to use for the Damage dice. For example a 4 represents a 4 sided die. Multiple dice are allowed, simply separate the numbers with a comma.")
     }
-    $("#attacks").append(c + $("#aParams").text());
+    else {
+        var c = '';
+        if ($("#attacks").text().length > 1) {
+            c = ','
+        }
+        $("#attacks").append(c + $("#aParams").text());
+    }
+
 }
 
 function saveAttack() {
     // move attack list to attack parameters field in custom combatant
+
     var s = '[' + $("#attacks").text() + ']';
     $("#attack_parameters").val(s);
 }
