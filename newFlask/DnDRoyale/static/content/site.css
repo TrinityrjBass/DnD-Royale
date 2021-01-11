@@ -19,7 +19,7 @@ textarea {
 .card {
     box-shadow: 5px 2px 7px 2px grey;
     padding: 0.8em;
-    /*margin: 5px;*/
+    margin: 5px;
 }
 
 /* styles for validation helpers */

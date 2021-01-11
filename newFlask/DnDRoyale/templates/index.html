@@ -25,31 +25,7 @@
                    data-tooltip="Email the author. Suggestions welcome!"><i class="far fa-envelope"></i>Suggestions</a>-->
             </div><!--icon-->
         </div><!--title row-->
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1 col-sm-12 text-justify">
-                <p style="text-align:justify; text-align-last:center;">
-                    <span style="float: left; color: #903; font-size: 64px; line-height: 48px; padding-top: 0px; padding-right: 6px; padding-left: 3px; font-family: Georgia;">T</span>
-                    HIS online tool calculates the victory probabilities in a D&amp;D encounter. It relies on a python script,
-                    which simulates an encounter 1,000 times for statistical accuracy. The combatants can be selected from 
-                    a preset list with their original stat blocks as found in the Monster Manual, or the user can choose to modify any or all of the original stats.
-                    The presets are based on a monster manual table ("beastiary.csv").
-                        <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
-                    Due to the complexity of the tactical decisions involved, which human players
-                    often fail at, the encounters are performed with the assumption that everyone borders everyone. 
-                    <br />The simulator is based on the 5e rules in how it handles crits, conditions, advantages and disadvantages.
-                </p>
-                <p style="text-align:justify; text-align-last:center;">
-                    Instructions on how to start a simple encounter : <br />
-                    Select a creature from the dropdown options in the "Option A" section.<br />
-                    Determine how many of these creatures you would like to fight as well as what team they are on (don't worry, you can change anything at any time before the simulation starts). <br />
-                    Click the "Add" button when you are ready to add the creatures.<br />
-                    Review, remove, and/or change teams of any combatants you have added in the "Lineup" section.<br />
-                    When you are ready, click the "Calculate" button.<br />
-                    CAUTION : the more creatures you add to the simulation, the longer each battle will be and you may get a limited data set as the app times out after 10 seconds regardless of the number of battles fought.
 
-                </p>
-            </div><!--abs-->
-        </div><!--abs row-->
     </div>
 </div>
 
@@ -60,11 +36,11 @@
         <!--option a and b-->
         <div class="card">
             <!--option A-->
-            <h3>Option A: add default combatant from list</h3>
-            Pick a default creature from the dropdown list<br />
+            <h3>Option A: Creature from Standard Monster Manual</h3>
+            Pick a creature from the dropdown list<br />
             <div class="card-body">
-                <input type="number" id="numberOfA" value="1" min="1" style="width:4em" />
-                <select id=drop onchange="updateCustomBase()">
+                <label for="drop">Creature</label>
+                <select class="input-xs form-control" id=drop onchange="updateCustomBase()">
                     <option data-xp="465000" value="cthulhu">Select creature</option><!--LABEL-->
                     {{list | safe }}
                 </select>
@@ -74,8 +50,8 @@
 
                 <label>Blue</label>
                 <input type="radio" name="team" value="Blue" class="combatant_team" checked><br />
-
-                <button onclick="AddA()"><i class="fa fa-shopping-cart"></i> Add</button>
+                <input class="input-xs form-control" type="number" id="numberOfA" value="1" min="1" style="width:4em" />
+                <button class="btn btn-default" onclick="AddA()"><i class="fa fa-shopping-cart"></i> Add</button>
                 <span id=confA><i class="fa fa-check"></i></span>
             </div>
         </div><!--end option A-->
@@ -83,176 +59,140 @@
             <!--Option B-->
             <h3>Option B: build combatant</h3>
             <div class="card-body">
-                Build custom combatant from stats. If "base creature" field is used, no custom stats will be used, any entered will be wiped and replaced for the base creature's stats.<br />
-                <table class=clear id=table>
+                Build custom combatant from stats.<br />
+                <div id=table>
 
-                    <tr>
-                        <td class=clear>Name:</td>
-                        <td class=clear>
-                            <input class="input-xs form-control" type=text id="name" data-toggle="tooltip" data-placement="right" title="The name of the creature. This is used for the summary and identical names can be used.">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Base creature:</td>
-                        <td class=clear>
-                            <input class="input-xs" type=text id=base placeholder="commoner" value="commoner" data-toggle="tooltip" data-placement="right" title="The base creature that you would like to modify attributes of. S elect the creature from the drop down in Option A and it will auto-fill here." disabled>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Team:</td>
-                        <td>
-                            <label>Red</label>
-                            <input type="radio" name="team" value="Red" class="combatant_team">
+                    <label for="name">Name of Creature:</label>
+                    <input class="input-xs form-control" type=text id="name" data-toggle="tooltip" data-placement="right" title="The name of the creature. This is used for the summary and identical names can be used.">
 
 
-                            <label>Blue</label>
-                            <input type="radio" name="team" value="Blue" class="combatant_team">
+                    <label for="base">Base creature:</label>
+                    <input class="input-xs form-control" type=text id=base placeholder="commoner" value="commoner" data-toggle="tooltip" data-placement="right" title="The base creature that you would like to modify attributes of. S elect the creature from the drop down in Option A and it will auto-fill here." disabled>
+         
+                    <label>Team:</label>
 
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="The team the creature is on."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>HP:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=hp min="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="hit points"></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>AC:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=ac min="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="armor class"></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Initiative bonus:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=initiative_bonus min="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="initiative bonus"></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Attack parameters:</td>
-                        <td class=clear>
-                            <input class="input-sm" type=text id=attack_parameters data-toggle="tooltip" title="Attacks need to be in square brackets, and follow the following template : ['club', toHit modifier, damage modifier, damage dice]. Please use the tool to make custom attacks."
-                                  data-placement="right">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Spell Casting:</td>
-                        <td class=clear>
-                            <input class="input-sm" list="spellCasting" id=spell_casting placeholder="None" data-toggle="tooltip" title="The ability the creature uses to cast spells (if any, or different than default creature)"
-                                  data-placement="right">
-                                <datalist id="spellCasting">
-                                    <option value="None">
-                                    <option value="Intelligence">
-                                    <option value="Charisma">
-                                    <option value="Wisdom">
-                                </datalist>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Number of healing spells:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=healing_spells value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number of times creature can cast healing spell"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Healing dice:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=healing_dice value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number without the d. d4 is the default."> <!--drop down options?... would like to deprecate this field in favor of actual spells-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Healing bonus:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=healing_bonus value="0" min="0"  data-toggle="tooltip" data-placement="right" title="the bonus to the healing effect, if none is given the base creatures default ability modifier will be used.">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Str:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=str min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Dex:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=dex min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Con:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=con min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Int:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=int min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Wis:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=wis min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>Cha:</td>
-                        <td class=clear>
-                            <input class="input-sm" type="number" id=cha min="0" value="0">
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=clear>CR:</td>
-                        <td class="clear">
-                            <input class="input-sm" list="CombatRating" id="cr" name="browser" min="0" max="30" data-toggle="tooltip" data-placement="right" title="The difficulty rating of the combattant. If you'd like to use the CR of a base creature, set this field to 0" required>
-                            <datalist id="CombatRating">
-                                <option value=.125>
-                                <option value=.25>
-                                <option value=.5>
-                                <option value=1>
-                                <option value=2>
-                                <option value=3>
-                                <option value=4>
-                                <option value=5>
-                                <option value=6>
-                                <option value=7>
-                                <option value=8>
-                                <option value=9>
-                                <option value=10>
-                                <option value="11">
-                                <option value="12">
-                                <option value="13">
-                                <option value="14">
-                                <option value="15">
-                                <option value="16">
-                                <option value="17">
-                                <option value="18">
-                                <option value="19">
-                                <option value="20">
-                            </datalist>
-                            <!--<input type="number" id="cr" value="10" min=".1"  required />-->
-                            <!--<span class="fa fa-question" data-toggle="tooltip" title="The difficulty rating of the combattant. If you'd like to use the CR of a base creature, set this field to 0"></span>-->
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="number" id="numberOfB" value="1" min="1" style="width:4em" />
-                            <button onclick="AddB()"><i class="fa fa-shopping-cart"></i> Add</button>
-                            <button onclick="clearB()"> <i class="fa fa-trash-o"></i>Reset</button>
-                        </td>
-                    </tr>
-                </table>
+                    <label class="radio-inline">
+                        <input type="radio" name="team" value="Red" class="input-xs combatant_team">
+                        Red
+                    </label>
+                    
+                    <label class="radio-inline">
+                        <input type="radio" name="team" value="Blue" class="input-xs combatant_team">
+                        Blue
+                    </label>
+                    <br />
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="The team the creature is on."></span>-->
+
+
+                    <label for="hp">HP:</label>
+                    <input class="input-xs form-control" type="number" id=hp min="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="hit points"></span>-->
+
+
+                    <label for="ac">AC:</label>
+                    <input class="input-xs form-control" type="number" id=ac min="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="armor class"></span>-->
+
+
+                    <label for="initiative_bonus">Initiative bonus:</label>
+                    <input class="input-xs form-control" type="number" id=initiative_bonus min="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="initiative bonus"></span>-->
+
+
+                    <label for="attack_parameters">Attack parameters:</label>
+                    <input class="input-xs form-control" type=text id=attack_parameters data-toggle="tooltip" title="Attacks need to be in square brackets, and follow the following template : ['club', toHit modifier, damage modifier, damage dice]. Please use the tool to make custom attacks."
+                            data-placement="right">
+
+                    <label for="spell_casting">Spell Casting:</label>
+                    <input class="input-xs form-control" list="spellCasting" id=spell_casting placeholder="None" data-toggle="tooltip" title="The ability the creature uses to cast spells (if any, or different than default creature)"
+                            data-placement="right">
+                        <datalist id="spellCasting">
+                            <option value="None">
+                            <option value="Intelligence">
+                            <option value="Charisma">
+                            <option value="Wisdom">
+                        </datalist>
+
+
+                    <label for=" healing_spells">Number of healing spells:</label>
+                    <input class="input-xs form-control" type="number" id=healing_spells value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number of times creature can cast healing spell"/>
+
+
+                    <label for=" diealing_dice">Healing dice:</label>
+                    <input class="input-xs form-control" type="number" id=healing_dice value="0" min="0" data-toggle="tooltip" data-placement="right" title="Number without the d. d4 is the default."> <!--drop down options?... would like to deprecate this field in favor of actual spells-->
+
+
+                    <label for="healing_bonus">Healing bonus:</label>
+                    <input class="input-xs form-control" type="number" id=healing_bonus value="0" min="0"  data-toggle="tooltip" data-placement="right" title="the bonus to the healing effect, if none is given the base creatures default ability modifier will be used.">
+
+
+                    <label for="str">Str:</label>
+                    <input class="input-xs form-control" type="number" id=str min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>-->
+
+
+                    <label for="dex">Dex:</label>
+                    <input class="input-xs form-control" type="number" id=dex min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>-->
+
+
+                    <label for="con">Con:</label>
+                    <input class="input-xs form-control" type="number" id=con min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>-->
+
+
+                    <label for="int">Int:</label>
+                    <input class="input-xs form-control" type="number" id=int min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>-->
+
+
+                    <label for="wis">Wis:</label>
+                    <input class="input-xs form-control" type="number" id=wis min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>-->
+
+
+                    <label for="cha">Cha:</label>
+                    <input class="input-xs form-control" type="number" id=cha min="0" value="0">
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>-->
+
+
+                    <label for="CombatRating">CR:</label>
+                    <input class="input-xs form-control" list="CombatRating" id="cr" name="browser" min="0" max="30" data-toggle="tooltip" data-placement="right" title="The difficulty rating of the combattant. If you'd like to use the CR of a base creature, set this field to 0" required>
+                    <datalist id="CombatRating">
+                        <option value=.125>
+                        <option value=.25>
+                        <option value=.5>
+                        <option value=1>
+                        <option value=2>
+                        <option value=3>
+                        <option value=4>
+                        <option value=5>
+                        <option value=6>
+                        <option value=7>
+                        <option value=8>
+                        <option value=9>
+                        <option value=10>
+                        <option value="11">
+                        <option value="12">
+                        <option value="13">
+                        <option value="14">
+                        <option value="15">
+                        <option value="16">
+                        <option value="17">
+                        <option value="18">
+                        <option value="19">
+                        <option value="20">
+                    </datalist>
+                    <!--<input type="number" id="cr" value="10" min=".1"  required />-->
+                    <!--<span class="fa fa-question" data-toggle="tooltip" title="The difficulty rating of the combattant. If you'd like to use the CR of a base creature, set this field to 0"></span>-->
+
+
+                    <input class="input-xs form-control" type="number" id="numberOfB" value="1" min="1" style="width:4em" />
+                    <button class="btn btn-default" onclick="AddB()"><i class="fa fa-shopping-cart"></i> Add</button>
+                    <button class="btn btn-danger" onclick="clearB()"> <i class="fa fa-trash-o"></i>Reset</button>
+
+
+                </div>
             </div>
 
             <!-- change function and params before uncommenting<button onclick='initial();console.log("cleared");$("#lineup").html("")'>
@@ -275,98 +215,71 @@
                 <p>
                     This is a tool to help create properly formatted battle parameters for custom combatants. Simply enter the values for an attack and copy and paste it into the battle parameters box for the custom combatant.
                 </p>
-                <p>
-                    <table id="attack_tool">
-                        <tr>
-                            <td class=clear>Better Attack Parameters:</td>
-                        </tr>
-                        <tr>
-                            <td><label>Weapon</label></td>
-                            <td>
-                                <input class="input-sm" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams(this)" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
-                                <datalist id="weapons">
-                                    <option value="club" data-die="4">
-                                    <option value="great club" data-die="8">
-                                    <option value="dagger" data-die="4">
-                                    <option value="short sword" data-die="6">
-                                    <option value="long sword" data-die="8">
-                                    <option value="bastard sword" data-die="10">
-                                    <option value="great sword" data-die="12">
-                                    <option value="rapier" data-die="8">
-                                    <option value="scimitar" data-die="6">
-                                    <option value="sickle" data-die="4">
-                                    <option value="hand axe" data-die="6">
-                                    <option value="battle axe" data-die="8">
-                                    <option value="battle axe" data-die="10">
-                                    <option value="great axe" data-die="12">
-                                    <option value="javelin" data-die="6">
-                                    <option value="spear" data-die="6">
-                                    <option value="flail" data-die="8">
-                                    <option value="glaive" data-die="10">
-                                    <option value="halberd" data-die="10">
-                                    <option value="lance" data-die="12">
-                                    <option value="pike" data-die="10">
-                                    <option value="trident" data-die="6">
-                                    <option value="war pick" data-die="8">
-                                    <option value="light hammer" data-die="4">
-                                    <option value="mace" data-die="6">
-                                    <option value="war hammer" data-die="8">
-                                    <option value="quarterstaff" data-die="6">
-                                    <option value="morningstar" data-die="8">
-                                    <option value="whip" data-die="4">
-                                    <option value="claws" data-die="8">
-                                    <option value="bite" data-die="10">
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>To Hit Modifier</label>
-                            </td>
-                            <td>
-                                <input class="input-sm" type="number" placeholder="To Hit" id=attack_hit onchange="figureAtkParams()">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Attack Die</label>
-                            </td>
-                            <td>
-                                <input class="input-sm" type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled>
-                                <i class="fa fa-question"
-                                   data-toggle="tooltip" title="Damage Die of selected weapon. Will be automatically figured if a default weapon is selected. This field will NOT be automatically filled for a custom weapon. Multiple dice are allowed."
-                                   data-tplacement="right"></i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label>Modifier</label></td>
-                            <td>
-                                <input class="input-sm" type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()"><br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>New Attack: </label>
-                            </td>
-                            <td>
-                                <a id="aParams"></a>
-                                <!-- need a way to indicate or figure automatically dx based weapons.-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
-                            </td>
-                        </tr>
-                    </table>
+                <div id="attack_tool">
+
+                    <label for="weapon">Weapon</label>
+                    <input class="input-xs form-control" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams(this)" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
+                    <datalist id="weapons">
+                        <option value="club" data-die="4">
+                        <option value="great club" data-die="8">
+                        <option value="dagger" data-die="4">
+                        <option value="short sword" data-die="6">
+                        <option value="long sword" data-die="8">
+                        <option value="bastard sword" data-die="10">
+                        <option value="great sword" data-die="12">
+                        <option value="rapier" data-die="8">
+                        <option value="scimitar" data-die="6">
+                        <option value="sickle" data-die="4">
+                        <option value="hand axe" data-die="6">
+                        <option value="battle axe" data-die="8">
+                        <option value="battle axe" data-die="10">
+                        <option value="great axe" data-die="12">
+                        <option value="javelin" data-die="6">
+                        <option value="spear" data-die="6">
+                        <option value="flail" data-die="8">
+                        <option value="glaive" data-die="10">
+                        <option value="halberd" data-die="10">
+                        <option value="lance" data-die="12">
+                        <option value="pike" data-die="10">
+                        <option value="trident" data-die="6">
+                        <option value="war pick" data-die="8">
+                        <option value="light hammer" data-die="4">
+                        <option value="mace" data-die="6">
+                        <option value="war hammer" data-die="8">
+                        <option value="quarterstaff" data-die="6">
+                        <option value="morningstar" data-die="8">
+                        <option value="whip" data-die="4">
+                        <option value="claws" data-die="8">
+                        <option value="bite" data-die="10">
+                    </datalist>
+
+                    <label for="attack_hit">To Hit Modifier</label>
+                    <input class="input-xs form-control" type="number" placeholder="To Hit" id=attack_hit onchange="figureAtkParams()">
+
+                    <label for="attack_dicedmg">Attack Die</label>
+                    <input class="input-xs form-control" type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled data-toggle="tooltip" title="Damage Die of selected weapon. Will be automatically figured if a default weapon is selected. This field will NOT be automatically filled for a custom weapon. Multiple dice are allowed."
+                        data-placement="right">
+                    
+
+                    <label for=" attack_dmgmod">Modifier</label>
+                    <input class="input-xs form-control" type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()"><br />
+
+                    <label for="aParams">New Attack: </label>
+                    <br />
+                    <span id="aParams"></span><br />
+                    <!-- need a way to indicate or figure automatically dx based weapons.-->
+
+                    <button class="btn btn-default" onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
+
+                    </div>
                     <h3>New Attacks</h3>
                 <p id="newAttacks" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     [<a id="attacks"></a>]
                     <br /><br />
                 </p>
                 <p>
-                    <button onclick="clearAttacks()"> <i class="fa fa-trash-o"></i>Clear</button>
-                    <button onclick="saveAttack()"><i class="fa fa-shopping-cart"></i> Add to combatant</button>
+                    <button class="btn btn-default" onclick="clearAttacks()"> <i class="fa fa-trash-o"></i>Clear</button>
+                    <button class="btn btn-default" onclick="saveAttack()"><i class="fa fa-shopping-cart"></i> Add to combatant</button>
                 </p>
             </div>
         </div><!--attack tool-->
@@ -374,8 +287,13 @@
             <h3>Simulation Options<i class="fa fa-chevron-up" id="OFF_options" onclick="flip('options',0)"></i><i class="fa fa-chevron-down" id="ON_options" onclick="flip('options',1)"></i></h3>
             <div id="DIV_options">
                 <div class="card-body">
-                    <label>Morale</label>
-                    <input type="checkbox" name="morale" id="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low. CR determines how much morale a creature has." />
+                    <div class="checkbox">
+                        <label for="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low. CR determines how much morale a creature has." >
+                            <input type="checkbox" name="morale" id="morale"/>
+                            Morale
+                        </label>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -395,12 +313,12 @@
                 </div>
             </div>
             <br />
-            <button onclick="duel()"><i class="fas fa-play"></i> Calculate</button>
-            <button onclick='rosterTable("hard")'>
+            <button class="btn btn-success" onclick="duel()"><i class="fas fa-play"></i> Calculate</button>
+            <button class=" btn btn-danger" onclick='rosterTable("hard")'>
                 <i class="fa fa-trash-o"></i>
                 Clear
             </button>
-            <button id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
+            <button class="btn btn-info" id="showInfo" data-toggle="modal" data-target="#myModal"><i class="fas fa-eye"></i> Show Data</button>
             <br />
         </div><!-- line up-->
         <div class="card"><p id=status></p></div>
