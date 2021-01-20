@@ -13,7 +13,6 @@ from . import app, DnD, creature
 #from DnDRoyale import creature
 print("loading views file")
 breadcrumb = os.listdir()
-print("working from: " + str(breadcrumb)) #for finding out where Azure is launching from 
 
 @app.route('/')
 @app.route('/home')
@@ -23,7 +22,8 @@ def home():
     return render_template(
         'index.html',
         title='D&D Battle Simulator',
-        list=sendindex()
+        list=sendindex(),
+        year=datetime.now().year
     )
 
 @app.route('/contact')
@@ -51,12 +51,12 @@ def sendindex():
     """ loads creatures from beastiary file and populates dropdown menu on page"""
     print("SendIndex") #for debugging
     # Read creatures from bestiary  
-    #root = 'static/content/'
     
     creaturelist = ''
-    #creaturelist =creature.Creature.load_beastiary('DnDRoyale/creatures.csv')
+    # Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
+    # Dev value : 'DnDRoyale/creatures.csv'
     #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
-    with open('/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv', encoding='utf-8', newline='') as csvfile:
+    with open('DnDRoyale/creatures.csv', encoding='utf-8', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []
@@ -66,18 +66,9 @@ def sendindex():
                 line_count+=1
             else:
                 #get data from row as row[column]
-                # put data in html tags
-                # add name to list
-                creaturelist += '<option data-xp="'+ row[23] +'" value="'+row[0]+'">'+row[0]+'</option>'
+                # put data in html tags and add name to list
+                creaturelist += '<option data-xp="'+ row[19] +'" value="'+row[0]+'">'+row[0]+'</option>'
                 line_count+=1
-
-    # x='<!--serverside values-->'
-    # Add creatures to html dropdown list
-    #for name in sorted([creature.Creature.beastiary[beast]['name'] for beast in creature.Creature.beastiary],key=str.lower):
-    #    x+='<option value="'+name+'">'+name+'</option>,'
-    #x.split(',')
-    #response_body=response_body.replace("<!--LABEL-->",x)
-    #response_body = response_body.encode('utf-8')
 
     return creaturelist
 
@@ -85,8 +76,6 @@ def sendindex():
 #from the encounter simulator app
 @app.route('/poster/', methods=['POST'])
 def poster():              
-    #from cgi import parse_qs
-    print("We've hit the Poster!");
     request_body = ""
     list = "" 
     
@@ -101,11 +90,8 @@ def poster():
 
     try:
         l = json.loads(request.data)
-        #l = request.values
-        # need to find the right way to parse the list from request
-        # print("l : " + l)
         wwe = DnD.Encounter(*l)
-        w=threading.Thread(target=wwe.go_to_war,args=(5,)) #default is 1000, changing to 5 for testing
+        w=threading.Thread(target=wwe.go_to_war,args=(1000,)) #default is 1000, changing to 5 for testing
         w.start()
         time.sleep(10)
         wwe.KILL = True
@@ -123,6 +109,3 @@ def poster():
 
     return response_body
 
-#if __name__ == '__main__':
-#    app.run(debug=True)
-# I don't think this is needed... maybe
