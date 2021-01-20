@@ -229,19 +229,20 @@ class Encounter:
         self.masterlog = []
         self.note = ''
         self.combattants = []
-        #keeping track of the number and what the teams are called.
+        #keeping track of the number and what the teams are called... but there's only ever 2 now right... so we don't need this?
         self.sides = []
         #self.teams["Red", "Blue"] I'm not sure if I'm going to need this, or an attribute that contains 
         self.teamRed = []
         self.teamBlue = []
+        self.options = lineup[0];
         
         for chap in lineup:
             if type(chap) is dict:
                 # TODO cope with dictionary input from custom combattant 
-                print("Custom Combattant detected, attempting to add to combattant list")
                 newChap = creature.Creature(chap)
                 self.append(newChap)
-            elif type(chap) is str: 
+            elif type(chap) is str:
+                print("Stringy combatant detected, Something's not right here")
                 self.append(chap)            
             else:
                 print("pls don't summon the big guy here")
@@ -289,6 +290,7 @@ class Encounter:
 
     def __str__(self):
         ''' formats the battle results and data to be displayed on the web page''' 
+        # I suspect that this shouldn't be here.. it's adding html... maybe it should be returning a dictionary?
         string = "=" * 50 + ' ' + self.name + " " + "=" * 50 + N
         string += self.predict()
         string += "-" * 110 + N
