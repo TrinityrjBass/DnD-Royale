@@ -5,7 +5,7 @@
 function updateGraph(redPower, bluePower) {
     // get total value of 'power' from each team
 
-    if (redPower + bluePower != 0) { // check if there's values to display
+    if (redPower + bluePower >= 0) { // check if there's values to display
 
         var chart = new CanvasJS.Chart("chartContainer",
             {
@@ -45,4 +45,5 @@ function updateGraph(redPower, bluePower) {
             });
     chart.render();
     }
+
 }
