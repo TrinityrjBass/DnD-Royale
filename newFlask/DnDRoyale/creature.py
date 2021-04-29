@@ -335,7 +335,7 @@ class Creature:
         print("actions")
         # dice(self, bonus=0, dice=20, avg=False, twinned=None, role="ability")
         # this isn't going to work atm...need to get to the damage etc correctly
-        if self.beastiary['actions'] is not '': #IF the creature has actions
+        if self.beastiary['actions'] != 'none': #IF the creature has actions
             import json
             self.beastiary['actions'].replace('\n', '') #json decoder error possibility
             actions = json.loads(self.beastiary['actions']) # make list of actions into object
@@ -352,7 +352,7 @@ class Creature:
                 #self.actions = actions
                 self.actions.append(action)
         else:
-            self.actions = {'name': None, 'attack': None}
+            self.actions = {'name': None, 'attack': None, 'usable': False}
         # last but not least
         print("Assessing alignment")
        
@@ -425,7 +425,7 @@ class Creature:
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
-        self.actions = [];
+        self.actions = [''];
         #self.actions = self.beastiary['actions']
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
