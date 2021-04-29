@@ -66,9 +66,7 @@ class Creature:
         # check here https://www.youtube.com/watch?v=efSjcrp87OY
         try:
             import csv
-            #r = csv.reader(open(path, encoding='utf-8'))
             r = csv.reader(open(path, encoding='utf-8-sig'))
-            #dr = csv.DictReader(path)
 
             headers = next(r)
             # print(headers)
@@ -109,10 +107,7 @@ class Creature:
             self._fill_from_beastiary(wildcard)
         elif type(wildcard) is dict:
             print("this wildcard is a dict")
-            self._initialise(**wildcard) # new attempt
-            # self._fill_from_dict(wildcard) # OG
-            #if not kwargs == {}: # seeing if commenting this out actually messes anything up
-            #    print("dictionary passed followed by unpacked dictionary error")
+            self._initialise(**wildcard)
         elif kwargs and type(wildcard) is str:
             print("kwargs, and also this wildcard is str")
             if wildcard in self.beastiary:
@@ -336,13 +331,28 @@ class Creature:
             warnings.warn('Insufficient info: defaulting hit dice to d8')
             self.hd = DnD.Dice(self.ability_bonuses['con'], 8, avg=True, role="hd")
 
-    def getAltAttack(self): # There are currently no alt attacks implemented. Breath weapons and spells are being planned 
-        print("alt attacks")
-        if 'alt_attack' in self.settings and type(self.settings['alt_attack']) is list:
-            self.alt_attack = {'name': self.settings['alt_attack'][0],
-                               'attack': DnD.Dice(self.settings['alt_attack'][1], 20)}  # CURRENTLY ONLY NETTING IS OPTION!
+    def getAltAttack(self): 
+        print("actions")
+        # dice(self, bonus=0, dice=20, avg=False, twinned=None, role="ability")
+        # this isn't going to work atm...need to get to the damage etc correctly
+        if self.beastiary['actions'] is not '': #IF the creature has actions
+            import json
+            self.beastiary['actions'].replace('\n', '') #json decoder error possibility
+            actions = json.loads(self.beastiary['actions']) # make list of actions into object
+            for action in actions: #make relevant dice for random elements in attacks
+                print("Action name : " + action['name'])
+                if "num_targets" in action:
+                    action['num_targets'] = DnD.Dice(0, dice = action['num_targets'], role='damage')#role 'damage' makes it non-critable
+                if "recharge" in action:
+                    action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
+                if "damage" in action:
+                    action['damage'] = DnD.Dice(0, dice = action['damage'], role='damage')
+                if "on_save" in action:
+                    action['on_save'] = DnD.Dice(0, action['on_save'], role='damage')
+                #self.actions = actions
+                self.actions.append(action)
         else:
-            self.alt_attack = {'name': None, 'attack': None}
+            self.actions = {'name': None, 'attack': None}
         # last but not least
         print("Assessing alignment")
        
@@ -397,9 +407,10 @@ class Creature:
         print("_initialise")
         # TB settings is ONLY user settings/from app
         self.settings = settings
-        # set up for creature abilities
+        # set up for creature ability scores
         self.abilities = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha': 0}
         self.ability_bonuses = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha': 0}
+        self.hasAction = True
 
         #load entry from bestiary -- default values
         if self.settings['base'] == 'cthulhu':
@@ -414,7 +425,8 @@ class Creature:
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
-
+        self.actions = [];
+        #self.actions = self.beastiary['actions']
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
         setattr(self, 'proficiency', int(1 + round(self.level / 4)))
@@ -661,7 +673,6 @@ class Creature:
             self.hurtful += (sum(x['damage'].dice) + len(
                 x['damage'].dice)) / 2  # the average roll of a d6 is not 3 but 3.5
 
-    # Another place where Morale may need to be added
     def __str__(self):
         if self.tally['battles']:
             battles = self.tally['battles']
@@ -677,34 +688,38 @@ class Creature:
         else:
             return self.name + self.id + ": UNTESTED IN BATTLE"
 
-        # Morale may be needed to be factored in here too
     def isalive(self):
         if self.hp > 0: return 1
 
     def take_damage(self, points, verbose=1):
+        if points < 0: points = 0 #negative damage will heal, we don't want this.
         self.hp -= points
         if verbose: 
-            verbose.append(self.name + self.id + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
-            print(self.name + self.id + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
-            
+            # verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
+            print(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
+        
+        if "morale" in self.arena.options:
+            updateMorale(points, verbose)
+
+        if self.hp <= 0: '{} {} dies'.format(self.name, str(self.id))
+        if self.concentrating:
+                dc = points / 2
+                if dc < 10: dc = 10
+                if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
+                    self.conc_fx()
+                    if verbose: verbose.append(self.name + str(self.id) + ' has lost their concentration')
+    def updateMorale(self, points, verbose=1):
         # Morale Check for bloodied
         if self.hp < self.starting_hp/2: 
             self.current_morale -= 1 # this will cause it to lose morale EVERY TURN while it's bloodied,
 
-        if points >= 10 : self.current_morale -= 1 # pseudo critical hit
+        if points >= 10: self.current_morale -= 1 # pseudo critical hit
         if verbose: verbose.append(self.name + self.id + ' is at ' + str(self.current_morale) + ' morale.')
 
         # if morale gets to be 0 or less, remove from combatants list (run away), else check if concentrating.
         if self.current_morale < 1 and self.hp > 0: 
             if verbose: verbose.append(self.name + self.id + ' lost its desire to fight and ran away from battle')
             self.hp = 0 #psuedo death (running away)
-        if self.hp <= 0 : '{} {} dies'.format(self.name, str(self.id))
-        if self.concentrating:
-                dc = points / 2
-                if dc < 10: dc = 10
-                if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
-                    self.conc_fx()
-                    if verbose: verbose.append(self.name + self.id + ' has lost their concentration')
 
     def ready(self):
         self.dodge = 0
@@ -761,9 +776,11 @@ class Creature:
 
     def heal(self, points, verbose=1):
         self.hp += points
-        self.current_morale +=  1
         if verbose: verbose.append(self.name + self.id + ' was healed by ' + str(points) + '. Now on ' + str(self.hp) + ' hp.')
-        if verbose: verbose.append(self.name + self.id + ' got a morale boost from getting healed and is now at ' + str(self.current_morale) + ' morale.')
+
+        if 'morale' in self.arena.options:
+            self.current_morale +=  1
+            if verbose: verbose.append(self.name + self.id + ' got a morale boost from getting healed and is now at ' + str(self.current_morale) + ' morale.')
 
     def assess_wounded(self, verbose=0):
         targets = self.arena.find('bloodiest allies')
@@ -797,7 +814,7 @@ class Creature:
             # This was the hit method. put here for now.
             self.attacks[i]['attack'].advantage = self.check_advantage(opponent)
             attackRoll = self.attacks[i]['attack'].roll(verbose)
-            if attackRoll == 999:
+            if attackRoll == 999 and 'morale' in self.arena.options:
                 opponent.current_morale-=1
                 print("CRITICAL HIT! " + opponent.name + " loses some morale")
             if attackRoll >= opponent.ac:
@@ -808,7 +825,7 @@ class Creature:
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
                 # check to see if the opponent survived the last hit, if not, win
-                if opponent.hp < 1 : # Does this raise a victory when the FIRST creature dies??
+                if opponent.hp < 1:
                     print(opponent.name + " " + str(opponent.id) + " dies")
             else:
                 self.tally['misses'] += 1
@@ -843,29 +860,100 @@ class Creature:
                 self.cast_healing(weakling, verbose)
         # Main action!
         economy = len(self.arena.find('allies')) > len(self.arena.find('opponents')) > 0
-        # Buff?
-        if self.condition == 'netted':
-            # NOT-RAW: DC10 strength check or something equally easy for monsters
-            if verbose: verbose.append(self.name + self.id + " freed himself from a net")
-            self.condition = 'normal'
+        ## Buff?
+        if 'restrained' in self.condition:
+            # try to get out of being restrained
+            if verbose:
+                verbose.append(self.name + self.id + " freed himself from a net")
+                self.condition = 'normal'
         elif self.buff_spells > 0 and self.concentrating == 0:
             self.conc_fx()
             if verbose: verbose.append(self.name + self.id + ' buffs up!')
             # greater action economy: waste opponent's turn.
-        elif economy and self is self.arena.find('weakest allies')[0]:
-            if verbose: 
+        elif economy and self is self.arena.find('weakest allies')[0]:# If it is the weakest, then dodge??
+            if verbose:
                 verbose.append(self.name + self.id + " is dodging")
             print(self.name + " " + self.id + " is dodging")
             self.dodge = 1
-        elif economy and self.alt_attack['name'] == 'net':
-            opponent = self.arena.find('fiersomest enemy alive', self)[0]
-            if opponent.condition != 'netted':
-                self.net(opponent, verbose)
+        # special abilities
+        # bloodied
+        elif self.hp <= self.starting_hp / 2:
+            for action in self.actions:
+                #if 'healing' in self.actions[0]['role'] and self.actions[0]['usable']:
+                if 'damage' in action['role'] and action['usable']:
+                    if self.hasAction == False: break #don't allow actions if it's not available
+                    print("we're going to use " + action['name'])
+                    self.checkDamageAction(action)
+                #if 'support' in self.actions[0]['role'] and self.actions[0]['usable']:
+            if self.hasAction:
+                self.multiattack(verbose)
+                self.hasAction == False
+            self.hasAction = True #the reset for next round. Each action check method will have to mark the action when one is executed.
+        # outnumbered
+        elif economy == True:
+            #TB TODO
+            print("Help! I'm outnumbered")
+        # press for advantage
+        elif len(self.arena.find('allies')) < len(self.arena.find('opponents')):
+            if economy and 'role' in self.actions:
+                #if it has special abilities, use them.
+                determineAction(self.actions)
             else:
                 self.multiattack(verbose)
         else:
             self.multiattack(verbose)
 
+    def determineAction(self, actions): #deprecating
+        for action in actions:
+            if action['role'] == 'healing':
+                # TODO healing actions first
+                print("TODO")
+            elif action['role'] == 'damage':
+                # TODO damage
+                print("TODO")
+            elif action['role'] == 'support':
+                # TODO support
+                print("TODO")
+            else:
+                self.multiattack(verbose)
+
+    def checkHealingAction(self, action):
+        if action['role'] == 'healing':
+                # TODO healing/support actions first?
+                self.arena.find('weakest allies')[0]
+                # and heal them
+                print("TODO")
+    def checkDamageAction(self, action):
+        if action['name'] == 'breath weapon':
+                # TODO damage
+                # get enemy/ies, check save, roll damage, apply damage, roll for ability recharge
+                # target = self.arena.find(TARGET, self)[0]
+                target = self.arena.find('weakest enemy')[0]
+                # check save (ability_bonus + D20
+                if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
+                    # roll damage
+                    damage = action['damage'].roll()
+                    # apply damage to target
+                    print("Watch out for full damage!")
+                    print(str(damage) + " points of damage!")
+                    #target = self.arena.find('weakest enemy')[0]
+                    target.take_damage(damage)
+                    action['usable'] = False
+                else:
+                    # roll save damage
+                    print("taking 1/2 damage")
+                    damage = action['on_save'].roll()
+                    #apply damage to target
+                    target.take_damage(damage)
+                    action['usable'] = False
+                # recharge should happen at end of turn (add to turn code block)
+                if action['recharge'].roll() > 4: # hard coded for behir breath weapon
+                    action['usable'] = True
+                    print(action['name'] + " is recharged!")
+    def checkSupportAction():
+        if action['role'] == 'support':
+                # TODO support
+                print("TODO")
     # I dont' think I'll ever use this function
     def generate_character_sheet(self):
         """
