@@ -90,14 +90,6 @@ function getUid() {
     return uid;
 }
 
-//function Add(newbie) {
-//    var lineup = JSON.parse(sessionStorage.getItem('lineup'));
-//    lineup.push(newbie);
-//    sessionStorage.setItem('lineup', JSON.stringify(lineup));
-//    $("#lineup").html(JSON.stringify(lineup));
-//}
-// new function for adding teams
-
 function Add(newbie) {
     // uniquenum++;
     lineup.push(newbie);
@@ -144,22 +136,6 @@ function AddB() {
     update_lineup();
     $("#confC").hide("slow");
 }
-
-//function AddB() {
-//    var numberOf = $("#numberOfB").val();
-//    num_entities += parseInt(numberOf);
-
-//    $("#confC").show("slow");
-//    for (var x = 0; x < numberOf; x++) {
-//        let newbie = getCustomCreature();
-//        newbie.team = $("input[name='team']:checked").val();
-//        newbie.uid = uniquenum;
-//        //print("new creature uid: " + newbie.uid);
-//        Add(newbie);
-//    }
-//    update_lineup();
-//    $("#confC").hide("slow");
-//}
 
 function getCustomCreature() {
     let newCreature = {};
@@ -328,8 +304,8 @@ function loadPowerDict() {
 
 // deprecating... but might be able to be used with Plotly
 function fix_doubles() {
-    // is making a dict of combatants, numbering them per type and therefore making them unique for identification
-    // I'm thinking there's got to be a more efficient way of ensuring uniqueness
+    // making a dict of combatants, numbering them per type and therefore making them unique for identification
+
     var unique = {};// this var is counting the number of unique creatures in the lineup. i'm assuming in the case of adding x A creatures, x B creatures, then going back and adding more A creatures
     for (var i = 0; i < lineup.length; i++) {
         if (!!lineup[i].replace) { //is string-like

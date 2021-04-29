@@ -5,6 +5,32 @@
 <h2>{{ title }}.</h2>
 <!--<h3>{{ message }}</h3>-->
 
+<div class="row">
+    <div class="col-lg-10 offset-lg-1 col-sm-12 text-justify">
+        <p style="text-align:justify; text-align-last:center;">
+            <span style="float: left; color: #903; font-size: 64px; line-height: 48px; padding-top: 0px; padding-right: 6px; padding-left: 3px; font-family: Georgia;">T</span>
+            HIS online tool calculates the victory probabilities in a D&amp;D encounter. It relies on a python script,
+            which simulates an encounter 1,000 times for statistical accuracy. The combatants can be selected from
+            a preset list with their original stat blocks as found in the Monster Manual, or the user can choose to modify any or all of the original stats.
+            The presets are based on a monster manual table ("beastiary.csv").
+            <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
+            Due to the complexity of the tactical decisions involved, which human players
+            often fail at, the encounters are performed with the assumption that everyone borders everyone.
+            <br />The simulator is based on the 5e rules in how it handles crits, conditions, advantages and disadvantages.
+        </p>
+        <p style="text-align:justify; text-align-last:center;">
+            Instructions on how to start a simple encounter : <br />
+            Select a creature from the dropdown options in the "Option A" section.<br />
+            Determine how many of these creatures you would like to fight as well as what team they are on (don't worry, you can change anything at any time before the simulation starts). <br />
+            Click the "Add" button when you are ready to add the creatures.<br />
+            Review, remove, and/or change teams of any combatants you have added in the "Lineup" section.<br />
+            When you are ready, click the "Calculate" button.<br />
+            CAUTION : the more creatures you add to the simulation, the longer each battle will be and you may get a limited data set as the app times out after 10 seconds regardless of the number of battles fought.
+
+        </p>
+    </div><!--abs-->
+</div><!--abs row-->
+
 <h2>Motive</h2>
 <p>
     D&D is an amazing game, but encounters can get tedious when they are not a challenge. Conversely, too
@@ -16,7 +42,7 @@
     represent the strength of a party.
 </p>
 <p>
-    Consequently, to address and <a href="#links">analyse</a> this and <a href="#links">
+    Consequently, to address and <a href="#links">analyze</a> this and <a href="#links">
         to trial new
         weapons
     </a>, I wrote a <a href="#links">python script</a> to simulate battles.
@@ -59,16 +85,29 @@
 </p>
 <h3><i class="far fa-wand-magic"></i>Spell-list</h3>
 <p>
-    Spell-budgeting troubles players, therefore there is not much spellcasting, bar for a handful of
-    cantrips.
+    Spell-budgeting troubles players, therefore there is no spells, except for a single healing cantrip.
+</p>
+<p>
+    Creatures also do not have any specical abilities, and there are no ranged weapons.
 </p>
 <h2>More</h2>
 <p>
-    This is the webserver version of a python script that is a lot more complex and customisable, such as
+    This is the webserver version of a python script that is a lot more complex and customizable, such as
     running multiple analyses changing on parameter or running a single button and getting the verbose
     description of the battle. For technical reasons, the simulations are limited to 1,000 battles
-    (encounters) and no custom spells are allowed as spells are encoded as method references which might
-    lead to vulnerability.
+    (encounters)
+    <!--and no custom spells are allowed as spells are encoded as method references which might
+    lead to vulnerability.-->
+</p>
+
+<h2>
+    Section help
+</h2>
+<p>
+    Settings <br />
+    Some optional rules have been added under "Simulation Options". At the moment, the only addition is "morale". Morale is determined based on the creature's CR.<br />
+    Certain events happen during battle that effect the creature's morale, such as falling under 1/2 of their total HP (becoming 'bloodied') and getting healed by an ally.<br />
+    If you would like to use any of these optional settings, check the box next to the setting that you would like to use in your simulation.
 </p>
 <p>See <a href="#links">GitHub</a> for more. </p>
 

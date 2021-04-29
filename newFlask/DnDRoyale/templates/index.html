@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row my-3">
             <div class="col-lg-3 offset-lg-2 hidden-xm hidden-sm">
-                <img src="{{url_for('static', filename = 'content/Owlbear.png') }}" width="100%" alt="owlbear icon" />
+                <img src="{{url_for('static', filename = 'content/Owlbear.png') }}" alt="owlbear icon" id="owlbear" />
             </div><!--icon-->
             <div class="col-lg-6 col-sm-12 align-middle">
                 <h1 style="display:inline">D&D 5e Royale Simulator</h1>
@@ -209,11 +209,11 @@
         <div class="card">
             <!--attack tool-->
             <h3>
-                Battle Parameter Tool <i class="fa fa-chevron-up" id="OFF_tool" onclick="flip('tool',0)"></i><i class="fa fa-chevron-down" id="ON_tool" onclick="flip('tool',1)"></i>
+                Custom Attack Tool <i class="fa fa-chevron-up" id="OFF_tool" onclick="flip('tool',0)"></i><i class="fa fa-chevron-down" id="ON_tool" onclick="flip('tool',1)"></i>
             </h3>
             <div id="DIV_tool">
                 <p>
-                    This is a tool to help create properly formatted battle parameters for custom combatants. Simply enter the values for an attack and copy and paste it into the battle parameters box for the custom combatant.
+                    This is a tool to help create properly formatted custom attacks for custom combatants. Simply enter the values for an attack and copy and paste it into the attack parameters box for the custom combatant.
                 </p>
                 <div id="attack_tool">
 
@@ -231,8 +231,8 @@
                         <option value="scimitar" data-die="6">
                         <option value="sickle" data-die="4">
                         <option value="hand axe" data-die="6">
-                        <option value="battle axe" data-die="8">
-                        <option value="battle axe" data-die="10">
+                        <option value="battle axe (1H)" data-die="8">
+                        <option value="battle axe (2H)" data-die="10">
                         <option value="great axe" data-die="12">
                         <option value="javelin" data-die="6">
                         <option value="spear" data-die="6">
