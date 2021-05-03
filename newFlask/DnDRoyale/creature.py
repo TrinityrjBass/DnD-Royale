@@ -342,7 +342,7 @@ class Creature:
             for action in actions: #make relevant dice for random elements in attacks
                 print("Action name : " + action['name'])
                 if "num_targets" in action:
-                    action['num_targets'] = DnD.Dice(0, dice = action['num_targets'], role='damage')#role 'damage' makes it non-critable
+                    action['num_targets'] = DnD.Dice(math.floor(action['max_targets']/2), dice = math.floor(action['max_targets']/2), role='damage')#role 'damage' makes it non-critable
                 if "recharge" in action:
                     action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
                 if "damage" in action:
@@ -353,8 +353,6 @@ class Creature:
                 self.actions.append(action)
         else:
             self.actions = {'name': None, 'attack': None, 'usable': False}
-        # last but not least
-        print("Assessing alignment")
        
 
     def getInternalStuff(self):
@@ -425,8 +423,8 @@ class Creature:
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
-        self.actions = [''];
-        #self.actions = self.beastiary['actions']
+        self.actions = [];
+        # self.actions = self.beastiary['actions']
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
         setattr(self, 'proficiency', int(1 + round(self.level / 4)))
@@ -926,32 +924,40 @@ class Creature:
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon':
                 # TODO damage
-                # get enemy/ies, check save, roll damage, apply damage, roll for ability recharge
-                # target = self.arena.find(TARGET, self)[0]
-                target = self.arena.find('weakest enemy')[0]
-                # check save (ability_bonus + D20
-                if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
-                    # roll damage
-                    damage = action['damage'].roll()
-                    # apply damage to target
-                    print("Watch out for full damage!")
-                    print(str(damage) + " points of damage!")
-                    #target = self.arena.find('weakest enemy')[0]
-                    target.take_damage(damage)
-                    action['usable'] = False
-                else:
-                    # roll save damage
-                    print("taking 1/2 damage")
-                    damage = action['on_save'].roll()
-                    #apply damage to target
-                    target.take_damage(damage)
-                    action['usable'] = False
-                # recharge should happen at end of turn (add to turn code block)
-                if action['recharge'].roll() > 4: # hard coded for behir breath weapon
-                    action['usable'] = True
-                    print(action['name'] + " is recharged!")
-    def checkSupportAction():
-        if action['role'] == 'support':
+                targets = []
+                num_targets = action['num_targets'].roll()
+                total_enemies = len(self.arena.find('alive enemy'))
+                # get enemy/ies, check save, roll damage, check immunity/vulnerable, apply damage, roll for ability recharge
+                if num_targets > total_enemies: num_targets = total_enemies
+                for x in range (num_targets):
+                    targets.append(self.arena.find(TARGET, self)[x]) #needs to select a group of enemies (based on ability)
+                # loop through targets and check saves
+                for target in targets: # check save (ability_bonus + D20
+                    if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
+                        # roll damage
+                        damage = action['damage'].roll()
+                        # apply damage to target
+                        print("Watch out for full damage!")
+                        print(str(damage) + " points of damage!")
+                        #target = self.arena.find('weakest enemy')[0]
+                        target.take_damage(damage)
+                        action['usable'] = False
+                    else:
+                        # roll save damage
+                        print("taking 1/2 damage")
+                        damage = action['on_save'].roll()
+                        #apply damage to target
+                        target.take_damage(damage)
+                        action['usable'] = False
+                    # recharge should happen at end of turn (add to turn code block)
+                if hasattr(action, 'recharge'):
+                    if action['recharge'].roll() >= action['recharge_threshold']:
+                        action['usable'] = True
+                        print(action['name'] + " is recharged!")
+                    else:
+                        print(action['name'] + " is not recharged")
+        def checkSupportAction():
+            if action['role'] == 'support':
                 # TODO support
                 print("TODO")
     # I dont' think I'll ever use this function
