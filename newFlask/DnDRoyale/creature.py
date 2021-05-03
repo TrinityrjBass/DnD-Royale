@@ -352,7 +352,7 @@ class Creature:
                 #self.actions = actions
                 self.actions.append(action)
         else:
-            self.actions = {'name': None, 'attack': None, 'usable': False}
+            self.actions = [{'name': None, 'attack': None, 'usable': False}]
        
 
     def getInternalStuff(self):
@@ -424,7 +424,7 @@ class Creature:
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
         self.actions = [];
-        # self.actions = self.beastiary['actions']
+        #self.actions = self.beastiary['actions']
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
         setattr(self, 'proficiency', int(1 + round(self.level / 4)))
@@ -706,6 +706,7 @@ class Creature:
                 if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
                     self.conc_fx()
                     if verbose: verbose.append(self.name + str(self.id) + ' has lost their concentration')
+
     def updateMorale(self, points, verbose=1):
         # Morale Check for bloodied
         if self.hp < self.starting_hp/2: 
@@ -730,9 +731,11 @@ class Creature:
         :param hard: bool, false keeps tallies
         :return: None
         """
-        
         self.hp = self.starting_hp
         self.current_morale = self.max_morale
+        for x in self.actions:
+            if 'recharge' in x:
+                x['usable'] = True
         if self.concentrating:
             self.conc_fx() #TODO this looks fishy
         self.healing_spells = self.starting_healing_spells
@@ -795,7 +798,7 @@ class Creature:
     def cast_healing(self, weakling, verbose=0):
         if self.healing_spells > 0:
             weakling.heal(self.healing.roll(), verbose)
-            self.healing_spells -= 1
+            # self.healing_spells -= 1
 
     def multiattack(self, verbose=1, assess=0):
         if assess:
@@ -851,7 +854,7 @@ class Creature:
         if not self.arena.find('alive enemy'):
             raise DnD.Encounter.Victory()
         # BONUS ACTION
-        # heal  -healing word, a bonus action.
+        # heal  -healing word, a bonus action. #TB nobody has healing except the big guy and custom combatants
         if self.healing_spells > 0:
             weakling = self.assess_wounded(verbose)
             if weakling != 0:
@@ -875,23 +878,27 @@ class Creature:
             self.dodge = 1
         # special abilities
         # bloodied
-        elif self.hp <= self.starting_hp / 2:
-            for action in self.actions:
-                #if 'healing' in self.actions[0]['role'] and self.actions[0]['usable']:
-                if 'damage' in action['role'] and action['usable']:
-                    if self.hasAction == False: break #don't allow actions if it's not available
-                    print("we're going to use " + action['name'])
-                    self.checkDamageAction(action)
-                #if 'support' in self.actions[0]['role'] and self.actions[0]['usable']:
-            if self.hasAction:
+        elif self.hp <= self.starting_hp / 2 or economy == True:
+            if self.actions[0]['name'] != None:
+                for action in self.actions:
+                    #if 'healing' in self.actions[0]['role'] and self.actions[0]['usable']:
+                    if action['role'] == 'damage' and action['usable'] == True:
+                        if self.hasAction == False: break #don't allow actions if it's not available
+                        print("we're going to use " + action['name'])
+                        self.checkDamageAction(action)
+                    else:# Try to recharge ability
+                        if hasattr(action, 'recharge'):
+                            if action['recharge'].roll() >= action['recharge_threshold']:
+                                action['usable'] = True
+                                print(action['name'] + " is recharged!")
+                            else:
+                                print(action['name'] + " is not recharged")
+                if self.hasAction:
+                    self.multiattack(verbose)
+                    self.hasAction == False
+                self.hasAction = True #the reset for next round. Each action check method will have to mark the action when one is executed.
+            else : 
                 self.multiattack(verbose)
-                self.hasAction == False
-            self.hasAction = True #the reset for next round. Each action check method will have to mark the action when one is executed.
-        # outnumbered
-        elif economy == True:
-            #TB TODO
-            print("Help! I'm outnumbered")
-        # press for advantage
         elif len(self.arena.find('allies')) < len(self.arena.find('opponents')):
             if economy and 'role' in self.actions:
                 #if it has special abilities, use them.
@@ -921,6 +928,7 @@ class Creature:
                 self.arena.find('weakest allies')[0]
                 # and heal them
                 print("TODO")
+
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon':
                 # TODO damage
@@ -950,12 +958,7 @@ class Creature:
                         target.take_damage(damage)
                         action['usable'] = False
                     # recharge should happen at end of turn (add to turn code block)
-                if hasattr(action, 'recharge'):
-                    if action['recharge'].roll() >= action['recharge_threshold']:
-                        action['usable'] = True
-                        print(action['name'] + " is recharged!")
-                    else:
-                        print(action['name'] + " is not recharged")
+                
         def checkSupportAction():
             if action['role'] == 'support':
                 # TODO support
