@@ -880,19 +880,18 @@ class Creature:
         # bloodied
         elif self.hp <= self.starting_hp / 2 or economy == True:
             if self.actions[0]['name'] != None:
-                for action in self.actions:
+                for action in self.actions:# Try to recharge ability
+                    if 'recharge' in action and action['usable'] == False:
+                        if action['recharge'].roll() >= action['recharge_threshold']:
+                            action['usable'] = True
+                            print(action['name'] + " is recharged!")
+                        else:
+                            print(action['name'] + " is not recharged")
                     #if 'healing' in self.actions[0]['role'] and self.actions[0]['usable']:
                     if action['role'] == 'damage' and action['usable'] == True:
                         if self.hasAction == False: break #don't allow actions if it's not available
                         print("we're going to use " + action['name'])
                         self.checkDamageAction(action)
-                    else:# Try to recharge ability
-                        if hasattr(action, 'recharge'):
-                            if action['recharge'].roll() >= action['recharge_threshold']:
-                                action['usable'] = True
-                                print(action['name'] + " is recharged!")
-                            else:
-                                print(action['name'] + " is not recharged")
                 if self.hasAction:
                     self.multiattack(verbose)
                     self.hasAction == False
