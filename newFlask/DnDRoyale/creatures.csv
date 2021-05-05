@@ -396,16 +396,459 @@ adult white dragon,,chaotic evil ,dragon,huge,natural armor,8,18,200,16,12,22,10
    }
 ]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,6,0,6,0,1,1,16.5
 air elemental,,neutral ,elemental,large,,0,15,90,12,10,14,20,14,6,10,6,"[[""slam"", 8, 5, 8, 8], [""slam"", 8, 5, 8, 8]]",5,1800,0,none,,,none,,,5,2,5,2,0,0,0,10
-ancient black dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,22,367,21,20,27,14,25,16,15,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6], [""claw"", 15, 8, 6, 6]]",21,33000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,2,8,2,7,3,2,4,1
-ancient blue dragon,,lawful evil ,dragon,gargantuan,natural armor,12,22,481,26,20,29,10,27,18,17,21,"[[""bite"", 16, 9, 10, 10], [""claw"", 16, 9, 6, 6]]",23,50000,,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,9,0,8,4,3,5,1
-ancient brass dragon,,chaotic good ,dragon,gargantuan,natural armor,10,20,297,17,20,27,10,25,16,15,19,"[[""bite"", 14, 8, 10, 10], [""claw"", 14, 8, 6, 6], [""claw"", 14, 8, 6, 6]]",20,25000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,8,0,7,3,2,4,33
-ancient bronze dragon,,lawful good ,dragon,gargantuan,natural armor,12,22,444,24,20,29,10,27,18,17,21,"[[""bite"", 16, 9, 10, 10], [""claw"", 16, 9, 6, 6]]",22,41000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,9,0,8,4,3,5,1
-ancient copper dragon,,chaotic good ,dragon,gargantuan,natural armor,10,21,350,20,20,27,12,25,20,17,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6], [""claw"", 15, 8, 6, 6]]",21,33000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,1,8,1,7,5,3,4,1
-ancient gold dragon,,lawful good ,dragon,gargantuan,natural armor,10,22,546,28,20,30,14,29,18,17,28,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",24,62000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,2,10,2,9,4,3,9,1
-ancient green dragon,,lawful evil ,dragon,gargantuan,natural armor,10,21,385,22,20,27,12,25,20,17,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6, 6, 6], [""claw"", 15, 8, 6, 6, 6, 6]]",22,41000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,1,8,1,7,5,3,4,1
-ancient red dragon,,chaotic evil ,dragon,gargantuan,natural armor,12,22,546,28,20,30,10,29,18,15,23,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",24,62000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,10,0,9,4,2,6,1
-ancient silver dragon,,lawful good ,dragon,gargantuan,natural armor,12,22,487,25,20,30,10,29,18,15,23,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",23,50000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,10,0,9,4,2,6,1
-ancient white dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,20,333,18,20,26,10,26,10,13,14,"[[""bite"", 14, 8, 10, 10], [""claw"", 14, 8, 6, 6], [""claw"", 14, 8, 6, 6]]",20,25000,0,none,,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,8,0,8,0,1,2,33
+ancient black dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,22,367,21,20,27,14,25,16,15,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6], [""claw"", 15, 8, 6, 6]]",21,33000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":36,
+      ""type"":""acid"",
+      ""save"":""dx"",
+      ""dc"":20,
+      ""damage"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8,
+   8,
+   8
+      ],
+      ""on_save"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true,
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,2,8,2,7,3,2,4,1
+ancient blue dragon,,lawful evil ,dragon,gargantuan,natural armor,12,22,481,26,20,29,10,27,18,17,21,"[[""bite"", 16, 9, 10, 10], [""claw"", 16, 9, 6, 6]]",23,50000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":48,
+      ""type"":""lightning"",
+      ""save"":""dx"",
+      ""dc"":23,
+      ""damage"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+   10,
+   10,
+   10,
+   10,
+         10
+      ],
+      ""on_save"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+   10,
+   10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,9,0,8,4,3,5,1
+ancient brass dragon,,chaotic good ,dragon,gargantuan,natural armor,10,20,297,17,20,27,10,25,16,15,19,"[[""bite"", 14, 8, 10, 10], [""claw"", 14, 8, 6, 6], [""claw"", 14, 8, 6, 6]]",20,25000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":36,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":21,
+      ""damage"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+   6
+      ],
+      ""on_save"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,8,0,7,3,2,4,33
+ancient bronze dragon,,lawful good ,dragon,gargantuan,natural armor,12,22,444,24,20,29,10,27,18,17,21,"[[""bite"", 16, 9, 10, 10], [""claw"", 16, 9, 6, 6]]",22,41000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":36,
+      ""type"":""lightning"",
+      ""save"":""dx"",
+      ""dc"":23,
+      ""damage"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+   10,
+         10,
+         10,
+         10,
+         10
+      ],
+      ""on_save"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,9,0,8,4,3,5,1
+ancient copper dragon,,chaotic good ,dragon,gargantuan,natural armor,10,21,350,20,20,27,12,25,20,17,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6], [""claw"", 15, 8, 6, 6]]",21,33000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":36,
+      ""type"":""acid"",
+      ""save"":""dx"",
+      ""dc"":22,
+      ""damage"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8,
+         8
+      ],
+      ""on_save"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,1,8,1,7,5,3,4,1
+ancient gold dragon,,lawful good ,dragon,gargantuan,natural armor,10,22,546,28,20,30,14,29,18,17,28,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",24,62000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":221,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":24,
+      ""damage"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+         10,
+   10
+      ],
+      ""on_save"":[
+         10,
+         10,
+         10,
+         10,
+         10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,2,10,2,9,4,3,9,1
+ancient green dragon,,lawful evil ,dragon,gargantuan,natural armor,10,21,385,22,20,27,12,25,20,17,19,"[[""bite"", 15, 8, 10, 10], [""claw"", 15, 8, 6, 6, 6, 6], [""claw"", 15, 8, 6, 6, 6, 6]]",22,41000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":221,
+      ""type"":""poison"",
+      ""save"":""cn"",
+      ""dc"":22,
+      ""damage"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6
+
+    ],
+      ""on_save"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+         6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,1,8,1,7,5,3,4,1
+ancient red dragon,,chaotic evil ,dragon,gargantuan,natural armor,12,22,546,28,20,30,10,29,18,15,23,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",24,62000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":221,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":24,
+      ""damage"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+         6,
+         6,
+   6
+
+      ],
+      ""on_save"":[
+         6,
+         6,
+         6,
+         6,
+         6,
+         6,
+   6,
+         6,
+         6,
+         6,
+         6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,10,0,9,4,2,6,1
+ancient silver dragon,,lawful good ,dragon,gargantuan,natural armor,12,22,487,25,20,30,10,29,18,15,23,"[[""bite"", 17, 10, 10, 10], [""claw"", 17, 10, 6, 6], [""claw"", 17, 10, 6, 6]]",23,50000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":221,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":24,
+      ""damage"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+   8,
+         8,
+         8,
+         8,
+         8,
+   8,
+         8,
+         8,
+         8,
+         8
+      ],
+      ""on_save"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,10,0,9,4,2,6,1
+ancient white dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,20,333,18,20,26,10,26,10,13,14,"[[""bite"", 14, 8, 10, 10], [""claw"", 14, 8, 6, 6], [""claw"", 14, 8, 6, 6]]",20,25000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":221,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":22,
+      ""damage"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8,
+         8,
+         8,
+         8
+      ],
+      ""on_save"":[
+         8,
+         8,
+         8,
+         8,
+         8,
+         8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,8,0,8,0,1,2,33
 androsphinx,,lawful neutral ,monstrosity,large,natural armor,7,17,199,19,10,22,10,20,16,18,23,"[[""claw"", 12, 6, 10, 10], [""claw"", 12, 6, 10, 10]]",17,18000,0,none,,,none,,,0,6,0,5,3,4,6,24
 animated armor,,unaligned ,construct,medium,natural armor,8,18,33,6,8,14,11,13,1,3,1,"[[""slam"", 4, 2, 6], [""slam"", 4, 2, 6]]",1,200,0,none,,,none,,,0,2,0,1,0,0,0,10
 ankheg,,unaligned ,monstrosity,large,natural armor (11 while prone),4,14,39,6,10,17,11,13,1,13,6,"[[""bite"", 5, 3, 6, 6]]",2,450,0,none,,,none,"plus 3 (1d6) acid damage. If the target is a large or smaller creature, it is grappled (escape DC 13). Until this grapple ends, the ankheg can bite only the grappled creature and has advantage on attack rolls to do so.",,0,3,0,1,0,1,0,10
@@ -416,7 +859,7 @@ awakened shrub,,unaligned ,plant,small,,-1,9,10,3,6,3,8,11,10,10,6,"[[""rake"", 
 awakened tree,,unaligned ,plant,huge,natural armor,3,13,59,7,12,19,6,15,10,10,7,"[[""slam"", 6, 4, 6, 6, 6]]",2,450,0,none,,,none,,,0,4,0,2,0,0,0,10
 axe beak,,unaligned ,beast,large,,0,11,19,3,10,14,12,12,2,10,5,"[[""beak"", 4, 2, 8]]",0.25,50,0,none,,,none,,,1,2,1,1,0,0,0,10
 azer,,lawful neutral ,elemental,medium,"natural armor, shield",6,17,39,6,8,17,12,15,12,13,10,"[[""warhammer"", 5, 3, 8]]",2,450,0,none,,,none,"or 8 (1d10 + 3) bludgeoning damage if used with two hands to make a melee attack, plus 3 (1d6) fire damage.",,1,3,1,2,1,1,0,10
-baboon,,unaligned ,beast,small,,0,12,3,1,6,8,14,11,4,12,6,"[[""bite"", 1, -1, 4]]",0,10,,none,,,none,,,2,0,2,0,0,1,0,10
+baboon,,unaligned ,beast,small,,0,12,3,1,6,8,14,11,4,12,6,"[[""bite"", 1, -1, 4]]",0,10,0,none,,,none,,,2,0,2,0,0,1,0,10
 badger,,unaligned ,beast,tiny,,0,10,3,1,4,4,11,12,2,12,5,"[[""bite"", 2, 0, 1]]",0,10,0,none,,,none,,,0,0,0,1,0,1,0,10
 balor,,chaotic evil ,fiend (demon),huge,natural armor,7,19,262,21,12,26,15,22,20,16,22,"[[""longsword"", 14, 8, 8, 8, 8], [""whip"", 14, 8, 6, 6]]",19,22000,0,none,,,none,,,2,8,2,6,5,3,6,30
 bandit,pirate,any non-lawful ,humanoid (any race),medium,leather armor,1,12,11,2,8,11,12,12,10,10,10,"[[""scimitar"", 3, 1, 6]]",0.125,25,0,none,,,none,,,1,0,1,1,0,0,0,10
@@ -493,15 +936,99 @@ behir,,neutral evil ,monstrosity,huge,natural armor,4,17,168,16,12,23,16,18,7,14
 ]",,,none,NO BREATH WEAPON,,3,6,3,4,0,2,1,14
 berserker,,any chaotic ,humanoid (any race),medium,hide armor,2,13,67,9,8,16,12,17,9,11,9,"[[""greataxe"", 5, 3, 12]]",2,450,0,none,,,none,,,1,3,1,3,0,0,0,10
 black bear,,unaligned ,beast,medium,natural armor,1,11,19,3,8,15,10,14,2,12,7,"[[""bite"", 3, 2, 6], [""claws"", 3, 2, 4, 4]]",0.5,100,0,none,,,none,,,0,2,0,2,0,1,0,10
-black dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,5,17,33,6,8,15,14,13,10,11,13,"[[""bite"", 4, 2, 10]]",2,450,0,none,,,none,plus 2 (1d4) acid damage.,,2,2,2,1,0,0,1,10
+black dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,5,17,33,6,8,15,14,13,10,11,13,"[[""bite"", 4, 2, 10]]",2,450,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":3,
+      ""type"":""acid"",
+      ""save"":""dx"",
+      ""dc"":11,
+      ""damage"":[
+         8,
+   8,
+         8,
+         8,
+         8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,plus 2 (1d4) acid damage.,,2,2,2,1,0,0,1,10
 black pudding,,unaligned ,ooze,large,,-3,7,85,10,10,16,5,16,1,6,1,"[[""pseudopod"", 5, 3, 6]]",4,1100,0,none,,,none,"plus 18 (4d8) acid damage. In addition, nonmagical armor worn by the target is partly dissolved and takes a permanent and cumulative 1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10.",,0,3,0,3,0,0,0,10
 blink dog,,lawful good ,fey,medium,,0,13,22,4,8,12,17,12,10,13,11,"[[""bite"", 3, 1, 6]]",0.25,50,0,none,,,none,,,3,1,3,1,0,1,0,10
 blood hawk,,unaligned ,beast,small,,0,12,7,2,6,6,14,10,3,14,5,"[[""beak"", 4, 2, 4]]",0.125,25,0,none,,,none,,,2,0,2,0,0,2,0,10
-blue dragon wyrmling,,lawful evil ,dragon,medium,natural armor,7,17,52,8,8,17,10,15,12,11,15,"[[""bite"", 5, 3, 10]]",3,700,0,none,,,none,plus 3 (1d6) lightning damage.,,0,3,0,2,1,0,2,10
+blue dragon wyrmling,,lawful evil ,dragon,medium,natural armor,7,17,52,8,8,17,10,15,12,11,15,"[[""bite"", 5, 3, 10]]",3,700,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""lighning"",
+      ""save"":""dx"",
+      ""dc"":12,
+      ""damage"":[
+         10,
+   10,
+         10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,plus 3 (1d6) lightning damage.,,0,3,0,2,1,0,2,10
 boar,,unaligned ,beast,medium,natural armor,1,11,11,2,8,13,11,12,2,9,5,"[[""tusk"", 3, 1, 6]]",0.25,50,0,none,,,none,,,0,1,0,1,0,0,0,10
 bone devil,,lawful evil ,fiend (devil),large,natural armor,6,19,142,15,10,18,16,18,13,14,16,"[[""claw"", 8, 4, 8], [""claw"", 8, 4, 8], [""sting"", 8, 4, 8, 8]]",9,5000,0,none,,,none,,,3,4,3,4,1,2,3,10.5
-brass dragon wyrmling,,chaotic good ,dragon,medium,natural armor,6,16,16,3,8,15,10,13,10,11,13,"[[""bite"", 4, 2, 10]]",1,200,0,none,,,none,,,0,2,0,1,0,0,1,10
-bronze dragon wyrmling,,lawful good ,dragon,medium,natural armor,7,17,32,5,8,17,10,15,12,11,15,"[[""bite"", 5, 3, 10]]",2,450,0,none,,,none,,,0,3,0,2,1,0,2,10
+brass dragon wyrmling,,chaotic good ,dragon,medium,natural armor,6,16,16,3,8,15,10,13,10,11,13,"[[""bite"", 4, 2, 10]]",1,200,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":5,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":11,
+      ""damage"":[
+         6,
+   6,
+         6,
+         6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,,,0,2,0,1,0,0,1,10
+bronze dragon wyrmling,,lawful good ,dragon,medium,natural armor,7,17,32,5,8,17,10,15,12,11,15,"[[""bite"", 5, 3, 10]]",2,450,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":8,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":12,
+      ""damage"":[
+   10,
+         10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,,,0,3,0,2,1,0,2,10
 brown bear,,unaligned ,beast,large,natural armor,1,11,34,4,10,19,10,16,2,13,7,"[[""bite"", 5, 4, 8]]",1,200,0,none,,,none,,,0,4,0,3,0,1,0,10
 bugbear,,chaotic evil ,humanoid (goblinoid),medium,"hide armor, shield",4,16,27,5,8,15,14,13,8,11,9,"[[""morningstar"", 4, 2, 8, 8]]",1,200,0,none,,,none,,,2,2,2,1,0,0,0,10
 bulette,land shark,unaligned ,monstrosity,large,natural armor,7,17,94,9,10,19,11,21,2,10,5,"[[""bite"", 7, 4, 12, 12, 12, 12]]",5,1800,0,none,,,none,,,0,4,0,5,0,0,0,10
@@ -517,7 +1044,28 @@ cloud giant,,neutral good (50%) or neutral evil (50%) ,giant,huge,natural armor,
 cockatrice,,unaligned ,monstrosity,small,,0,11,27,6,6,6,12,12,2,13,5,"[[""bite"", 3, 1, 4]]",0.5,100,0,none,,,none,"The target must succeed on a DC 11 Constitution saving throw against being magically petrified. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 24 hours.",,1,0,1,1,0,1,0,10
 commoner,peasant,any ,humanoid (any race),medium,,0,10,4,1,8,10,10,10,10,10,10,"[[""club"", 2, 0, 4]]",0,10,0,none,,,none,,,0,0,0,0,0,0,0,10
 constrictor snake,,unaligned ,beast,large,,0,12,13,2,10,15,14,12,1,10,3,"[[""bite"", 4, 2, 6]]",0.25,50,0,none,,,none,,,2,2,2,1,0,0,0,10
-copper dragon wyrmling,,chaotic good ,dragon,medium,natural armor,5,16,22,4,8,15,12,13,14,11,13,"[[""bite"", 4, 2, 10]]",1,200,0,none,,,none,,,1,2,1,1,2,0,1,10
+copper dragon wyrmling,,chaotic good ,dragon,medium,natural armor,5,16,22,4,8,15,12,13,14,11,13,"[[""bite"", 4, 2, 10]]",1,200,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":5,
+      ""type"":""lightning"",
+      ""save"":""dx"",
+      ""dc"":11,
+      ""damage"":[
+   8,
+   8,
+         8,
+         8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,,,1,2,1,1,2,0,1,10
 couatl,,lawful good ,celestial,medium,natural armor,4,19,97,13,8,16,20,17,18,20,18,"[[""bite"", 8, 5, 6]]",4,1100,0,none,,,none,"The target must succeed on a DC 13 Constitution saving throw or be poisoned for 24 hours. Until this poison ends, the target is unconscious. Another creature can use an action to shake the target awake.",,5,3,5,3,4,5,4,10
 crab,,unaligned ,beast,tiny,natural armor,1,11,2,1,4,2,11,10,1,8,2,"[[""claw"", 0, 0, 1]]",0,10,0,none,,,none,,,0,0,0,0,0,0,0,10
 crocodile,,unaligned ,beast,large,natural armor,2,12,19,3,10,15,10,13,2,10,5,"[[""bite"", 4, 2, 10]]",0.5,100,0,none,,,none,"The target is grappled (escape DC 12). Until this grapple ends, the target is restrained, and the crocodile can't bite another target.",,0,2,0,1,0,0,0,10
@@ -594,10 +1142,54 @@ gnoll,,chaotic evil ,humanoid (gnoll),medium,"hide armor, shield",4,15,22,5,8,14
 svirfneblin,deep gnome,neutral good ,humanoid (gnome),small,chain shirt,3,15,16,3,6,15,14,14,12,10,9,"[[""war pick"", 4, 2, 8]]",0.5,100,0,none,,,none,,,2,2,2,2,1,0,0,10
 goat,,unaligned ,beast,medium,,0,10,4,1,8,12,10,11,2,10,5,"[[""ram"", 3, 1, 4]]",0,10,0,none,,,none,,,0,1,0,0,0,0,0,10
 goblin,,neutral evil ,humanoid (goblinoid),small,"leather armor, shield",3,15,7,2,6,8,14,10,10,8,8,"[[""scimitar"", 4, 2, 6]]",0.25,50,0,none,,,none,,,2,0,2,0,0,0,0,10
-gold dragon wyrmling,,lawful good ,dragon,medium,natural armor,5,17,60,8,8,19,14,17,14,11,16,"[[""bite"", 6, 4, 10]]",3,700,0,none,,,none,,,2,4,2,3,2,0,3,10
+gold dragon wyrmling,,lawful good ,dragon,medium,natural armor,5,17,60,8,8,19,14,17,14,11,16,"[[""bite"", 6, 4, 10]]",3,700,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":13,
+      ""damage"":[
+   10,
+   10,
+         10,
+         10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,,,2,4,2,3,2,0,3,10
 gorgon,,unaligned ,monstrosity,large,natural armor,9,19,114,12,10,20,11,18,2,12,7,"[[""gore"", 8, 5, 12, 12]]",5,1800,0,none,,,none,,,0,5,0,4,0,1,0,10
 gray ooze,,unaligned ,ooze,medium,,-2,8,22,3,8,12,6,16,1,6,2,"[[""pseudopod"", 3, 1, 6]]",0.5,100,0,none,,,none,"plus 7 (2d6) acid damage, and if the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative 1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10.",,0,1,0,3,0,0,0,10
-green dragon wyrmling,,lawful evil ,dragon,medium,natural armor,6,17,38,7,8,15,12,13,14,11,13,"[[""bite"", 4, 2, 10]]",2,450,0,none,,,none,plus 3 (1d6) poison damage.,,1,2,1,1,2,0,1,10
+green dragon wyrmling,,lawful evil ,dragon,medium,natural armor,6,17,38,7,8,15,12,13,14,11,13,"[[""bite"", 4, 2, 10]]",2,450,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""poison"",
+      ""save"":""cn"",
+      ""dc"":11,
+      ""damage"":[
+   6,
+   6,
+         6,
+         6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,plus 3 (1d6) poison damage.,,1,2,1,1,2,0,1,10
 green hag,,neutral evil ,fey,medium,natural armor,6,17,82,11,8,18,12,16,13,14,14,"[[""claws"", 6, 4, 8, 8]]",3,700,0,none,,,none,,,1,4,1,3,1,2,2,10
 grick,,neutral ,monstrosity,medium,natural armor,2,14,27,6,8,14,14,11,3,14,5,"[[""tentacles"", 4, 2, 6, 6], [""beak"", 4, 2, 6]]",2,450,0,none,,,none,"If Tentacles attack hits, can make one Beak attack against same target",,2,2,2,0,0,2,0,10
 griffon,,unaligned ,monstrosity,large,,0,12,59,7,10,18,15,16,2,13,8,"[[""beak"", 6, 4, 8], [""claws"", 6, 4, 6, 6]]",2,450,0,none,,,none,,,2,4,2,3,0,1,0,10
@@ -680,7 +1272,31 @@ quipper,,unaligned ,beast,tiny,,0,13,1,1,4,2,16,9,1,7,2,"[[""bite"", 5, 0, 1]]",
 rakshasa,,lawful evil ,fiend,medium,natural armor,3,16,110,13,8,14,17,18,13,16,20,"[[""claw"", 7, 2, 6, 6], [""claw"", 7, 2, 6, 6]]",13,10000,0,none,,,none,,,3,2,3,4,1,3,5,16.5
 rat,,unaligned ,beast,tiny,,0,10,1,1,4,2,11,9,2,10,4,"[[""bite"", 0, 0, 1]]",0,10,0,none,,,none,,,0,0,0,0,0,0,0,10
 raven,,unaligned ,beast,tiny,,0,12,1,1,4,2,14,8,2,12,6,"[[""beak"", 4, 0, 1]]",0,10,0,none,,,none,,,2,0,2,0,0,1,0,10
-red dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,7,17,75,10,8,19,10,17,12,11,15,"[[""bite"", 6, 4, 10]]",4,1100,0,none,,,none,plus 3 (1d6) fire damage.,,0,4,0,3,1,0,2,10
+red dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,7,17,75,10,8,19,10,17,12,11,15,"[[""bite"", 6, 4, 10]]",4,1100,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":13,
+      ""damage"":[
+   6,
+   6,
+         6,
+         6,
+   6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,plus 3 (1d6) fire damage.,,0,4,0,3,1,0,2,10
 reef shark,,unaligned ,beast,medium,natural armor,1,12,22,4,8,14,13,13,1,10,4,"[[""bite"", 4, 2, 8]]",0.5,100,0,none,,,none,,,1,2,1,1,0,0,0,10
 remorhaz,,unaligned ,monstrosity,huge,natural armor,6,17,195,17,12,24,13,21,4,10,5,"[[""bite"", 11, 7, 10, 10, 10, 10, 10, 10]]",11,7200,0,none,,,none,"plus 10 (3d6) fire damage. If the target is a creature, it is grappled (escape DC 17). Until this grapple ends, the target is restrained, and the remorhaz can't bite another target.",,1,7,1,5,0,0,0,14
 rhinoceros,,unaligned ,beast,large,natural armor,1,11,45,6,10,21,8,15,2,12,6,"[[""gore"", 7, 5, 8, 8]]",2,450,0,none,,,none,,,0,5,0,2,0,1,0,10
@@ -701,7 +1317,28 @@ shadow,,chaotic evil ,undead,medium,,0,12,16,3,8,6,14,13,6,10,8,"[[""strength dr
 shambling mound,shambler,unaligned ,plant,large,natural armor,5,15,136,16,10,18,8,16,5,10,5,"[[""slam"", 7, 4, 8, 8], [""slam"", 7, 4, 8, 8]]",5,1800,0,none,,,none,"If both attacks hit medium or smaller target, target is grappled (escape DC 14), and Engulfed",,0,4,0,3,0,0,0,10
 shield guardian,,unaligned ,construct,large,natural armor,7,17,142,15,10,18,8,18,7,10,3,"[[""fist"", 7, 4, 6, 6], [""fist"", 7, 4, 6, 6]]",7,2900,0,none,,,none,,,0,4,0,4,0,0,0,8
 shrieker,,unaligned ,plant,medium,,-5,5,13,3,8,1,1,10,1,3,1,[],0,10,0,none,,,none,,,0,0,0,0,0,0,0,10
-silver dragon wyrmling,,lawful good ,dragon,medium,natural armor,7,17,45,6,8,19,10,17,12,11,15,"[[""bite"", 6, 4, 10]]",2,450,0,none,,,none,,,0,4,0,3,1,0,2,10
+silver dragon wyrmling,,lawful good ,dragon,medium,natural armor,7,17,45,6,8,19,10,17,12,11,15,"[[""bite"", 6, 4, 10]]",2,450,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":13,
+      ""damage"":[
+         8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,,,0,4,0,3,1,0,2,10
 skeleton,,lawful evil ,undead,medium,armor scraps,1,13,13,2,8,10,14,15,6,8,5,"[[""shortsword"", 4, 2, 6]]",0.25,50,0,none,,,none,,,2,0,2,2,0,0,0,10
 solar,,lawful good ,celestial,large,natural armor,5,21,243,18,10,26,22,26,25,25,30,"[[""greatsword"", 15, 8, 6, 6, 6, 6], [""greatsword"", 15, 8, 6, 6, 6, 6]]",21,33000,0,none,,,none,NO SLAYING LONGBOW,,6,8,6,8,7,7,10,1
 specter,,chaotic evil ,undead,medium,,0,12,22,5,8,1,14,11,10,10,11,"[[""life drain"", 4, 0, 6, 6, 6]]",1,200,0,none,,,none,NO LIFEDRAIN EFFECT (The target must succeed on a DC 10 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the creature finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.),,2,0,2,0,0,0,0,10
@@ -749,7 +1386,29 @@ wereboar,,neutral evil ,humanoid (human shapechanger),medium,"in humanoid form, 
 wererat,,lawful evil ,humanoid (human shapechanger),medium,,0,12,33,6,8,10,15,12,11,10,8,"[[""bite"", 4, 2, 4], [""shortsword"", 4, 2, 6]]",2,450,0,none,,,none,Multiattack only available in Humanoid or Hybrid Form,,2,0,2,1,0,0,0,10
 weretiger,,neutral ,humanoid (human shapechanger),medium,,0,12,120,16,8,17,15,16,10,13,11,"[[""claw"", 5, 3, 8], [""claw"", 5, 3, 8]]",4,1100,,none,,,none,Multiattack only available in Humanoid or Hybrid Form,,2,3,2,3,0,1,0,10
 werewolf,,chaotic evil ,humanoid (human shapechanger),medium,"in humanoid form, 12 (natural armor) in wolf or hybrid form ",0,11,58,9,8,15,13,14,10,11,10,"[[""bite"", 4, 2, 8], [""claws"", 4, 2, 4, 4]]",3,700,,none,,,none,Multiattack only available in Humanoid or Hybrid Form,,1,2,1,2,0,0,0,10
-white dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,6,16,32,5,8,14,10,14,5,10,11,"[[""bite"", 4, 2, 10]]",2,450,0,none,,,none,plus 2 (1d4) cold damage.,,0,2,0,2,0,0,0,10
+white dragon wyrmling,,chaotic evil ,dragon,medium,natural armor,6,16,32,5,8,14,10,14,5,10,11,"[[""bite"", 4, 2, 10]]",2,450,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":12,
+      ""damage"":[
+         8,
+   8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,plus 2 (1d4) cold damage.,,0,2,0,2,0,0,0,10
 wight,,neutral evil ,undead,medium,studded leather,2,14,45,6,8,15,14,16,10,13,15,"[[""longsword"", 4, 2, 8], [""longsword"", 4, 2, 8]]",3,700,0,none,,,none,Can use Life Drain in place of one longsword attack,,2,2,2,3,0,1,2,10
 will-o-wisp,,chaotic evil ,undead,tiny,,0,19,22,9,4,1,28,10,13,14,11,"[[""shock"", 4, 0, 8, 8]]",2,450,0,none,,,none,,,9,0,9,0,1,2,0,10
 winter wolf,,neutral evil ,monstrosity,large,natural armor,2,13,75,10,10,18,13,14,7,12,8,"[[""bite"", 6, 4, 6, 6]]",3,700,0,none,,,none,"If the target is a creature, it must succeed on a DC 14 Strength saving throw or be knocked prone.",,1,4,1,2,0,1,0,10
@@ -758,14 +1417,296 @@ worg,,neutral evil ,monstrosity,large,natural armor,2,13,26,4,10,16,13,13,7,11,8
 wraith,,neutral evil ,undead,medium,,0,13,67,9,8,6,16,16,12,14,15,"[[""life drain"", 6, 3, 8, 8, 8, 8]]",5,1800,0,none,,,none,The target must succeed on a DC 14 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.,,3,0,3,3,1,2,2,10
 wyvern,,unaligned ,dragon,large,natural armor,3,13,110,13,10,19,10,16,5,12,6,"[[""bite"", 7, 4, 6, 6], [""stinger"", 7, 4, 6, 6]]",6,2300,0,none,,,none,"When flying, can use claws in place of one other attack",,0,4,0,3,0,1,0,7
 xorn,,neutral ,elemental,medium,natural armor,9,19,73,7,8,17,10,22,11,10,11,"[[""claw"", 6, 3, 6], [""claw"", 6, 3, 6], [""claw"", 6, 3, 6], [""bite"", 6, 3, 6, 6, 6]]",5,1800,0,none,,,none,,,0,3,0,6,0,0,0,10
-young black dragon,,chaotic evil ,dragon,large,natural armor,6,18,127,15,10,19,14,17,12,11,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",7,2900,0,none,,,none,NO BREATH WEAPON,,2,4,2,3,1,0,2,8
-young blue dragon,,lawful evil ,dragon,large,natural armor,8,18,152,16,10,21,10,19,14,13,17,"[[""bite"", 9, 5, 10, 10], [""claw"", 9, 5, 6, 6], [""claw"", 9, 5, 6, 6]]",9,5000,0,none,,,none,NO BREATH WEAPON,,0,5,0,4,2,1,3,10.5
-young brass dragon,,chaotic good ,dragon,large,natural armor,7,17,110,13,10,19,10,17,12,11,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",6,2300,0,none,,,none,NO BREATH WEAPON,,0,4,0,3,1,0,2,7
-young bronze dragon,,lawful good ,dragon,large,natural armor,8,18,142,15,10,21,10,19,14,13,17,"[[""bite"", 8, 5, 10, 10], [""claw"", 8, 5, 6, 6], [""claw"", 8, 5, 6, 6]]",8,3900,0,none,,,none,NO BREATH WEAPON,,0,5,0,4,2,1,3,9
-young copper dragon,,chaotic good ,dragon,large,natural armor,6,17,119,14,10,19,12,17,16,13,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",7,2900,0,none,,,none,NO BREATH WEAPON,,1,4,1,3,3,1,2,8
-young gold dragon,,lawful good ,dragon,large,natural armor,6,18,178,17,10,23,14,21,16,13,20,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",10,5900,0,none,,,none,NO BREATH WEAPON,,2,6,2,5,3,1,5,12
-young green dragon,,lawful evil ,dragon,large,natural armor,7,18,136,16,10,19,12,17,16,13,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",8,3900,0,none,,,none,NO BREATH WEAPON,,1,4,1,3,3,1,2,9
-young red dragon,,chaotic evil ,dragon,large,natural armor,8,18,178,17,10,23,10,21,14,11,19,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",10,5900,0,none,,,none,NO BREATH WEAPON,,0,6,0,5,2,0,4,12
-young silver dragon,,lawful good ,dragon,large,natural armor,8,18,168,16,10,23,10,21,14,11,19,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",9,5000,0,none,,,none,NO BREATH WEAPON,,0,6,0,5,2,0,4,10.5
-young white dragon,,chaotic evil ,dragon,large,natural armor,7,17,133,14,10,18,10,18,6,11,12,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",6,2300,0,none,,,none,NO BREATH WEAPON,,0,4,0,4,0,0,1,7
+young black dragon,,chaotic evil ,dragon,large,natural armor,6,18,127,15,10,19,14,17,12,11,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",7,2900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":6,
+      ""type"":""acid"",
+      ""save"":""cn"",
+      ""dc"":14,
+      ""damage"":[
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,2,4,2,3,1,0,2,8
+young blue dragon,,lawful evil ,dragon,large,natural armor,8,18,152,16,10,21,10,19,14,13,17,"[[""bite"", 9, 5, 10, 10], [""claw"", 9, 5, 6, 6], [""claw"", 9, 5, 6, 6]]",9,5000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":12,
+      ""type"":""lighting"",
+      ""save"":""dx"",
+      ""dc"":16,
+      ""damage"":[
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,5,0,4,2,1,3,10.5
+young brass dragon,,chaotic good ,dragon,large,natural armor,7,17,110,13,10,19,10,17,12,11,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",6,2300,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":8,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":14,
+      ""damage"":[
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,4,0,3,1,0,2,7
+young bronze dragon,,lawful good ,dragon,large,natural armor,8,18,142,15,10,21,10,19,14,13,17,"[[""bite"", 8, 5, 10, 10], [""claw"", 8, 5, 6, 6], [""claw"", 8, 5, 6, 6]]",8,3900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":12,
+      ""type"":""lightning"",
+      ""save"":""dx"",
+      ""dc"":15,
+      ""damage"":[
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,5,0,4,2,1,3,9
+young copper dragon,,chaotic good ,dragon,large,natural armor,6,17,119,14,10,19,12,17,16,13,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",7,2900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""acid"",
+      ""save"":""cn"",
+      ""dc"":14,
+      ""damage"":[
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,1,4,1,3,3,1,2,8
+young gold dragon,,lawful good ,dragon,large,natural armor,6,18,178,17,10,23,14,21,16,13,20,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",10,5900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":17,
+      ""damage"":[
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10,
+   10
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,2,6,2,5,3,1,5,12
+young green dragon,,lawful evil ,dragon,large,natural armor,7,18,136,16,10,19,12,17,16,13,15,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",8,3900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""poison"",
+      ""save"":""cn"",
+      ""dc"":14,
+      ""damage"":[
+         6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,1,4,1,3,3,1,2,9
+young red dragon,,chaotic evil ,dragon,large,natural armor,8,18,178,17,10,23,10,21,14,11,19,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",10,5900,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""fire"",
+      ""save"":""dx"",
+      ""dc"":17,
+      ""damage"":[
+         6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6,
+   6
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,6,0,5,2,0,4,12
+young silver dragon,,lawful good ,dragon,large,natural armor,8,18,168,16,10,23,10,21,14,11,19,"[[""bite"", 10, 6, 10, 10], [""claw"", 10, 6, 6, 6], [""claw"", 10, 6, 6, 6]]",9,5000,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":17,
+      ""damage"":[
+         8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,6,0,5,2,0,4,10.5
+young white dragon,,chaotic evil ,dragon,large,natural armor,7,17,133,14,10,18,10,18,6,11,12,"[[""bite"", 7, 4, 10, 10], [""claw"", 7, 4, 6, 6], [""claw"", 7, 4, 6, 6]]",6,2300,0,"[
+   {
+      ""name"":""breath weapon"",
+   ""role"":""damage"",
+      ""num_targets"":[
+         4
+      ],
+   ""max_targets"":21,
+      ""type"":""cold"",
+      ""save"":""cn"",
+      ""dc"":15,
+      ""damage"":[
+         8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8,
+   8
+      ],
+   ""recharge"":5,
+   ""recharge_threshold"":5,
+   ""usable"": true
+   }
+]",,,none,NO BREATH WEAPON,,0,4,0,4,0,0,1,7
 zombie,,neutral evil ,undead,medium,,-2,8,22,3,8,13,6,16,3,6,5,"[[""slam"", 3, 1, 6]]",0.25,50,0,none,,,none,,,0,1,0,3,0,0,0,10
