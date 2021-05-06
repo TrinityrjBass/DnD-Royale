@@ -176,6 +176,11 @@ class Creature:
             
         print("attack is : " + str(self.attacks[0]))
 
+    def getVulnerabilities(self):
+        if self.beastiary['vulnerabilities'] != 'none':
+            import json
+            self.vulnerabilities = json.loads(self.beastiary['vulnerabilities'])
+
     def getAbilityScores(self):
         for a in self.ability_names: 
             if a in self.settings.keys() and int(self.settings[a]) != 0: # IF custom ability score is provided
@@ -347,8 +352,8 @@ class Creature:
                     action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
                 if "damage" in action:
                     action['damage'] = DnD.Dice(0, dice = action['damage'], role='damage')
-                if "on_save" in action:
-                    action['on_save'] = DnD.Dice(0, action['on_save'], role='damage')
+                #if "on_save" in action:
+                #    action['on_save'] = DnD.Dice(0, action['on_save'], role='damage')
                 #self.actions = actions
                 self.actions.append(action)
         else:
@@ -416,9 +421,7 @@ class Creature:
         else:
             self.beastiary = self.beastiary[self.settings['base']] 
         # TB Need to add check for user input before assigning all default values
-
-        #self.level = self.settings['level']
-        #self.xp = self.settings['xp']
+        self.vulnerabilities = {} # "type" : severity  0 - immune, .5 - resistant, 1- normal, 2 - vulnerable
         self._set('name', self.beastiary['name'])
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
@@ -437,6 +440,7 @@ class Creature:
         self.getInitiative()
         self.getSpellCasting()
         self.getattacks()
+        self.getVulnerabilities()
         self.getmorale()
         self.getTeam()
         self.getAltAttack()
@@ -689,7 +693,9 @@ class Creature:
     def isalive(self):
         if self.hp > 0: return 1
 
-    def take_damage(self, points, verbose=1):
+    def take_damage(self, points, verbose=1, type=""):
+        if type in self.vulnerabilities:
+            points *= self.vulnerabilities[type]
         if points < 0: points = 0 #negative damage will heal, we don't want this.
         self.hp -= points
         if verbose: 
@@ -700,6 +706,7 @@ class Creature:
             updateMorale(points, verbose)
 
         if self.hp <= 0: '{} {} dies'.format(self.name, str(self.id))
+        # can be new method
         if self.concentrating:
                 dc = points / 2
                 if dc < 10: dc = 10
@@ -930,38 +937,36 @@ class Creature:
 
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon':
-                # TODO damage
                 targets = []
                 num_targets = action['num_targets'].roll()
                 total_enemies = len(self.arena.find('alive enemy'))
                 # get enemy/ies, check save, roll damage, check immunity/vulnerable, apply damage, roll for ability recharge
                 if num_targets > total_enemies: num_targets = total_enemies
                 for x in range (num_targets):
-                    targets.append(self.arena.find(TARGET, self)[x]) #needs to select a group of enemies (based on ability)
+                    targets.append(self.arena.find(TARGET, self)[x]) #select a group of enemies
                 # loop through targets and check saves
+                damage = 0
                 for target in targets: # check save (ability_bonus + D20
                     if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
                         # roll damage
                         damage = action['damage'].roll()
-                        # apply damage to target
                         print("Watch out for full damage!")
                         print(str(damage) + " points of damage!")
-                        #target = self.arena.find('weakest enemy')[0]
-                        target.take_damage(damage)
-                        action['usable'] = False
                     else:
                         # roll save damage
                         print("taking 1/2 damage")
-                        damage = action['on_save'].roll()
-                        #apply damage to target
-                        target.take_damage(damage)
-                        action['usable'] = False
-                    # recharge should happen at end of turn (add to turn code block)
+                        damage = math.floor(action['damage'].roll()/2) # TB testing to see if I can handle saves this way
+                    #apply damage to target
+                    target.take_damage(damage, type = action['type'])
+                    action['usable'] = False
+        else:
+            print("checkDamageAction else block")
                 
-        def checkSupportAction():
-            if action['role'] == 'support':
-                # TODO support
-                print("TODO")
+    def checkSupportAction():
+        if action['role'] == 'support':
+            # TODO support
+            print("TODO")
+
     # I dont' think I'll ever use this function
     def generate_character_sheet(self):
         """
