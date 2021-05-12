@@ -661,12 +661,13 @@ class Creature:
         :return: None (changes self.attacks)
         """
         if type(attack_parameters) is str:
-            print("attack parameters are str... importing json....?")
             import json
             attack_parameters = json.loads(attack_parameters)
         self.attacks = []
         for monoattack in attack_parameters:
             att = {'name': monoattack[0]}
+            if type(monoattack[-1]) is not str: att['type'] = self.damageLookup(monoattack)
+            else : att['type'] = monoattack.pop()
             att['damage'] = DnD.Dice(monoattack[2], monoattack[3:], role="damage")
             att['attack'] = DnD.Dice(monoattack[1], 20, role="attack", twinned=att['damage'])
             self.attacks.append(att)
@@ -675,6 +676,13 @@ class Creature:
             self.hurtful += (sum(x['damage'].dice) + len(
                 x['damage'].dice)) / 2  # the average roll of a d6 is not 3 but 3.5
 
+    def damageLookup(self, attack):
+        #should include variant spellings. ie crossbow and cross bow
+        if attack[0] in ['tentacle', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
+        elif attack[0] in ['hand axe', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
+        elif attack[0] in ['dagger', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
+        else: return 'none'
+        
     def __str__(self):
         if self.tally['battles']:
             battles = self.tally['battles']
@@ -694,13 +702,14 @@ class Creature:
         if self.hp > 0: return 1
 
     def take_damage(self, points, verbose=1, type=""):
+        if self.name == 'lich' and type =="": points = 0 #liches are immune to non-magical weapon attacks #Ryan Requested this
         if type in self.vulnerabilities:
-            points *= self.vulnerabilities[type]
+            points = math.floor(points * self.vulnerabilities[type])
         if points < 0: points = 0 #negative damage will heal, we don't want this.
         self.hp -= points
         if verbose: 
             # verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
-            print(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.')
+            print(self.name + str(self.id) + ' took ' + str(points) + ' of ' + type + ' damage. Now on ' + str(self.hp) + ' hp.')
         
         if "morale" in self.arena.options:
             updateMorale(points, verbose)
@@ -829,7 +838,7 @@ class Creature:
                 # self.attacks[i]['damage'].crit = self.attacks[i]['attack'].crit  #Pass the crit if present.
                 h = self.attacks[i]['damage'].roll(verbose)
                 print("damage done is " + str(h))
-                opponent.take_damage(h, verbose)
+                opponent.take_damage(h, verbose, type = self.attacks[i]['type'] )
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
                 # check to see if the opponent survived the last hit, if not, win
