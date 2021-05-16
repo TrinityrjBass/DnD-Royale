@@ -3,7 +3,13 @@ function figureAtkParams(opt) {
     var w = $("#weapon").val();
     var th = $("#attack_hit").val();
     var dMod = $("#attack_dmgmod").val();
-    var dice = $('[value="'+ w +'"]').attr('data-die')
+    var dice = $('[value="' + w + '"]').attr('data-die')
+    var dmgtype = $('#attack_dmgtype').val();
+
+    if (dmgtype == '') {
+        dmgtype = getDmgType(w) 
+        $('#attack_dmgtype').val(dmgtype);
+    }
 
     if (dice) {
         $("#attack_dicedmg").val(dice);
@@ -16,7 +22,7 @@ function figureAtkParams(opt) {
 
     // if there's a value in the To Hit field, they must want that one to be used, so we will leave it alone.
     if (th == "") {
-        // call method to figure to hit from st or dx (should add... somthing to indicate which one... slapdash for the moment)
+        // call method to figure to hit from st or dx (should add... something to indicate which one... slapdash for the moment)
         // getToHit(); // for a later implementation
         th = 0;
     }
@@ -29,13 +35,67 @@ function figureAtkParams(opt) {
         dice = 0;
     }
 
-    var r = '"' + w + '", ' + th + ", " + dMod + ", " + dice;
+    var r = '"' + w + '", ' + th + ", " + dMod + ", " + dice + "," + '"' + dmgtype + '"';
     $('#aParams').text("[" + r + "]");
     // call method to figure Damage modifier for a later implementation
 }
 
-function clearWeapons() {
-    $("#weapon").val("");
+function getDmgType(w) {
+    switch (w) {
+        case "dagger":
+        case "javelin":
+        case "spear":
+        case "crossbow":
+        case "dart":
+        case "short bow":
+        case "lance":
+        case "morningstar":
+        case "pike":
+        case "rapier":
+        case "short sword":
+        case "war pick":
+        case "blowgun":
+        case "hand crossbow":
+        case "heavy crossbow":
+        case "longbow":
+        case "trident":
+        case "bite":
+            return "piercing";
+        case "club":
+        case "greatclub":
+        case "maul":
+        case "mace":
+        case "light hammer":
+        case "quarterstaff":
+        case "sling":
+        case "flail":
+        case "warhammer":
+        case "tentacle":
+        case "hooves":
+        case "fist":
+        case "slam":
+            return "bludgeoning"
+        case "hand axe":
+        case "axe":
+        case "bastard sword":
+        case "sickle":
+        case "battle axe (1H)":
+        case "battle axe (2H)":
+        case "glaive":
+        case "great axe":
+        case "great sword":
+        case "long sword":
+        case "scimitar":
+        case "whip":
+        case "claws":
+            return "slashing"
+        default:
+            return "";
+    }
+}
+
+function clearOption(id) {
+    $("#"+id).val("");
 }
 
 function weaponDice() {

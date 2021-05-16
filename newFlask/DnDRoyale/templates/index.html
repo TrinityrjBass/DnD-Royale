@@ -218,7 +218,7 @@
                 <div id="attack_tool">
 
                     <label for="weapon">Weapon</label>
-                    <input class="input-xs form-control" list="weapons" id="weapon" name="browser" onclick="clearWeapons()" onchange="figureAtkParams(this)" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
+                    <input class="input-xs form-control" list="weapons" id="weapon" name="browser" onclick="clearOption('weapon')" onchange="figureAtkParams(this)" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
                     <datalist id="weapons">
                         <option value="club" data-die="4">
                         <option value="great club" data-die="8">
@@ -258,20 +258,33 @@
 
                     <label for="attack_dicedmg">Attack Die</label>
                     <input class="input-xs form-control" type=text placeholder="Dmg Dice" id=attack_dicedmg onchange="figureAtkParams()" disabled data-toggle="tooltip" title="Damage Die of selected weapon. Will be automatically figured if a default weapon is selected. This field will NOT be automatically filled for a custom weapon. Multiple dice are allowed."
-                        data-placement="right">
-                    
+                           data-placement="right">
 
-                    <label for=" attack_dmgmod">Modifier</label>
+
+                    <label for="attack_dmgmod">Modifier</label>
                     <input class="input-xs form-control" type=number placeholder="Dmg Modifier" id=attack_dmgmod onchange="figureAtkParams()"><br />
 
-                    <label for="aParams">New Attack: </label>
+                    <label for="attack_dmgtype">Damage Type</label>
+                    <input class="input-xs form-control" list="attack_dmgtypes" id="attack_dmgtype" name="browser" onclick="clearOption('attack_dmgtype')" onchange="figureAtkParams()" data-toggle="tooltip" data-placement="right" title="Damage type for selected weapon. Custom damage types will have no effect. I.E. 'smashing' type will not act as bludgeoning">
+                    <datalist id="attack_dmgtypes">
+                        <option value="bludgeoning">
+                        <option value="slashing">
+                        <option value="piercing">
+                        <option value="magical bludgeoning">
+                        <option value="magical slashing">
+                        <option value="magical piercing">
+                    </datalist>
                     <br />
-                    <span id="aParams"></span><br />
-                    <!-- need a way to indicate or figure automatically dx based weapons.-->
 
-                    <button class="btn btn-default" onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
+                        <label for="aParams">New Attack: </label>
+                        <br />
+                        <span id="aParams"></span>
+                        <br />
+                        <!-- need a way to indicate or figure automatically dx based weapons.-->
 
-                    </div>
+                        <button class="btn btn-default" onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
+
+                </div>
                     <h3>New Attacks</h3>
                 <p id="newAttacks" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
                     [<a id="attacks"></a>]
@@ -288,12 +301,17 @@
             <div id="DIV_options">
                 <div class="card-body">
                     <div class="checkbox">
-                        <label for="morale" data-toggle="tooltip" data-placement="right" title="When selected, combatants will run away when their morale gets too low. CR determines how much morale a creature has." >
+                        <label for="morale" data-toggle="tooltip" data-placement="right" title="Combatants will run away when their morale gets too low. CR determines how much morale a creature has." >
                             <input type="checkbox" name="morale" id="morale"/>
                             Morale
                         </label>
                     </div>
-                    
+                    <div class="checkbox">
+                        <label for="damage" data-toggle="tooltip" data-placement="right" title="Will use vulnerabilities, resistances, and immunities to all damage types includes elemental and physical damage types.">
+                            <input type="checkbox" name="damage" id="damage" />
+                            Attack Damage Type
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -335,9 +353,9 @@
                 <div id="result" class="modal-body">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-                <div class="modal-footer">
+                <!--<div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                </div>-->
             </div>
         </div>
         

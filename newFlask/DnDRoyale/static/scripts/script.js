@@ -18,20 +18,6 @@ function flip(name, way) {
     }
 }
 
-//function duel_t() { // deprecated
-//    var lineup = sessionStorage.getItem('lineup')
-//    $.ajax({
-//        type: "POST",
-//        contentType: 'application/json',
-//        url: "/poster/",
-//        dataType: 'json',
-//        data: JSON.stringify(lineup)
-//    })
-//        .done(function (msg) {
-//            alert("Data Saved: " + msg);
-//        });
-//}
-
 function duel() {
     flip("result", 1)
     //var options = getOptions();
@@ -275,7 +261,8 @@ function initial() {
     $("#OFF_limits").hide();
     $("#OFF_link").hide();
     $("#OFF_motive").hide();
-    $("#OFF_tool").hide();
+    $("#ON_tool").hide();
+    $("#DIV_tool").hide();
     $("#OFF_future").hide();
     $("#OFF_setup").hide();
     $("#ON_result").hide();

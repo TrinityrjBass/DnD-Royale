@@ -57,13 +57,13 @@ input[type="checkbox"].input-validation-error {
 
 .modal{
     position:fixed;
-    left: 30%;
+    /*left: 30%;*/
     top: 20px;
     bottom: auto;
-    background-color: white;
+    /*background-color: white;*/
     overflow-y: scroll;
-    width: fit-content;
-    height: 700px; /* I dont' like the absolute value here*/
+    /*width: fit-content;*/
+    /*height: 700px;*/ /* I dont' like the absolute value here*/
 }
 
 #OUT_combattant{

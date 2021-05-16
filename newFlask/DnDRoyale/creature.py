@@ -352,8 +352,8 @@ class Creature:
                     action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
                 if "damage" in action:
                     action['damage'] = DnD.Dice(0, dice = action['damage'], role='damage')
-                #if "on_save" in action:
-                #    action['on_save'] = DnD.Dice(0, action['on_save'], role='damage')
+                if "secondary_type" in action:
+                    action['secondary_damage'] = DnD.Dice(0, action['secondary_damage'], role='damage')
                 #self.actions = actions
                 self.actions.append(action)
         else:
@@ -678,8 +678,8 @@ class Creature:
 
     def damageLookup(self, attack):
         #should include variant spellings. ie crossbow and cross bow
-        if attack[0] in ['tentacle', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
-        elif attack[0] in ['hand axe', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
+        if attack[0] in ['tentacle', 'tentacles', 'hoof', 'hooves', 'tail', 'tails', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
+        elif attack[0] in ['hand axe', 'bastard sword', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
         elif attack[0] in ['dagger', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
         else: return 'none'
         
@@ -701,28 +701,6 @@ class Creature:
     def isalive(self):
         if self.hp > 0: return 1
 
-    def take_damage(self, points, verbose=1, type=""):
-        if self.name == 'lich' and type =="": points = 0 #liches are immune to non-magical weapon attacks #Ryan Requested this
-        if type in self.vulnerabilities:
-            points = math.floor(points * self.vulnerabilities[type])
-        if points < 0: points = 0 #negative damage will heal, we don't want this.
-        self.hp -= points
-        if verbose: 
-            # verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
-            print(self.name + str(self.id) + ' took ' + str(points) + ' of ' + type + ' damage. Now on ' + str(self.hp) + ' hp.')
-        
-        if "morale" in self.arena.options:
-            updateMorale(points, verbose)
-
-        if self.hp <= 0: '{} {} dies'.format(self.name, str(self.id))
-        # can be new method
-        if self.concentrating:
-                dc = points / 2
-                if dc < 10: dc = 10
-                if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
-                    self.conc_fx()
-                    if verbose: verbose.append(self.name + str(self.id) + ' has lost their concentration')
-
     def updateMorale(self, points, verbose=1):
         # Morale Check for bloodied
         if self.hp < self.starting_hp/2: 
@@ -735,6 +713,27 @@ class Creature:
         if self.current_morale < 1 and self.hp > 0: 
             if verbose: verbose.append(self.name + self.id + ' lost its desire to fight and ran away from battle')
             self.hp = 0 #psuedo death (running away)
+
+    def take_damage(self, points, verbose=1, type=""):
+        if 'damage' in self.arena.options:
+            if type in self.vulnerabilities:
+                points = math.floor(points * self.vulnerabilities[type])
+        if points < 0: points = 0 #negative damage will heal, we don't want this.
+        self.hp -= points
+        if verbose: 
+            # verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
+            print(self.name + str(self.id) + ' took ' + str(points) + ' of ' + type + ' damage. Now on ' + str(self.hp) + ' hp.')
+        if "morale" in self.arena.options:
+            self.updateMorale(points, verbose)
+
+        if self.hp <= 0: '{} {} dies'.format(self.name, str(self.id))
+        # can be new method
+        if self.concentrating:
+            dc = points / 2
+            if dc < 10: dc = 10
+            if DnD.Dice(self.ability_bonuses[self.sc_ab]).roll() < dc:
+                self.conc_fx()
+                if verbose: verbose.append(self.name + str(self.id) + ' has lost their concentration')
 
     def ready(self):
         self.dodge = 0
@@ -839,6 +838,9 @@ class Creature:
                 h = self.attacks[i]['damage'].roll(verbose)
                 print("damage done is " + str(h))
                 opponent.take_damage(h, verbose, type = self.attacks[i]['type'] )
+                # TB TODO check for secondary damage would go here
+                if 'secondary_type' in self.attacks[i]:
+                    opponent.take_damage(self.attacks[i]['secondary_damage'].roll(), verbose, type = self.attacks[i]['secondary_type'] )
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
                 # check to see if the opponent survived the last hit, if not, win
@@ -939,36 +941,40 @@ class Creature:
 
     def checkHealingAction(self, action):
         if action['role'] == 'healing':
-                # TODO healing/support actions first?
-                self.arena.find('weakest allies')[0]
-                # and heal them
-                print("TODO")
+            # TODO healing/support actions first?
+            self.arena.find('weakest allies')[0]
+            # and heal them
+            print("TODO")
 
     def checkDamageAction(self, action):
-        if action['name'] == 'breath weapon':
-                targets = []
-                num_targets = action['num_targets'].roll()
-                total_enemies = len(self.arena.find('alive enemy'))
-                # get enemy/ies, check save, roll damage, check immunity/vulnerable, apply damage, roll for ability recharge
-                if num_targets > total_enemies: num_targets = total_enemies
-                for x in range (num_targets):
-                    targets.append(self.arena.find(TARGET, self)[x]) #select a group of enemies
-                # loop through targets and check saves
-                damage = 0
-                for target in targets: # check save (ability_bonus + D20
-                    if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
-                        # roll damage
-                        damage = action['damage'].roll()
-                        print("Watch out for full damage!")
-                        print(str(damage) + " points of damage!")
-                    else:
-                        # roll save damage
-                        print("taking 1/2 damage")
-                        damage = math.floor(action['damage'].roll()/2) # TB testing to see if I can handle saves this way
-                    #apply damage to target
-                    target.take_damage(damage, type = action['type'])
-                    action['usable'] = False
-        else:
+        if action['name'] == 'breath weapon': # we may not need this if statement
+            targets = []
+            num_targets = action['num_targets'].roll()
+            total_enemies = len(self.arena.find('alive enemy'))
+            # get enemy/ies, check save, roll damage, check immunity/vulnerable, apply damage, roll for ability recharge
+            if num_targets > total_enemies: num_targets = total_enemies
+            for x in range (num_targets):
+                targets.append(self.arena.find(TARGET, self)[x]) #select a group of enemies
+            # loop through targets and check saves
+            damage = 0
+            for target in targets: # check save (ability_bonus + D20
+                if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
+                    # roll damage
+                    damage = action['damage'].roll()
+                    print("Watch out for full damage!")
+                    print(str(damage) + " points of damage!")
+                else:
+                    # roll save damage
+                    print("taking 1/2 damage")
+                    damage = math.floor(action['damage'].roll()/2) # TB testing to see if I can handle saves this way
+                #apply damage to target
+                target.take_damage(damage, type = action['type'])
+                action['usable'] = False
+        elif action['name'] == 'multiattack':
+            # get target
+            # to hit
+            # damage
+            # or can I use existing functions?
             print("checkDamageAction else block")
                 
     def checkSupportAction():
