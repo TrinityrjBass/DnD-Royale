@@ -3,11 +3,13 @@ function figureAtkParams(opt) {
     var w = $("#weapon").val();
     var th = $("#attack_hit").val();
     var dMod = $("#attack_dmgmod").val();
-    var dice = $('[value="' + w + '"]').attr('data-die')
+    var dice = $('[value="' + w + '"]').attr('data-die');
     var dmgtype = $('#attack_dmgtype').val();
+    var magical = $("#magicalAttack").prop("checked");
+    var isMagical = ', "isMagical": ' + magical;
 
-    if (dmgtype == '') {
-        dmgtype = getDmgType(w) 
+    if (opt == 'weapon') {
+        dmgtype = getDmgType(w);
         $('#attack_dmgtype').val(dmgtype);
     }
 
@@ -35,8 +37,8 @@ function figureAtkParams(opt) {
         dice = 0;
     }
 
-    var r = '"' + w + '", ' + th + ", " + dMod + ", " + dice + "," + '"' + dmgtype + '"';
-    $('#aParams').text("[" + r + "]");
+    var r = '"name": ' + w + '", "attack": ' + th + ', "damage modifier": ' + dMod + ', "damage": ' + dice + ', "type": ' + '"' + dmgtype + '"' + isMagical ;
+    $('#aParams').text("{" + r + "}");
     // call method to figure Damage modifier for a later implementation
 }
 
@@ -62,7 +64,7 @@ function getDmgType(w) {
         case "bite":
             return "piercing";
         case "club":
-        case "greatclub":
+        case "great club":
         case "maul":
         case "mace":
         case "light hammer":

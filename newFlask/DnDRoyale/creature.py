@@ -174,7 +174,7 @@ class Creature:
 
         self.attack_parameters = self._attack_parse(self.settings['attack_parameters'])
             
-        print("attack is : " + str(self.attacks[0]))
+        #print("attack is : " + str(self.attacks[0]))
 
     def getVulnerabilities(self):
         if self.beastiary['vulnerabilities'] != 'none':
@@ -664,23 +664,24 @@ class Creature:
             import json
             attack_parameters = json.loads(attack_parameters)
         self.attacks = []
-        for monoattack in attack_parameters:
-            att = {'name': monoattack[0]}
-            if type(monoattack[-1]) is not str: att['type'] = self.damageLookup(monoattack)
-            else : att['type'] = monoattack.pop()
-            att['damage'] = DnD.Dice(monoattack[2], monoattack[3:], role="damage")
-            att['attack'] = DnD.Dice(monoattack[1], 20, role="attack", twinned=att['damage'])
-            self.attacks.append(att)
-        for x in self.attacks:
-            self.hurtful += x['damage'].bonus
-            self.hurtful += (sum(x['damage'].dice) + len(
-                x['damage'].dice)) / 2  # the average roll of a d6 is not 3 but 3.5
+        if attack_parameters != []:
+            for monoattack in attack_parameters:
+                #att = {'name': monoattack[0]}
+                if "type" not in monoattack : monoattack['type'] = self.damageLookup(monoattack["name"]) #checking for damage type
+                monoattack['damage'] = DnD.Dice(monoattack['damage_modifier'], monoattack['damage_die'], role="damage")
+                monoattack['attack'] = DnD.Dice(monoattack['to_hit'], 20, role="attack", twinned=monoattack['damage'])
+                self.attacks.append(monoattack)
+            for x in self.attacks:
+                self.hurtful += x['damage'].bonus
+                self.hurtful += (sum(x['damage'].dice) + len(
+                    x['damage'].dice)) / 2  # the average roll of a d6 is not 3 but 3.5
+
 
     def damageLookup(self, attack):
         #should include variant spellings. ie crossbow and cross bow
-        if attack[0] in ['tentacle', 'tentacles', 'hoof', 'hooves', 'tail', 'tails', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
-        elif attack[0] in ['hand axe', 'bastard sword', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
-        elif attack[0] in ['dagger', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
+        if attack in ['tentacle', 'tentacles', 'hoof', 'hooves', 'tail', 'tails', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
+        elif attack in ['hand axe', 'bastard sword', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
+        elif attack in ['dagger', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
         else: return 'none'
         
     def __str__(self):

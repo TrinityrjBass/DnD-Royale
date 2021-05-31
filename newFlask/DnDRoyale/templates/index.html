@@ -218,7 +218,7 @@
                 <div id="attack_tool">
 
                     <label for="weapon">Weapon</label>
-                    <input class="input-xs form-control" list="weapons" id="weapon" name="browser" onclick="clearOption('weapon')" onchange="figureAtkParams(this)" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
+                    <input class="input-xs form-control" list="weapons" id="weapon" name="browser" onclick="clearOption('weapon')" onchange="figureAtkParams('weapon')" data-toggle="tooltip" data-placement="right" title="Choose your weapon, or name your own.">
                     <datalist id="weapons">
                         <option value="club" data-die="4">
                         <option value="great club" data-die="8">
@@ -270,24 +270,27 @@
                         <option value="bludgeoning">
                         <option value="slashing">
                         <option value="piercing">
-                        <option value="magical bludgeoning">
-                        <option value="magical slashing">
-                        <option value="magical piercing">
+                            <!--<option value="magical bludgeoning">
+            <option value="magical slashing">
+            <option value="magical piercing">-->
                     </datalist>
                     <br />
+                    <label>Magical Attack</label>
+                    <input type="checkbox" id="magicalAttack" value="magical" onchange="figureAtkParams()" class="">
+                    <br />
 
-                        <label for="aParams">New Attack: </label>
-                        <br />
-                        <span id="aParams"></span>
-                        <br />
-                        <!-- need a way to indicate or figure automatically dx based weapons.-->
+                    <label for="aParams">New Attack: </label>
+                    <br />
+                    <span id="aParams"></span>
+                    <br />
+                    <!-- need a way to indicate or figure automatically dx based weapons.-->
 
-                        <button class="btn btn-default" onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
+                    <button class="btn btn-default" onclick="queueAttack()"><i class="fas fa-plus-square"></i> Add to parameters</button>
 
                 </div>
                     <h3>New Attacks</h3>
                 <p id="newAttacks" style="padding:10px; min-height:2em; border:1px lightgrey; background:gainsboro; overflow-wrap: break-word;">
-                    [<a id="attacks"></a>]
+                    [<span id="attacks"></span>]
                     <br /><br />
                 </p>
                 <p>
