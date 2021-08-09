@@ -102,22 +102,22 @@ class Creature:
         `{'abilities': None, 'dex': 10, 'con_bonus': 10, 'cr': 17, 'xp': 5900, 'ac': 20, 'starting_healing_spells': 0, 'starting_hp': 135, 'condition': 'normal', 'initiative': <__main__.Dice object at 0x1022542e8>, 'str': 10, 'wis': 10, 'ability_bonuses': {'int': 0, 'cha': 0, 'dex': 0, 'con': 0, 'str': 0, 'wis': 0}, 'custom': [], 'hd': <__main__.Dice object at 0x102242c88>, 'hurtful': 36.0, 'tally': {'rounds': 0, 'hp': 0, 'battles': 0, 'hits': 0, 'damage': 0, 'healing_spells': 0, 'dead': 0, 'misses': 0}, 'hp': 135, 'proficiency': 5, 'cha_bonus': 10, 'able': 1, 'healing_spells': 0, 'copy_index': 1, 'int': 10, 'concentrating': 0, 'wis_bonus': 10, 'con': 10, 'int_bonus': 10, 'sc_ab': 'con', 'str_bonus': 10, 'level': 18, 'settings': {}, 'arena': None, 'dex_bonus': 10, 'log': '', 'cha': 10, 'dodge': 0, 'alt_attack': {'attack': None, 'name': None}, 'alignment': 'lawful evil ', 'attacks': [{'attack': <__main__.Dice object at 0x1022545f8>, 'damage': <__main__.Dice object at 0x1022545c0>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x102254668>, 'damage': <__main__.Dice object at 0x102254630>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x1022546d8>, 'damage': <__main__.Dice object at 0x1022546a0>, 'name': 'tentacle'}], 'attack_parameters': [['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6]], 'buff_spells': 0, 'temp': 0, 'name': 'aboleth'}`
         """
         self.log = ""
-        if not kwargs and type(wildcard) is str:
-            print("filling from beastiary - no kwargs")
-            self._fill_from_beastiary(wildcard)
-        elif type(wildcard) is dict:
+        #if not kwargs and type(wildcard) is str:
+        #    print("filling from beastiary - no kwargs")
+        #    self._fill_from_beastiary(wildcard)
+        if type(wildcard) is dict:
             print("this wildcard is a dict")
             self._initialise(**wildcard)
-        elif kwargs and type(wildcard) is str:
-            print("kwargs, and also this wildcard is str")
-            if wildcard in self.beastiary:
-                print("this wildcard is in the beastiary")
-                self._initialise(base=wildcard, **kwargs)
-            else:
-                self._initialise(name=wildcard, **kwargs)
-        elif type(wildcard) is Creature:
-            print("this wildcard is a Creature")
-            self._initialise(base=wildcard, **kwargs)
+        #elif kwargs and type(wildcard) is str:
+        #    print("kwargs, and also this wildcard is str")
+        #    if wildcard in self.beastiary:
+        #        print("this wildcard is in the beastiary")
+        #        self._initialise(base=wildcard, **kwargs)
+        #    else:
+        #        self._initialise(name=wildcard, **kwargs)
+        #elif type(wildcard) is Creature:
+        #    print("this wildcard is a Creature")
+        #    self._initialise(base=wildcard, **kwargs)
         else:
             warnings.warn("UNKNOWN COMBATTANT:" + str(wildcard))
             print("UNKNOWN COMBATTANT:" + str(wildcard))
@@ -346,14 +346,19 @@ class Creature:
             actions = json.loads(self.beastiary['actions']) # make list of actions into object
             for action in actions: #make relevant dice for random elements in attacks
                 print("Action name : " + action['name'])
+                dmgMod = 0
+                if "damage_modifier" in action:
+                     dmgMod = action['damage_modifier']
                 if "num_targets" in action:
                     action['num_targets'] = DnD.Dice(math.floor(action['max_targets']/2), dice = math.floor(action['max_targets']/2), role='damage')#role 'damage' makes it non-critable
                 if "recharge" in action:
                     action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
                 if "damage" in action:
-                    action['damage'] = DnD.Dice(0, dice = action['damage'], role='damage')
+                    action['damage'] = DnD.Dice(dmgMod, dice = action['damage'], role='damage')
                 if "secondary_type" in action:
                     action['secondary_damage'] = DnD.Dice(0, action['secondary_damage'], role='damage')
+                if "secondary_save" in action:
+                    action['secondary_save'] = DnD.Dice(0, action['secondary_save'], role="save")
                 #self.actions = actions
                 self.actions.append(action)
         else:
@@ -668,20 +673,21 @@ class Creature:
             for monoattack in attack_parameters:
                 #att = {'name': monoattack[0]}
                 if "type" not in monoattack : monoattack['type'] = self.damageLookup(monoattack["name"]) #checking for damage type
-                monoattack['damage'] = DnD.Dice(monoattack['damage_modifier'], monoattack['damage_die'], role="damage")
-                monoattack['attack'] = DnD.Dice(monoattack['to_hit'], 20, role="attack", twinned=monoattack['damage'])
+                monoattack['damage'] = DnD.Dice(monoattack['damage_modifier'], monoattack['damage'], role="damage")
+                monoattack['attack'] = DnD.Dice(monoattack['attack'], 20, role="attack", twinned=monoattack['damage'])
+                if "secondary_damage" in monoattack:
+                    monoattack['secondary_damage'] = DnD.Dice(0, monoattack['secondary_damage'], role="damage") #do any secondary damage types have modifiers? (they have saves sometimes
                 self.attacks.append(monoattack)
             for x in self.attacks:
                 self.hurtful += x['damage'].bonus
                 self.hurtful += (sum(x['damage'].dice) + len(
                     x['damage'].dice)) / 2  # the average roll of a d6 is not 3 but 3.5
 
-
     def damageLookup(self, attack):
         #should include variant spellings. ie crossbow and cross bow
         if attack in ['tentacle', 'tentacles', 'hoof', 'hooves', 'tail', 'tails', 'club', 'greatclub', 'slam', 'maul', 'mace', 'light hammer', 'quarterstaff', 'sling', 'flail', 'warhammer' ] : return 'bludgeoning'
-        elif attack in ['hand axe', 'bastard sword', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
-        elif attack in ['dagger', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
+        elif attack in ['claw', 'claws', 'hand axe', 'bastard sword', 'sickle', 'battle axe', 'glaive', 'great axe', 'great sword', 'long sword', 'scimitar', 'whip' ] : return 'slashing'
+        elif attack in ['dagger', 'bite', 'bites', 'javelin', 'spear', 'crossbow', 'dart', 'short bow', 'lance', 'morningstar', 'pike', 'rapier', 'short sword', 'trident', 'war pick', 'blowgun', 'hand crossbow', 'heavy crossbow', 'longbow'] : return 'piercing'
         else: return 'none'
         
     def __str__(self):
@@ -715,14 +721,14 @@ class Creature:
             if verbose: verbose.append(self.name + self.id + ' lost its desire to fight and ran away from battle')
             self.hp = 0 #psuedo death (running away)
 
-    def take_damage(self, points, verbose=1, type=""):
+    def take_damage(self, points, verbose=1, type="", magical=False):
         if 'damage' in self.arena.options:
             if type in self.vulnerabilities:
                 points = math.floor(points * self.vulnerabilities[type])
         if points < 0: points = 0 #negative damage will heal, we don't want this.
         self.hp -= points
         if verbose: 
-            # verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
+            #verbose.append(self.name + str(self.id) + ' took ' + str(points) + ' damage. Now on ' + str(self.hp) + ' hp.') # This Verbose.append causes an error somehow
             print(self.name + str(self.id) + ' took ' + str(points) + ' of ' + type + ' damage. Now on ' + str(self.hp) + ' hp.')
         if "morale" in self.arena.options:
             self.updateMorale(points, verbose)
@@ -757,7 +763,6 @@ class Creature:
         self.healing_spells = self.starting_healing_spells
         if hard:
             self.tally={'damage': 0,'hp': 0, 'hits': 0,'misses': 0,'rounds': 0,'healing_spells': 0,'battles': 0,'dead':0}
-
 
     def check_advantage(self, opponent):
         adv = 0
@@ -837,11 +842,12 @@ class Creature:
             if attackRoll >= opponent.ac:
                 # self.attacks[i]['damage'].crit = self.attacks[i]['attack'].crit  #Pass the crit if present.
                 h = self.attacks[i]['damage'].roll(verbose)
+                if self.attacks[i]['damage_modifier']:
+                   h += self.attacks[i]['damage_modifier'] 
                 print("damage done is " + str(h))
-                opponent.take_damage(h, verbose, type = self.attacks[i]['type'] )
-                # TB TODO check for secondary damage would go here
+                opponent.take_damage(h, verbose, type = self.attacks[i]['type'], magical = "isMagical" in self.attacks[i] )
                 if 'secondary_type' in self.attacks[i]:
-                    opponent.take_damage(self.attacks[i]['secondary_damage'].roll(), verbose, type = self.attacks[i]['secondary_type'] )
+                    opponent.take_damage(self.attacks[i]['secondary_damage'].roll(), verbose, type = self.attacks[i]['secondary_type'], magical = self.attacks[i]["isMagical"] )
                 self.tally['damage'] += h
                 self.tally['hits'] += 1
                 # check to see if the opponent survived the last hit, if not, win
@@ -982,6 +988,16 @@ class Creature:
         if action['role'] == 'support':
             # TODO support
             print("TODO")
+
+    def toFile(s):
+        """
+        utility function to help with manipulating/rewriting mass data.
+        I still need to add headers manually when using this function
+        """
+        fileName = "newfile.csv" #something relevant to the current use.
+        f = open("DnDRoyale/" + fileName, "a")
+        f.write(s)
+        f.close()
 
     # I dont' think I'll ever use this function
     def generate_character_sheet(self):
