@@ -350,11 +350,20 @@ class Creature:
                 if "damage_modifier" in action:
                      dmgMod = action['damage_modifier']
                 if "num_targets" in action:
-                    action['num_targets'] = DnD.Dice(math.floor(action['max_targets']/2), dice = math.floor(action['max_targets']/2), role='damage')#role 'damage' makes it non-critable
+                    targets = 0
+                    max = 1
+                    if action['max_targets'] > 1: #if there's more than one target, the spell should at least hit 1/2 of the max
+                        targets = math.floor(action['max_targets']/2)
+                    action['num_targets'] = DnD.Dice(targets, dice = max, role='damage')#role 'damage' makes it non-critable
                 if "recharge" in action:
                     action['recharge'] = DnD.Dice(0, dice = action['recharge'], role='damage')
                 if "damage" in action:
                     action['damage'] = DnD.Dice(dmgMod, dice = action['damage'], role='damage')
+                if "effect" in action:
+                    bonus = 0
+                    if 'effect_bonus' in action:
+                        bonus = action['effect_bonus']
+                    action['effect'] = DnD.Dice(bonus, dice = action['effect'], role='damage')
                 if "secondary_type" in action:
                     action['secondary_damage'] = DnD.Dice(0, action['secondary_damage'], role='damage')
                 if "secondary_save" in action:
@@ -917,6 +926,10 @@ class Creature:
                         if self.hasAction == False: break #don't allow actions if it's not available
                         print("we're going to use " + action['name'])
                         self.checkDamageAction(action)
+                    if action['role'] == 'healing' and action['usable'] == True:
+                        if self.hasAction == False: break
+                        print('we are going to heal someone!')
+                        self.checkHealingAction(action)
                 if self.hasAction:
                     self.multiattack(verbose)
                     self.hasAction == False
@@ -948,10 +961,16 @@ class Creature:
 
     def checkHealingAction(self, action):
         if action['role'] == 'healing':
-            # TODO healing/support actions first?
-            self.arena.find('weakest allies')[0]
-            # and heal them
-            print("TODO")
+            targets = []
+            num_targets = action['num_targets'].roll()
+            total_allies = len(self.arena.find('bloodiest allies')) #could also be random or strongest allies 
+            if num_targets > total_allies: num_targets = total_allies
+            for x in range (num_targets):
+                targets.append(self.arena.find(TARGET, self)[x])
+            heal = action['effect'].roll()
+            for target in targets:
+                #apply healing
+                target.hp += heal # too tired... this might.not.work.... or it might. FYI the caster IS included in target list
 
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon': # we may not need this if statement
