@@ -9,33 +9,16 @@
     <div class="col-lg-10 offset-lg-1 col-sm-12">
         <p>
             <span style="color: #903; font-size: 64px; line-height: 48px; padding-top: 0px; padding-right: 6px; padding-left: 3px; font-family: Georgia;">T</span>
-            HIS online tool calculates the victory probabilities in a D&amp;D encounter. It relies on a python script,
+            HIS online tool calculates the victory probabilities in a D&amp;D encounter 
             which simulates an encounter 1,000 times for statistical accuracy. The combatants can be selected from
-            a list with their original stat blocks as found in the Monster Manual, or the user can choose to modify any or all of the original stats.
+            a list with their original stat blocks as found in the Monster Manual, or the user can choose to modify the stat block.
             
-            <span style="text-decoration:none">&nbsp;<i class="far fa-download"></i></span>
-            Due to the complexity of the tactical decisions involved, which human players
-            often fail at, the encounters are performed with the assumption that everyone borders everyone.
-            <br />The simulator is based on the 5e rules in how it handles crits, conditions, advantages and disadvantages.
-        </p>
-        <p style="">
-            Instructions on how to start a simple encounter : <br />
-            Select a creature from the dropdown options in the "Option A" section.<br />
-            Determine how many of these creatures you would like to fight as well as what team they are on (don't worry, you can change these amounts as well as the team assignments at any time before the simulation starts). <br />
-            Click the "Add" button when you are ready to add the creatures.<br />
-            Review, remove, and/or change teams of any combatants you have added in the "Lineup" section.<br />
-            When you are ready, click the "Calculate" button.<br />
-            CAUTION : the more creatures you add to the simulation, the longer each battle will be and you may get a limited data set as the app automatically stops after 10 seconds regardless of the number of battles fought.
-            This is to prevent abuse and and some server errors.
-
-        </p>
-        <p>
-
+            <br />The simulator is based on the 5e rules in how it handles crits, conditions, damage types, advantages and disadvantages.
         </p>
     </div><!--abs-->
 </div><!--abs row-->
 
-<h2>Motive</h2>
+<!--<h2>Motive</h2>
 <p>
     D&D is an amazing game, but encounters can get tedious when they are not a challenge. Conversely, too
     much of a challenge leads to a dissapointing series of GM fiats or, worse, a total party kill, a
@@ -52,12 +35,12 @@
     in determining how an encounter may swing, therefore it may be impossible to predict with calculus,
     hence the simulation.
     Iv'e worked to improve the application in the way it works and to improve user experience. However, this updated version is also not without it's shortcomings as well, but I'm working to solve the ones that I'm aware of (noted later).<br />
-    </p>
+    </p>-->
 
 <h2>But, How does it Work?</h2>
 
 <h3><i class="fas fa-chess-board"></i> Technical notes</h3>
-<p>
+<!--<p>
     There are may factors in play in the simulation, one of which is strategy, which is encoded here with a set of
     assumptions.
 </p>
@@ -82,29 +65,26 @@
     Breath weapons and AoEs will affect a number of targets equal to at least half of what's capable when possible to try to mitigate gridlessness.
     Since there is no spece between combatants, ranged weapons are not used and combatants that have abilities that do best at range are not as effective.
 </p>
-<h3><i class="far fa-wand-magic"></i>Spell-list</h3>
-<p>
-    Spell-budgeting troubles players, therefore there is no spells, except for a single healing cantrip.
-</p>
+
 <p>
     Creatures also do not have any specical abilities, and there are no ranged weapons.
-</p>
-<h2>Shortcomings</h2>
+</p>-->
+<h2>Limitations</h2>
 <ul>
     <li>
-        The lack of ranged weapons.
+        There's no concept of space, so there's no range or movement. AOEs assume at least 50% of possible targets are targeted.
     </li>
     <li>
-        The lack of magical spells (on the todo list)
+        No magical spells (it's on the todo list)
     </li>
     <li>
         Not all abilities are added (work in progress)
     </li>
     <li>
-        Social abilities will not be added
+        Social abilities will not be added (no value to combat)
     </li>
     <li>
-        Custom Attack tool is not very intuitive
+        Custom Attack tool is not very intuitive (on the todo list)
     </li>
     <li>
         Power graph can be very misleading (on the todo list)
@@ -117,28 +97,40 @@
     </li>
     <li>
         There's no magical items
-    </li>    
+    </li>  
+    <li>
+        No status conditions (on the todo list)
+    </li>
 </ul>
 
 <h2>
     Section help
 </h2>
-<p>
-    Settings <br />
+<div>
+    <h3>Simulation Settings</h3> <br />
     Some optional rules have been added under "Simulation Options".<br />
     <ul>
         <li id="morale">
             Morale is determined based on the creature's CR.
             Certain events happen during battle that effect the creature's morale, such as falling under 1/2 of their total HP (becoming 'bloodied') and getting healed by an ally.
-        </liid="morale>
-        <li>
+        </li>
+        <li id="attack_damage_type">
             Attack Damage Type enables resistances, immunities, and vulnerabilities to all damage types including magical types. <br />
             If you would like to use any of these optional settings, check the box next to the setting that you would like to use in your simulation.
         </li>
     </ul>
-    
-    
-</p>
+    <h3>Custom Attack Tool</h3>
+    <p>
+
+    </p>
+
+    <h3>Lineup</h3>
+    <p></p>
+
+    <h3>Option B</h3>
+    <p></p>
+</div>
+
 <!--<p>See <a href="#links">GitHub</a> for more. </p>-->
 
 

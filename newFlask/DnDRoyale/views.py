@@ -26,14 +26,14 @@ def home():
         year=datetime.now().year
     )
 
-@app.route('/contact')
+@app.route('/contact') #legal
 def contact():
     """Renders the contact page."""
     return render_template(
         'contact.html',
-        title='Contact',
+        title='Legal',
         year=datetime.now().year,
-        message='Your contact page.'
+        message='Legal Notice'
     )
 
 @app.route('/about')
@@ -65,7 +65,6 @@ def sendindex():
                 # skip column names
                 line_count+=1
             else:
-                #get data from row as row[column]
                 # put data in html tags and add name to list
                 creaturelist += '<option data-xp="'+ row[19] +'" value="'+row[0]+'">'+row[0]+'</option>'
                 line_count+=1
