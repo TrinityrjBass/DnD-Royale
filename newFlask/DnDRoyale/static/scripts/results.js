@@ -32,9 +32,9 @@ function Output(text) {
     tmax = 100 / 4;
     t = "<table class=res><thead><tr>" +
         "<th width='" + tmax + "%'>Team name</th>" +
-        "<th width='" + tmax + "%'>Number of victories</th>" +
-        "<th width='" + tmax + "%'>Number of close calls</th>" +
-        "<th width='" + tmax + "%'>Number of perfects</th>" + "</tr></thead><tbody>";
+        "<th width='" + tmax + "%'># of victories</th>" +
+        "<th width='" + tmax + "%'># of close calls</th>" +
+        "<th width='" + tmax + "%'># of perfects</th>" + "</tr></thead><tbody>";
     for (ti = 0; ti < reply["team_names"].length; ti++) {
         t += "<tr><th width='" + tmax + " %'>" + reply["team_names"][ti] + "</th><td width='" + tmax + "%'>" +
             reply["team_victories"][ti] + "</td><td width='" + tmax + "%'>" +
