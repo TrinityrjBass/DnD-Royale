@@ -872,7 +872,32 @@ ancient white dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,20,333,18
 ]","{""cold"": 0}",,none,"NO FRIGHTENING PRESENCE, BREATH WEAPON, OR LEGENDARY ACTIONS",,0,8,0,8,0,1,2,33
 androsphinx,,lawful neutral ,monstrosity,large,natural armor,7,17,199,19,10,22,10,20,16,18,23,"[{""name"": ""claw"", ""type"": ""none"", ""attack"": 12, ""damage_modifier"": 6, ""damage"": [10, 10]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 12, ""damage_modifier"": 6, ""damage"": [10, 10]}]",17,18000,0,none,"{""psychic"": 0, ""bludgeoning"": 0, ""piercing"":0, ""slashing"":0}",,none,,,0,6,0,5,3,4,6,24
 animated armor,,unaligned ,construct,medium,natural armor,8,18,33,6,8,14,11,13,1,3,1,"[{""name"": ""slam"", ""type"": ""bludgeoning"", ""attack"": 4, ""damage_modifier"": 2, ""damage"": [6]}, {""name"": ""slam"", ""type"": ""bludgeoning"", ""attack"": 4, ""damage_modifier"": 2, ""damage"": [6]}]",1,200,0,none,"{""poison"":0, ""psychic"":0}",,none,,,0,2,0,1,0,0,0,10
-ankheg,,unaligned ,monstrosity,large,natural armor (11 while prone),4,14,39,6,10,17,11,13,1,13,6,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6, 6]}]",2,450,0,none,none,,none,"plus 3 (1d6) acid damage. If the target is a large or smaller creature, it is grappled (escape DC 13). Until this grapple ends, the ankheg can bite only the grappled creature and has advantage on attack rolls to do so.",,0,3,0,1,0,1,0,10
+ankheg,,unaligned ,monstrosity,large,natural armor (11 while prone),4,14,39,6,10,17,11,13,1,13,6,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6, 6]}]",2,450,0,"[
+{
+    ""name"":""breath weapon"",
+ ""role"":""damage"",
+      ""num_targets"":[
+         30
+      ],
+   ""max_targets"":30,
+      ""type"":""acid"",
+      ""save"":""dx"",
+      ""dc"":13,
+      ""damage"":[
+         6,
+         6,
+         6
+      ],
+      ""on_save"":[
+         3,
+         3,
+         3
+      ],
+      ""recharge"":6,
+      ""recharge_threshold"":6,
+      ""usable"": true
+   }
+]",none,,none,"plus 3 (1d6) acid damage. If the target is a large or smaller creature, it is grappled (escape DC 13). Until this grapple ends, the ankheg can bite only the grappled creature and has advantage on attack rolls to do so.",,0,3,0,1,0,1,0,10
 ape,,unaligned ,beast,medium,,0,12,19,3,8,16,14,14,6,12,7,"[{""name"": ""fist"", ""type"": ""bludgeoning"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6]}, {""name"": ""fist"", ""type"": ""bludgeoning"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6]}]",0.5,100,0,none,none,,none,,,2,3,2,2,0,1,0,10
 archmage,,any ,humanoid (any race),medium,(15 with mage armor),0,12,99,18,8,10,14,12,20,15,16,"[{""name"": ""dagger"", ""type"": ""piercing"", ""attack"": 6, ""damage_modifier"": 2, ""damage"": [4]}]",12,8400,0,none,none,,none,,,2,0,2,1,5,2,3,15
 assassin,,any non-good ,humanoid (any race),medium,studded leather,2,15,78,12,8,11,16,14,13,11,10,"[{""name"": ""shortsword"", ""type"": ""none"", ""attack"": 6, ""damage_modifier"": 3, ""damage"": [6]}, {""name"": ""shortsword"", ""type"": ""none"", ""attack"": 6, ""damage_modifier"": 3, ""damage"": [6]}]",8,3900,0,none,none,,none,,,3,0,3,2,1,0,0,9
@@ -1095,7 +1120,7 @@ cultist,,any non-good ,humanoid (any race),medium,leather armor,1,12,9,2,8,11,12
 darkmantle,,unaligned ,monstrosity,small,,0,11,22,5,6,16,12,13,2,10,5,"[{""name"": ""crush"", ""type"": ""bludgeoning"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6]}]",0.5,100,0,none,none,,none,"The darkmantle attaches to the target. If the target is medium or smaller and the darkmantle has advantage on the attack roll, it attaches by engulfing the target""s head, and the target is also blinded and unable to breathe while the darkmantle is attached in this way. While attached to the target, the darkmantle can attack no other creature except the target but has advantage on its attack rolls.",,1,3,1,1,0,0,0,10
 death dog,,neutral evil ,monstrosity,medium,,0,12,39,6,8,15,14,14,3,13,6,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 4, ""damage_modifier"": 2, ""damage"": [6]}, {""name"": ""bite"", ""type"": ""piercing"", ""attack"": 4, ""damage_modifier"": 2, ""damage"": [6]}]",1,200,0,none,none,,none,,,2,2,2,2,0,1,0,10
 deer,,unaligned ,beast,medium,,0,13,4,1,8,11,16,11,2,14,5,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 2, ""damage_modifier"": 0, ""damage"": [4]}]",0,10,0,none,none,,none,,,3,0,3,0,0,2,0,10
-deva,,lawful good ,celestial,medium,natural armor,3,17,136,16,8,18,18,18,17,20,20,"[{""name"": ""mace"", ""type"": ""bludgeoning"", ""attack"": 8, ""damage_modifier"": 4, ""damage_die"": [6], ""secondary_type"": ""radiant"", ""secondary_damage"": [8,8,8,8], ""isMagical"": true}, {""name"": ""mace"", ""type"": ""bludgeoning"", ""attack"": 8, ""damage_modifier"": 4, ""damage_die"": [6], ""secondary_type"": ""radiant"", ""secondary_damage"": [8,8,8,8], ""isMagical"": true}]",10,5900,0,"[
+deva,,lawful good ,celestial,medium,natural armor,3,17,136,16,8,18,18,18,17,20,20,"[{""name"": ""mace"", ""type"": ""bludgeoning"", ""attack"": 8, ""damage_modifier"": 4, ""damage"": [6], ""secondary_type"": ""radiant"", ""secondary_damage"": [8,8,8,8], ""isMagical"": true}, {""name"": ""mace"", ""type"": ""bludgeoning"", ""attack"": 8, ""damage_modifier"": 4, ""damage"": [6], ""secondary_type"": ""radiant"", ""secondary_damage"": [8,8,8,8], ""isMagical"": true}]",10,5900,0,"[
    {
       ""name"":""healing touch"",
    ""role"":""healing"",
@@ -1112,9 +1137,9 @@ deva,,lawful good ,celestial,medium,natural armor,3,17,136,16,8,18,18,18,17,20,2
       ],
    ""effect_bonus"":2,
    ""charges"":3,
-   ""usable"": true,
+   ""usable"": true
    }
-]","{""charmed"": 0, ""exhausted"":0, ""frightened"":0, ""radiant"":.5, ""bludgeoning"":.5, ""piercing"":.5, ""slashing"":.5}",,none,,,4,4,4,4,3,5,5,12
+]","{""charmed"": 0, ""exhausted"":0, ""frightened"":0, ""radiant"": 0.5, ""bludgeoning"": 0.5, ""piercing"": 0.5, ""slashing"": 0.5}",,none,,,4,4,4,4,3,5,5,12
 dire wolf,,unaligned ,beast,large,natural armor,2,14,37,5,10,17,15,15,3,12,7,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6, 6]}]",1,200,0,none,none,,none,"If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.",,2,3,2,2,0,1,0,10
 djinni,,chaotic good ,elemental,large,natural armor,5,17,161,14,10,21,15,22,15,16,20,"[{""name"": ""scimitar"", ""type"": ""none"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}, {""name"": ""scimitar"", ""type"": ""none"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}, {""name"": ""scimitar"", ""type"": ""none"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}]",11,7200,0,none,none,,none,,,2,5,2,6,2,3,5,14
 doppelganger,,neutral ,monstrosity (shapechanger),medium,,0,14,52,8,8,11,18,14,11,12,14,"[{""name"": ""slam"", ""type"": ""bludgeoning"", ""attack"": 6, ""damage_modifier"": 4, ""damage"": [6]}, {""name"": ""slam"", ""type"": ""bludgeoning"", ""attack"": 6, ""damage_modifier"": 4, ""damage"": [6]}]",3,700,0,none,none,,none,,,4,0,4,2,0,1,2,10
@@ -1318,7 +1343,7 @@ planetar,,lawful good ,celestial,large,natural armor,4,19,200,16,10,24,20,24,19,
       ],
    ""effect_bonus"":3,
    ""charges"":4,
-   ""usable"": true,
+   ""usable"": true
    }
 ]",none,,none,,,5,7,5,7,4,6,7,22
 plesiosaurus,,unaligned ,beast,large,natural armor,1,13,68,8,10,18,15,16,2,12,5,"[{""name"": ""bite"", ""type"": ""none"", ""attack"": 6, ""damage_modifier"": 4, ""damage"": [6, 6, 6]}]",2,450,0,none,none,,none,,,2,4,2,3,0,1,0,10
@@ -1422,7 +1447,7 @@ solar,,lawful good ,celestial,large,natural armor,5,21,243,18,10,26,22,26,25,25,
       ],
    ""effect_bonus"":4,
    ""charges"":4,
-   ""usable"": true,
+   ""usable"": true
    }
 ]",none,,none,NO SLAYING LONGBOW,,6,8,6,8,7,7,10,1
 specter,,chaotic evil ,undead,medium,,0,12,22,5,8,1,14,11,10,10,11,"[{""name"": ""life drain"", ""type"": ""none"", ""attack"": 4, ""damage_modifier"": 0, ""damage"": [6, 6, 6]}]",1,200,0,none,none,,none,NO LIFEDRAIN EFFECT (The target must succeed on a DC 10 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the creature finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.),,2,0,2,0,0,0,0,10
