@@ -272,6 +272,8 @@ function initial() {
     $("#OFF_roster").hide();
     $("#ON_options").hide();
     $("#DIV_options").hide();
+    $("#ON_quick").hide();
+    $("#DIV_quick").hide();
     // create roster table and set some variables
     rosterTable("hard");
     // iniitalize tooltips
@@ -346,7 +348,9 @@ function changeAmount(uid) {
     var numOf = $("#" + uid).val();
     num_entities = 0;
     let redPower = 0;
+    let numRed = 0;
     let bluePower = 0;
+    let numBlue = 0;
     jQuery.each(lineup, function (index, c) {
         
         if (c.uid == uid) {
@@ -356,12 +360,39 @@ function changeAmount(uid) {
         // refigure power of teams
         if (c.team == "Red") {
             redPower += powerdict[c.base] * parseInt(c.amount);
+            
+            numRed+=c.amount;
         }
         else {
             bluePower += powerdict[c.base] * parseInt(c.amount);
+            
+            numBlue += c.amount;
         }
     });
+    redPower = teamSizeCrAdjustment(numRed, redPower);
+    bluePower = teamSizeCrAdjustment(numBlue, bluePower);
     updateGraph(redPower, bluePower);
+}
+
+function teamSizeCrAdjustment(num, power) {
+    if (num > 1) {
+        if (num > 2) {
+            if (num > 3) {
+                if (num > 6) {
+                    if (num > 14) {
+                        power *= 4;
+                    }
+                    else power *= 3;
+                }
+                else power *= 2.5;
+            }
+            else power *= 2;
+        }
+        else power *= 1.5;
+
+    }
+    
+    return power;
 }
 
 // generic print function for debugging
@@ -373,6 +404,8 @@ function display_rosters(lineup) {
     // grab data for plotly graph... for later
     var redPower = 0;
     var bluePower = 0;
+    var numRed = 0;
+    var numBlue = 0;
     // clear roster table so there aren't duplicates.
     rosterTable("soft");
     // display creatures in lineup -- for debugging purposes
@@ -393,15 +426,19 @@ function display_rosters(lineup) {
         if (creature.team == "Red") {
             $(':radio[name="' + creature.uid + '"][value="Red"]').prop("checked", true);
             // add xp or power value to red 
+            numRed++;
             redPower += xp;
         }
         else {
             $(':radio[name="' + creature.uid + '"][value="Blue"]').prop("checked", true);
             // add xp or power value to blue
+            numBlue++;
             bluePower += xp;
         }
 
     });
+    redPower = teamSizeCrAdjustment(numRed, redPower);
+    bluePower = teamSizeCrAdjustment(numBlue, bluePower);
     updateGraph(redPower, bluePower);
 }
 
