@@ -9,15 +9,14 @@
     <div class="col-lg-10 offset-lg-1 col-sm-12">
         <p>
             <span style="color: #903; font-size: 64px; line-height: 48px; padding-top: 0px; padding-right: 6px; padding-left: 3px; font-family: Georgia;">T</span>
-            HIS online tool calculates the victory probabilities in a D&amp;D encounter 
+            HIS online tool calculates the victory probabilities in a D&amp;D encounter
             which simulates an encounter 1,000 times for statistical accuracy. The combatants can be selected from
             a list with their original stat blocks as found in the Monster Manual, or the user can choose to modify the stat block.
-            
+
             <br />The simulator is based on the 5e rules in how it handles crits, conditions, damage types, advantages and disadvantages.
         </p>
     </div><!--abs-->
 </div><!--abs row-->
-
 <!--<h2>Motive</h2>
 <p>
     D&D is an amazing game, but encounters can get tedious when they are not a challenge. Conversely, too
@@ -60,7 +59,7 @@
 <h3><i class="fas fa-chess-board"></i> Gridlessness</h3>
 <p>
     This application does not take into account space. That means it assumes tactics on a grid don't matter:
-    this is clearly wrong, but it is a lesser evil than encoding a 
+    this is clearly wrong, but it is a lesser evil than encoding a
         lot of behavioral rules.<br />
     Breath weapons and AoEs will affect a number of targets equal to at least half of what's capable when possible to try to mitigate gridlessness.
     Since there is no spece between combatants, ranged weapons are not used and combatants that have abilities that do best at range are not as effective.
@@ -69,6 +68,59 @@
 <p>
     Creatures also do not have any specical abilities, and there are no ranged weapons.
 </p>-->
+
+
+<h2>
+    Building Teams
+</h2>
+<div>
+
+    <h3 id="option_b">Option B</h3>
+    <p>
+        Option B provides a more granular control over combatants, allowing the user to modify a base creature. <br />
+        Modifications include giving it a unique name or changing any of it's base stats.<br />
+        Custom attacks can also be created by using the <strong>Custom Attack Tool</strong>.<br />
+        The default CR may also be changed. <br />
+        Only fields that are modified will be changed in the simulation, all other fields will use the default values of the selected base creature.
+    </p>
+
+    <h3>Simulation Settings</h3> <br />
+    Some optional rules have been added under "Simulation Options".<br />
+    <ul>
+        <li id="morale">
+            <strong>Morale </strong> <br />
+            Enabling the Morale option enables combat morale which is determined based on the creature's CR.
+            Certain events happen during battle that effect the creature's morale, such as falling under 1/2 of their total HP (becoming 'bloodied') and getting healed by an ally.
+        </li>
+        <li id="attack_damage_type">
+            <strong>Attack Damage Type </strong><br />
+            The Attack Damage Type option enables resistances, immunities, and vulnerabilities to all damage types including magical types. <br />
+            If you would like to use any of these optional settings, check the box next to the setting that you would like to use in your simulation.
+        </li>
+    </ul>
+    <h3>Custom Attack Tool</h3>
+    <p>
+        This tool allows you to create custom attacks for custom creatures (Option B).<br />
+        Select the weapon type that you would like to use, the attack and damage modifiers (these are not automatically calculated by the program).<br />
+        The damage dice (D6, D8, etc.) and damage type will be automatically filled in based off the weapon type selected.<br />
+        Select if the attack is considered magical (default is non-magical) and click the "Add to parameters" button to add it to the list of attacks in the multi-attack list.<br />
+        When all the desired attacks are added, click the "Add to combatant" button to add the attacks to the custom creature in Option B.<br />
+        
+        <strong>NOTE</strong>
+        If a weapon is typed in the "Weapon" box instead of selecting from the drop-down list the Attack Die box will be unlocked, allowing for a unique weapon and attack to be created.<br />
+        Multiple damage die my be added this way. For example, a weapon with 2D6 damage would simply be "66" in the Attack Die field. A weapon that has 2D6 and 1D8 damage would be "668" and so on.
+    </p>
+
+
+    <h3>Lineup</h3>
+    <p>
+        The Lineup is where each creature and it's team is displayed. <br />
+        From here the number of each creature can be adjusted as well as the team it's assigned to.<br />
+        The graph on the top displays a rough representation of the relative power of each side.<br />
+        This graph is only meant as a rough indicator of the results and is not 100% accurate.
+    </p>
+</div>
+
 <h2>Limitations</h2>
 <ul>
     <li>
@@ -97,41 +149,11 @@
     </li>
     <li>
         There's no magical items
-    </li>  
+    </li>
     <li>
         No status conditions (on the todo list)
     </li>
 </ul>
 
-<h2>
-    Section help
-</h2>
-<div>
-    <h3>Simulation Settings</h3> <br />
-    Some optional rules have been added under "Simulation Options".<br />
-    <ul>
-        <li id="morale">
-            Morale is determined based on the creature's CR.
-            Certain events happen during battle that effect the creature's morale, such as falling under 1/2 of their total HP (becoming 'bloodied') and getting healed by an ally.
-        </li>
-        <li id="attack_damage_type">
-            Attack Damage Type enables resistances, immunities, and vulnerabilities to all damage types including magical types. <br />
-            If you would like to use any of these optional settings, check the box next to the setting that you would like to use in your simulation.
-        </li>
-    </ul>
-    <h3>Custom Attack Tool</h3>
-    <p>
-
-    </p>
-
-    <h3>Lineup</h3>
-    <p></p>
-
-    <h3>Option B</h3>
-    <p></p>
-</div>
-
 <!--<p>See <a href="#links">GitHub</a> for more. </p>-->
-
-
 {% endblock %}
