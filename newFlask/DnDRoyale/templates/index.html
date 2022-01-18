@@ -30,26 +30,29 @@
 </div>
 <div id="quick_start" class="card">
     <div>
-        <h2>Quick Start</h2>
+        <h2>Quick Start</h2> <i class="fa fa-chevron-up" id="OFF_quick" onclick="flip('quick',0)"></i><i class="fa fa-chevron-down" id="ON_quick" onclick="flip('quick',1)"></i>
         <!--Id like this as collpsable or as a modal, but this will do for now. I DO NOT want to have this on a different page-->
-        <p>
-            Select the creature that you want to add to a team.
-            Select the team it will be assigned to (Red or Blue).
-            Enter the amount of the selected creature to be added (the number below the team selection).
-            Click the "Add" button to add them to the simulation.
-        </p>
-        <p>
-            Example: I would like to see if 20 Acolytes can win a fight against an adult black dragon.<br />
-            Select "Acolyte" from the drop-down list in the Option A section.<br />
-            Select the team that these combatants will be assigned to (Blue or Red).<br />
-            Enter the number of combatants you would like to add. In this case I want 20, so I enter 20 in the box.<br />
-            Click the "Add" button to add them to the simulation.<br />
-            Follow these steps to add the dragon to the simulation. <br />
-            Click the Green "Calculate" button to start the simulation.<br />
-            The results will show as a pop-up when the simulation is done running.<br />
-            Check out the About page for more information and advanced options.
-        </p>
-
+        <div id="DIV_quick">
+            <p>
+                Select the creature that you want to add to a team.
+                Select the team it will be assigned to (Red or Blue).
+                Enter the amount of the selected creature to be added (the number below the team selection).
+                Click the "Add" button to add them to the simulation.
+            </p>
+            <h4>Example:</h4>
+            <p>
+                I would like to see if 20 Acolytes can win a fight against an adult black dragon.<br />
+                Select "Acolyte" from the drop-down list in the Option A section.<br />
+                Select the team that these combatants will be assigned to (Blue or Red).<br />
+                Enter the number of combatants you would like to add. In this case I want 20, so I enter 20 in the box.<br />
+                Click the "Add" button to add them to the simulation.<br />
+                Follow these steps to add the dragon to the simulation (but assign to the opposite team). <br />
+                Changes can be made in the Lineup section anytime before the simulation is run. <br />
+                Click the Green "Calculate" button to start the simulation.<br />
+                The results will show as a pop-up when the simulation is done running.<br />
+                Check out the About page for more information and advanced options.
+            </p>
+        </div>
     </div>
 </div>
 
@@ -83,7 +86,7 @@
             <h3>Option B: Build Combatant</h3>
             <div class="card-body">
                 Modify combatants stat block<br />
-                Hover over fields for help.<br />
+                Hover over fields for help, or click <a href="/about#option_b">here</a>.<br />
                 <div id=table>
 
                     <label for="name">Name of Creature:</label>
@@ -127,7 +130,7 @@
                     <input class="input-xs form-control" type=text id=attack_parameters data-toggle="tooltip" title="Attacks need to be in square brackets, and follow the following template : ['club', toHit modifier, damage modifier, damage dice]. Please use the tool to make custom attacks."
                             data-placement="right">
 
-                    <label for="spell_casting">Spell Casting:</label>
+                    <label for="spell_casting">Spell Casting Atribute:</label>
                     <input class="input-xs form-control" list="spellCasting" id=spell_casting placeholder="None" data-toggle="tooltip" title="The ability the creature uses to cast spells (if any, or different than default creature)"
                             data-placement="right">
                         <datalist id="spellCasting">
@@ -152,32 +155,26 @@
 
                     <label for="str">Str:</label>
                     <input class="input-xs form-control" type="number" id=str min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Strength ability, not bonus."></span>-->
 
 
                     <label for="dex">Dex:</label>
                     <input class="input-xs form-control" type="number" id=dex min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Dex ability, not bonus."></span>-->
 
 
                     <label for="con">Con:</label>
                     <input class="input-xs form-control" type="number" id=con min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Constitution ability, not bonus."></span>-->
 
 
                     <label for="int">Int:</label>
                     <input class="input-xs form-control" type="number" id=int min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Intelligence ability, not bonus."></span>-->
 
 
                     <label for="wis">Wis:</label>
                     <input class="input-xs form-control" type="number" id=wis min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Wisdom ability, not bonus."></span>-->
 
 
                     <label for="cha">Cha:</label>
                     <input class="input-xs form-control" type="number" id=cha min="0" value="0">
-                    <!--<span class="fa fa-question" data-toggle="tooltip" title="Charisma ability, not bonus."></span>-->
 
 
                     <label for="CombatRating">CR:</label>
