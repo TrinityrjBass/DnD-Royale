@@ -373,7 +373,6 @@ class Creature:
         else:
             self.actions = [{'name': None, 'attack': None, 'usable': False}]
        
-
     def getInternalStuff(self):
         print("internals")
         # internal stuff
@@ -442,6 +441,7 @@ class Creature:
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
         self.actions = [];
         #self.actions = self.beastiary['actions']
+        self.conditions = []
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
         setattr(self, 'proficiency', int(1 + round(self.level / 4)))
@@ -572,13 +572,15 @@ class Creature:
                             "ac":25, "hp":5000, "xp":465000,
                             "initiative_bonus":15,
                             "attack_parameters":[
-                                ["2 claws", 19, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10], 
-                                ["tentacle",  19, 10, 10, 10, 10, 10, 10], 
-                                ["tentacle",  19, 10, 10, 10, 10, 10, 10],
-                                ["tentacle",  19, 10, 10, 10, 10, 10, 10], 
-                                ["tentacle",  19, 10, 10, 10, 10, 10, 10]
+                                {"name": "2 claws", "type": "slashing", "attack": 19, "damage": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], "damage_modifier": 10}, 
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}, 
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]},
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}, 
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}
                                 ],
                             "alt_attack":['none', 0],
+                            "vulnerabilities": "none",
+                            "actions": "none",
                             "healing_spells":99999, "healing_dice":20, "healing_bonus":30,
                             "cha": 29, "con": 30, "dex": 12, "int": 30, "str": 30, "wis": 27,
                             "ability_bonuses":{'cha': 9, 'con': 10, 'dex': 1, 'int': 10, 'str': 10, 'wis': 8}, "sc_ability":'int',
@@ -772,6 +774,7 @@ class Creature:
         self.healing_spells = self.starting_healing_spells
         if hard:
             self.tally={'damage': 0,'hp': 0, 'hits': 0,'misses': 0,'rounds': 0,'healing_spells': 0,'battles': 0,'dead':0}
+            self.conditions=[]
 
     def check_advantage(self, opponent):
         adv = 0
@@ -885,10 +888,12 @@ class Creature:
         self.do_action(best)
 
     def act(self, verbose=0):
+        ## self.hasAction : the ability to act
+        ## action['usable'] : used to indicate chargeable and per rest abilites
         if not self.arena.find('alive enemy'):
             raise DnD.Encounter.Victory()
         # BONUS ACTION
-        # heal  -healing word, a bonus action. #TB nobody has healing except the big guy and custom combatants
+        # heal  -healing word, a bonus action.
         if self.healing_spells > 0:
             weakling = self.assess_wounded(verbose)
             if weakling != 0:
@@ -899,7 +904,7 @@ class Creature:
         if 'restrained' in self.condition:
             # try to get out of being restrained
             if verbose:
-                verbose.append(self.name + self.id + " freed himself from a net")
+                verbose.append(self.name + self.id + " is freed from being restrained.")
                 self.condition = 'normal'
         elif self.buff_spells > 0 and self.concentrating == 0:
             self.conc_fx()
@@ -959,18 +964,23 @@ class Creature:
             else:
                 self.multiattack(verbose)
 
-    def checkHealingAction(self, action):
+    def checkHealingAction(self, action): # creatures are able to use abilities and then attack on the same turn... this is unwanted
         if action['role'] == 'healing':
             targets = []
+            allies = self.arena.find('bloodiest allies')
             num_targets = action['num_targets'].roll()
-            total_allies = len(self.arena.find('bloodiest allies')) #could also be random or strongest allies 
+            total_allies = len(allies) #could also be random or strongest allies 
             if num_targets > total_allies: num_targets = total_allies
-            for x in range (num_targets):
-                targets.append(self.arena.find(TARGET, self)[x])
             heal = action['effect'].roll()
-            for target in targets:
+            for x in range (num_targets):
+                #targets.append(self.arena.find('bloodiest allies')[x])
+                print(self.name + " " + str(self.id) + "heals " + allies[x].name + " " + str(allies[x].id) + " for " + str(heal) + "hp")
                 #apply healing
-                target.hp += heal # too tired... this might.not.work.... or it might. FYI the caster IS included in target list
+                allies[x].hp += heal # FYI the caster IS included in target list
+            #for target in targets:
+            #    print(self.name + " " + str(self.id) + "heals " + target.name + " " + str(target.id) + " for " + str(heal) + "hp")
+            #    #apply healing
+            #    target.hp += heal # FYI the caster IS included in target list
 
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon': # we may not need this if statement
