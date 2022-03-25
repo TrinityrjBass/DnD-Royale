@@ -572,12 +572,17 @@ class Creature:
                             "ac":25, "hp":5000, "xp":465000,
                             "initiative_bonus":15,
                             "attack_parameters":[
-                                {"name": "2 claws", "type": "slashing", "attack": 19, "damage": [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], "damage_modifier": 10}, 
-                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}, 
-                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]},
-                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}, 
-                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage_modifier":10, "damage":[10, 10, 10, 10, 10]}
-                                ],
+                                {"name": "2 claws", "attack": 19, "damage_modifier": 10, "damage": [10,10,10,10,10], "type": "slashing", "isMagical": False}, 
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage":[10, 10, 10, 10, 10], "damage_modifier": 10, "isMagical": False, 
+                                    "secondary_type": "psycic",
+                                    "secondary_damage":[10, 10, 10, 10, 10]}, 
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage":[10, 10, 10, 10, 10], "damage_modifier": 10, "isMagical": False,
+                                    "secondary_type": "psycic",
+                                    "secondary_damage":[10, 10, 10, 10, 10]},
+                                {"name": "tentacle", "type": "bludgeon", "attack": 19, "damage":[10, 10, 10, 10, 10], "damage_modifier": 10, "isMagical": False,
+                                    "secondary_type": "psycic",
+                                    "secondary_damage":[10, 10, 10, 10, 10]
+                                }],# each tentacle attack is supposed to also have psycic and necrotic damage too
                             "alt_attack":['none', 0],
                             "vulnerabilities": "none",
                             "actions": "none",

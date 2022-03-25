@@ -414,7 +414,7 @@ air elemental,,neutral ,elemental,large,,0,15,90,12,10,14,20,14,6,10,6,"[{""name
  ""damage_modifier"":0,
     ""recharge"":4,
     ""recharge_threshold"":5,
-    ""usable"": true,
+    ""usable"": true
    }
 ]","{""poison"": 0, ""lightning"":0.5, ""thunder"":0.5, ""bludgeoning"":0.5, ""piercing"": 0.5, ""slashing"":0.5}",,none,,,5,2,5,2,0,0,0,10
 ancient black dragon,,chaotic evil ,dragon,gargantuan,natural armor,10,22,367,21,20,27,14,25,16,15,19,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 15, ""damage_modifier"": 8, ""damage"": [10, 10]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 15, ""damage_modifier"": 8, ""damage"": [6, 6]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 15, ""damage_modifier"": 8, ""damage"": [6, 6]}]",21,33000,0,"[
