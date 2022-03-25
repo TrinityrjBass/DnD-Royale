@@ -99,6 +99,7 @@ class Dice:
 
     def __str__(self):
         """
+        I think this isn't being used... TB
         This is rather inelegant piece of code and is not overly flexible. If the dice fail to show, they will still work.
         :return: string in dice notation.
         """
@@ -214,6 +215,7 @@ class Encounter:
     class Victory(Exception):
         """
         The way the encounter ends is a victory error is raised to stop the creatures from acting further.
+        TB. This could also hold a value/attribute that can be modified and checked to determine victory
         """
         pass
 
@@ -221,6 +223,7 @@ class Encounter:
         '''
         creates the variables necessary to run the encounter and then instantiates each combatant
         '''
+        print("found __init__")
         self.KILL=False #needed for code.
         self.tally = {'rounds': 0, 'battles': 0, 'perfect': None, 'close': None, 'victories': None}
         self.active = None
@@ -231,14 +234,15 @@ class Encounter:
         self.combattants = []
         #keeping track of the number and what the teams are called... but there's only ever 2 now right... so we don't need this?
         self.sides = []
-        #self.teams["Red", "Blue"] I'm not sure if I'm going to need this, or an attribute that contains 
         self.teamRed = []
         self.teamBlue = []
         self.options = lineup[0];
-        
+
+        print("number in lineup: " + str(len(lineup)))
+
         for chap in lineup:
-            if type(chap) is dict:
-                # TODO cope with dictionary input from custom combattant 
+            if type(chap) is dict: 
+                print("new guy here : " + chap["name"])
                 newChap = creature.Creature(chap)
                 self.append(newChap)
             elif type(chap) is str:
@@ -246,6 +250,7 @@ class Encounter:
                 self.append(chap)            
             else:
                 print("pls don't summon the big guy here")
+                print(chap)
                 continue 
 
         self.blank()
@@ -264,7 +269,7 @@ class Encounter:
 
     def append(self, newbie):
         ''' add a creature to the list of combatants '''
-        #print("appending " + newbie + str(len(self.combattants))) #debugging
+        print("appending " + newbie.name + " " + str(len(self.combattants))) #debugging
         if not type(newbie) is creature.Creature:
             newbie = creature.Creature(newbie) 
         newbie.id = str(len(self.combattants)) 
@@ -277,16 +282,6 @@ class Encounter:
         for x in iterable:
             self.append(x)
         return self
-    # ===== DEPRECATION CHECK =====
-    #def addmob(self, n):
-    #    """
-    #    Adds _n_ commoners to the battle
-    #    :param n: number of commoners
-    #    :return: self
-    #    """
-    #    for x in range(int(n)):
-    #        self.append("commoner")
-    #    return self
 
     def __str__(self):
         ''' formats the battle results and data to be displayed on the web page''' 
