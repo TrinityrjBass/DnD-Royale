@@ -1,5 +1,6 @@
 #This may be the removed creature class, but I'm going to add it back to DnD.py for now to get things working.
 
+from queue import Empty
 import warnings
 import math, os
 from DnDRoyale import DnD
@@ -62,8 +63,6 @@ class Creature:
         * max_morale
         * current_morale
         """
-        # I like this way better since it yields a dict by default
-        # check here https://www.youtube.com/watch?v=efSjcrp87OY
         try:
             import csv
             r = csv.reader(open(path, encoding='utf-8-sig'))
@@ -97,27 +96,12 @@ class Creature:
           If a Creature object is passed it will make a copy
         :param kwargs: a lot of arguments...
         :return: a creature.
-        The arguments are many.
-        >>> print(Creature(Creature('aboleth'), ac=20).__dict__)
-        `{'abilities': None, 'dex': 10, 'con_bonus': 10, 'cr': 17, 'xp': 5900, 'ac': 20, 'starting_healing_spells': 0, 'starting_hp': 135, 'condition': 'normal', 'initiative': <__main__.Dice object at 0x1022542e8>, 'str': 10, 'wis': 10, 'ability_bonuses': {'int': 0, 'cha': 0, 'dex': 0, 'con': 0, 'str': 0, 'wis': 0}, 'custom': [], 'hd': <__main__.Dice object at 0x102242c88>, 'hurtful': 36.0, 'tally': {'rounds': 0, 'hp': 0, 'battles': 0, 'hits': 0, 'damage': 0, 'healing_spells': 0, 'dead': 0, 'misses': 0}, 'hp': 135, 'proficiency': 5, 'cha_bonus': 10, 'able': 1, 'healing_spells': 0, 'copy_index': 1, 'int': 10, 'concentrating': 0, 'wis_bonus': 10, 'con': 10, 'int_bonus': 10, 'sc_ab': 'con', 'str_bonus': 10, 'level': 18, 'settings': {}, 'arena': None, 'dex_bonus': 10, 'log': '', 'cha': 10, 'dodge': 0, 'alt_attack': {'attack': None, 'name': None}, 'alignment': 'lawful evil ', 'attacks': [{'attack': <__main__.Dice object at 0x1022545f8>, 'damage': <__main__.Dice object at 0x1022545c0>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x102254668>, 'damage': <__main__.Dice object at 0x102254630>, 'name': 'tentacle'}, {'attack': <__main__.Dice object at 0x1022546d8>, 'damage': <__main__.Dice object at 0x1022546a0>, 'name': 'tentacle'}], 'attack_parameters': [['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6], ['tentacle', 9, 5, 6, 6]], 'buff_spells': 0, 'temp': 0, 'name': 'aboleth'}`
         """
         self.log = ""
-        #if not kwargs and type(wildcard) is str:
-        #    print("filling from beastiary - no kwargs")
-        #    self._fill_from_beastiary(wildcard)
+        
         if type(wildcard) is dict:
             print("this wildcard is a dict")
             self._initialise(**wildcard)
-        #elif kwargs and type(wildcard) is str:
-        #    print("kwargs, and also this wildcard is str")
-        #    if wildcard in self.beastiary:
-        #        print("this wildcard is in the beastiary")
-        #        self._initialise(base=wildcard, **kwargs)
-        #    else:
-        #        self._initialise(name=wildcard, **kwargs)
-        #elif type(wildcard) is Creature:
-        #    print("this wildcard is a Creature")
-        #    self._initialise(base=wildcard, **kwargs)
         else:
             warnings.warn("UNKNOWN COMBATTANT:" + str(wildcard))
             print("UNKNOWN COMBATTANT:" + str(wildcard))
@@ -128,7 +112,6 @@ class Creature:
     def getattacks(self):
         # get use attacks from user, if none, get from bestiary, if none, figure appropriate attack : fist/claw/slam and params
         print("loading attack information")
-        # self.attacks = []
         self.hurtful = 0
         # custom creature that wants default attacks
         if not 'attack_parameters' in self.settings:
@@ -173,8 +156,6 @@ class Creature:
         #    self.settings['attack_parameters'][0] = str(self.settings['attack_parameters'][0])
 
         self.attack_parameters = self._attack_parse(self.settings['attack_parameters'])
-            
-        #print("attack is : " + str(self.attacks[0]))
 
     def getVulnerabilities(self):
         if self.beastiary['vulnerabilities'] != 'none':
@@ -193,6 +174,11 @@ class Creature:
         # Ability scores have already been determined. Figure from known
         for mod in self.ability_names: 
             self.ability_bonuses[mod] = int((self.abilities[mod] - 10) // 2)
+    
+    def getSaves(self):
+        # get saves
+        for save in self.beastiary['saves']:
+            self.saves.append(save)
 
     def getmorale(self):
         print("getting morale")
@@ -395,30 +381,6 @@ class Creature:
             self.buff_spells = 0
 
     def _initialise(self, **settings):
-        """`
-        Preface.
-        Character creation in DnD is rather painful. Here due to missing it is even more complex.
-        Also, creature, character and monster are used interchangably here unfortunately, which will be fixed one day.
-        The method _set
-        This is the order of creation. All attributes are in lowercase regardless of the style on the PHB.
-        1. a creature can be based off another, if the `base attribute is set`(str or Creature).
-        2. set `name`
-        3. set `level` (def 1)
-        4. set `xp` (def None)
-        5. set `proficiency` (proficiency bonus), 1 + round(self.level / 4) if absent, but will be overidden if hp is not specified as the `set_level` will generate it from HD and level
-        6. set ability bonues (`_initialise_abilities` method). To let the user give a base creature and weak a single ability (__e.g.__ `Creature('Commoner',name='mutant commoner', str=20)), the creature has abilities as individual attributes with three letter codes, __e.g.__ `self.str` and as a dictionary (`self.abilities`), while `self.ability_bonuses` has a twin that is the suffix `_bonus` (__e.g.__ `self.str_bonus`).
-        7. set `hp`
-        8. AC (`self.ac`)
-        9. spellcasting (complex, may change in future): `sc_ab` the spellcasting ability as three char str,
-        10. `initiative_bonus`
-        11. combat stats... attack_parameters=[['rapier', 4, 2, 8]], alt_attack=['net', 4, 0, 0]
-        12. set max morale
-        13. id. This should be able to be used to single out one combattant of many for the purpose of death/retreat
-        name, alignment="good", ac=10, initiative_bonus=None, hp=None, attack_parameters=[['club', 2, 0, 4]],
-                 alt_attack=['none', 0],
-                 healing_spells=0, healing_dice=4, healing_bonus=None, ability_bonuses=[0, 0, 0, 0, 0, 0], sc_ability='wis',
-                 buff='cast_nothing', buff_spells=0, log=None, xp=0, hd=6, level=1, proficiency=2
-                 """
         # TB debugging -> getting code path of calls
         print("_initialise")
         # TB settings is ONLY user settings/from app
@@ -439,15 +401,16 @@ class Creature:
         self._set('level', 0, 'int')
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
-        self.actions = [];
+        self.actions = []
+        self.saves = {}
         #self.actions = self.beastiary['actions']
         self.conditions = []
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
         setattr(self, 'proficiency', int(1 + round(self.level / 4)))
  
-        self.getAbilityScores() # new function 
-        self.getAbilityModifiers() # new function 
+        self.getAbilityScores()
+        self.getAbilityModifiers() 
         # self.getHd() #Idon't think that this is used....unless used as a sub for lv, but .base references need to be taken out
         self.getHp()
         self.getAc()
@@ -895,8 +858,13 @@ class Creature:
     def act(self, verbose=0):
         ## self.hasAction : the ability to act
         ## action['usable'] : used to indicate chargeable and per rest abilites
+        ## next TODO : add checks/saves for conditions (petrifying). Add Save()?
         if not self.arena.find('alive enemy'):
             raise DnD.Encounter.Victory()
+        # beginning of turn effects
+        if len(self.conditions) > 0 : 
+            #rollSaves(self.conditions)
+            print(self.conditions)
         # BONUS ACTION
         # heal  -healing word, a bonus action.
         if self.healing_spells > 0:
@@ -906,7 +874,7 @@ class Creature:
         # Main action!
         economy = len(self.arena.find('allies')) > len(self.arena.find('opponents')) > 0
         ## Buff?
-        if 'restrained' in self.condition:
+        if 'restrained' in self.condition: # TB - Deprecating in favor of self.conditions
             # try to get out of being restrained
             if verbose:
                 verbose.append(self.name + self.id + " is freed from being restrained.")
@@ -954,6 +922,16 @@ class Creature:
                 self.multiattack(verbose)
         else:
             self.multiattack(verbose)
+
+    def rollSaves(self):
+        # TODO - roll saves against conditions and effects
+        for condition in self.conditions:
+            if condition["name"] == "petrifying":
+                #Cn save
+                print("there may be a condition")
+            # Get save ability
+            # Get save DC
+            # Roll ability save
 
     def determineAction(self, actions): #deprecating
         for action in actions:

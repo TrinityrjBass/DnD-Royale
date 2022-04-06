@@ -7,8 +7,7 @@ import os
 import threading, time
 from datetime import datetime
 from flask import render_template, request
-from . import app, DnD, creature
-
+from . import app, DnD
 
 #from DnDRoyale import creature
 print("loading views file")
@@ -43,7 +42,7 @@ def about():
         'about.html',
         title='About',
         year=datetime.now().year,
-        message='Your application description page.'
+        message='...About.'
     )
 
 # I don't think I like this here

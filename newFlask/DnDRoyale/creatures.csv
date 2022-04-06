@@ -1,4 +1,4 @@
-﻿name,alt,alignment,type,size,armour_name,armor_bonus,ac,hp,level,hd,str,dex,con,int,wis,cha,attack_parameters,cr,xp,regen,actions,vulnerabilities,healing_bonus,sc_ability,log,proficiency,initiative_bonus,ab_str,ab_dex,ab_con,ab_int,ab_wis,ab_cha,max_morale
+﻿name,alt,alignment,type,size,armour_name,armor_bonus,ac,hp,level,hd,str,dex,con,int,wis,cha,attack_parameters,cr,xp,regen,actions,vulnerabilities,saves,sc_ability,log,proficiency,initiative_bonus,ab_str,ab_dex,ab_con,ab_int,ab_wis,ab_cha,max_morale
 aboleth,,lawful evil ,aberration,large,natural armor,7,17,135,18,10,21,9,15,18,15,18,"[{""name"": ""tentacle"", ""type"": ""bludgeoning"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}, {""name"": ""tentacle"", ""type"": ""bludgeoning"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}, {""name"": ""tentacle"", ""type"": ""bludgeoning"", ""attack"": 9, ""damage_modifier"": 5, ""damage"": [6, 6]}]",10,5900,0,none,none,,none,NO ENSLAVE,,0,5,0,0,4,2,4,12
 acolyte,,any ,humanoid (any race),medium,,0,10,9,2,8,10,10,10,10,14,11,"[{""name"": ""club"", ""type"": ""bludgeoning"", ""attack"": 2, ""damage_modifier"": 0, ""damage"": [4]}]",0.25,50,0,none,none,,"[0, 3]",,,0,0,0,0,0,2,0,10
 adult black dragon,,chaotic evil ,dragon,huge,natural armor,7,19,195,17,12,23,14,21,14,13,17,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 11, ""damage_modifier"": 6, ""damage"": [10, 10]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 11, ""damage_modifier"": 6, ""damage"": [6, 6]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 11, ""damage_modifier"": 6, ""damage"": [6, 6]}]",14,11500,0,"[
@@ -911,7 +911,20 @@ balor,,chaotic evil ,fiend (demon),huge,natural armor,7,19,262,21,12,26,15,22,20
 bandit,pirate,any non-lawful ,humanoid (any race),medium,leather armor,1,12,11,2,8,11,12,12,10,10,10,"[{""name"": ""scimitar"", ""type"": ""none"", ""attack"": 3, ""damage_modifier"": 1, ""damage"": [6]}]",0.125,25,0,none,none,,none,,,1,0,1,1,0,0,0,10
 bandit captain,pirate captain,any non-lawful ,humanoid (any race),medium,studded leather,2,15,65,10,8,15,16,14,14,11,14,"[{""name"": ""scimitar"", ""type"": ""none"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6]}, {""name"": ""scimitar"", ""type"": ""none"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6]}, {""name"": ""dagger"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [4]}]",2,450,0,none,none,,none,,,3,2,3,2,2,0,2,10
 barbed devil,,lawful evil ,fiend (devil),medium,natural armor,2,15,110,13,8,16,17,18,12,14,14,"[{""name"": ""tail"", ""type"": ""bludgeoning"", ""attack"": 6, ""damage_modifier"": 3, ""damage"": [6, 6]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 6, ""damage_modifier"": 3, ""damage"": [6]}, {""name"": ""claw"", ""type"": ""none"", ""attack"": 6, ""damage_modifier"": 3, ""damage"": [6]}]",5,1800,0,none,none,,none,NO HURL FLAME,,3,3,3,4,1,2,2,10
-basilisk,,unaligned ,monstrosity,medium,natural armor,5,15,52,8,8,16,8,15,2,8,7,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6, 6]}]",3,700,0,none,none,,none,plus 7 (2d6) poison damage.,,0,3,0,2,0,0,0,10
+basilisk,,unaligned ,monstrosity,medium,natural armor,5,15,52,8,8,16,8,15,2,8,7,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [6, 6]}]",3,700,0,"[{
+  ""name"": ""petrifying gaze"",
+  ""role"": ""control"",
+  ""num_targets"": [
+   1
+  ],
+  ""max_targets"": 1,
+  ""save"": ""cn"",
+  ""dc"": 12,
+  ""conditions"": [[""petrifying""], [""restrained""]],
+  ""on_save"": """",
+  ""usable"": true
+ }
+]",none,,none,plus 7 (2d6) poison damage.,,0,3,0,2,0,0,0,10
 bat,,unaligned ,beast,tiny,,0,12,1,1,4,2,15,8,2,12,4,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 0, ""damage_modifier"": 0, ""damage"": [1]}]",0,10,0,none,none,,none,,,2,0,2,0,0,1,0,10
 bearded devil,,lawful evil ,fiend (devil),medium,natural armor,1,13,52,8,8,16,15,15,9,11,11,"[{""name"": ""beard"", ""type"": ""piercing"", ""attack"": 5, ""damage_modifier"": 2, ""damage"": [8]}, {""name"": ""glaive"", ""type"": ""none"", ""attack"": 5, ""damage_modifier"": 3, ""damage"": [10]}]",3,700,0,none,none,,none,,,2,3,2,2,0,0,0,10
 behir,,neutral evil ,monstrosity,huge,natural armor,4,17,168,16,12,23,16,18,7,14,12,"[{""name"": ""bite"", ""type"": ""piercing"", ""attack"": 10, ""damage_modifier"": 6, ""damage"": [10, 10, 10]}]",11,7200,0,"[{
