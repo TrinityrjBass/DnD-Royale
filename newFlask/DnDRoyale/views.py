@@ -9,9 +9,9 @@ from datetime import datetime
 from flask import render_template, request
 from . import app, DnD
 
+app.debug = True
 #from DnDRoyale import creature
 print("loading views file")
-breadcrumb = os.listdir()
 
 @app.route('/')
 @app.route('/home')
@@ -53,9 +53,13 @@ def sendindex():
     
     creaturelist = ''
     # Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
-    # Dev value : 'DnDRoyale/creatures.csv'
+    creaturespath = 'DnD-Royale/newFlask/DnDRoyale/creatures.csv'
+    # development/production check
+    if os.environ['FLASK_ENV'] != "development":
+        creaturespath = '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
     #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
-    with open('DnDRoyale/creatures.csv', encoding='utf-8', newline='') as csvfile:
+    print("creaturespath : " + creaturespath)
+    with open(creaturespath, encoding='utf-8', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         line_count = 0
         xp = []

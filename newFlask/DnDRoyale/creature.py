@@ -83,7 +83,7 @@ class Creature:
             warnings.warn('Beastiary error, expected path ' + path + ' error ' + str(e))
             return {}
 
-    beastiary = load_beastiary('DnDRoyale/creatures.csv')
+    beastiary = load_beastiary('DnD-Royale/newFlask/DnDRoyale/creatures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
     debug = True
 
@@ -102,7 +102,7 @@ class Creature:
         if type(wildcard) is dict:
             print("this wildcard is a dict")
             self._initialise(**wildcard)
-        else:
+        else: # DELETE Deprecated
             warnings.warn("UNKNOWN COMBATTANT:" + str(wildcard))
             print("UNKNOWN COMBATTANT:" + str(wildcard))
             # raise Exception
@@ -324,8 +324,6 @@ class Creature:
 
     def getAltAttack(self): 
         print("actions")
-        # dice(self, bonus=0, dice=20, avg=False, twinned=None, role="ability")
-        # this isn't going to work atm...need to get to the damage etc correctly
         if self.beastiary['actions'] != 'none': #IF the creature has actions
             import json
             self.beastiary['actions'].replace('\n', '') #json decoder error possibility
@@ -402,8 +400,9 @@ class Creature:
         self._set('xp', None, 'int')
         self.id = self.settings['uid'] # value should get overwritten when loaded into combattants list.
         self.actions = []
+        # saves is the saves that a creature is proficient in
         self.saves = {}
-        #self.actions = self.beastiary['actions']
+        # conditions hold any conditions{} that the creature has applied to it.
         self.conditions = []
         # proficiency. Will be overridden if not hp is provided.
         # self._set('proficiency', 1 + round(self.level / 4))  # TODO check maths on PH
@@ -848,6 +847,7 @@ class Creature:
 
     # TODO
     def TBA_act(self, verbose=0):
+        print("TBA ACT is not DEAD hahahahahahahahahahaha.... ha") #debug, is this getting hit?
         if not self.arena.find('alive enemy'):
             raise DnD.Encounter.Victory()
         x = {'nothing': 'cast_nothing'}
@@ -863,8 +863,12 @@ class Creature:
             raise DnD.Encounter.Victory()
         # beginning of turn effects
         if len(self.conditions) > 0 : 
-            #rollSaves(self.conditions)
+            print("conditions : ")
             print(self.conditions)
+            # some conditions save at end of turn, some save at beginning of turn
+            # so there maybe should be an if/cast structure to determine when save is made
+            self.rollSaves(self.conditions[0])
+            #print(self.conditions)
         # BONUS ACTION
         # heal  -healing word, a bonus action.
         if self.healing_spells > 0:
@@ -904,10 +908,17 @@ class Creature:
                         if self.hasAction == False: break #don't allow actions if it's not available
                         print("we're going to use " + action['name'])
                         self.checkDamageAction(action)
+                        self.hasAction = False
                     if action['role'] == 'healing' and action['usable'] == True:
                         if self.hasAction == False: break
                         print('we are going to heal someone!')
                         self.checkHealingAction(action)
+                        self.hasAction = False
+                    if action['role'] == 'control' and action['usable'] == True:
+                        if self.hasAction == False:break
+                        #print(""")
+                        self.checkControlAction(action)
+                        self.hasAction = False
                 if self.hasAction:
                     self.multiattack(verbose)
                     self.hasAction == False
@@ -922,16 +933,6 @@ class Creature:
                 self.multiattack(verbose)
         else:
             self.multiattack(verbose)
-
-    def rollSaves(self):
-        # TODO - roll saves against conditions and effects
-        for condition in self.conditions:
-            if condition["name"] == "petrifying":
-                #Cn save
-                print("there may be a condition")
-            # Get save ability
-            # Get save DC
-            # Roll ability save
 
     def determineAction(self, actions): #deprecating
         for action in actions:
@@ -949,22 +950,16 @@ class Creature:
 
     def checkHealingAction(self, action): # creatures are able to use abilities and then attack on the same turn... this is unwanted
         if action['role'] == 'healing':
-            targets = []
             allies = self.arena.find('bloodiest allies')
             num_targets = action['num_targets'].roll()
             total_allies = len(allies) #could also be random or strongest allies 
             if num_targets > total_allies: num_targets = total_allies
             heal = action['effect'].roll()
             for x in range (num_targets):
-                #targets.append(self.arena.find('bloodiest allies')[x])
                 print(self.name + " " + str(self.id) + "heals " + allies[x].name + " " + str(allies[x].id) + " for " + str(heal) + "hp")
                 #apply healing
                 allies[x].hp += heal # FYI the caster IS included in target list
-            #for target in targets:
-            #    print(self.name + " " + str(self.id) + "heals " + target.name + " " + str(target.id) + " for " + str(heal) + "hp")
-            #    #apply healing
-            #    target.hp += heal # FYI the caster IS included in target list
-
+            
     def checkDamageAction(self, action):
         if action['name'] == 'breath weapon': # we may not need this if statement
             targets = []
@@ -976,7 +971,7 @@ class Creature:
                 targets.append(self.arena.find(TARGET, self)[x]) #select a group of enemies
             # loop through targets and check saves
             damage = 0
-            for target in targets: # check save (ability_bonus + D20
+            for target in targets: # check save (ability_bonus + D20) but not all breath weapons are Dex saves
                 if DnD.Dice(target.ability_bonuses['dex'], 20, role="save").roll() <= action['dc']:
                     # roll damage
                     damage = action['damage'].roll()
@@ -985,7 +980,7 @@ class Creature:
                 else:
                     # roll save damage
                     print("taking 1/2 damage")
-                    damage = math.floor(action['damage'].roll()/2) # TB testing to see if I can handle saves this way
+                    damage = math.floor(action['damage'].roll()/2)
                 #apply damage to target
                 target.take_damage(damage, type = action['type'])
                 action['usable'] = False
@@ -996,10 +991,60 @@ class Creature:
             # or can I use existing functions?
             print("checkDamageAction else block")
                 
-    def checkSupportAction():
-        if action['role'] == 'support':
+    def checkSupportAction(self, action):
+        if action['role'] == 'support': #this has already been checked... this shoudldn't need to be checked again
             # TODO support
             print("TODO")
+    
+    def checkControlAction(self, action): 
+        if action['role'] == 'control':
+            # TODO control
+            print("name : " + action['name'] + ", Save: " + action['save'] + ", DC: " + str(action['dc']))
+            # get targets
+            targets = []
+            total_enemies = len(self.arena.find('alive enemy'))
+            num_targets = action['max_targets']
+            if num_targets > total_enemies: num_targets = total_enemies
+            for x in range (num_targets):
+                targets.append(self.arena.find('opponents', self)[x]) #select a group of enemies
+            # loop through targets and check saves
+            # roll targets save vs DC
+            for target in targets: # check save (ability_bonus + D20
+                if action['save'] is not Empty: #if the action has a save associated with it
+                    if DnD.Dice(target.ability_bonuses[action['save']], 20, role="save").roll() <= action['dc']:
+                        effect = action['conditions']
+                        print(target.name + " failed saving throw, effect will be applied")
+                        for condition in action['conditions']:
+                            c = {}
+                            c['name'] = condition
+                            c['dc'] = action['dc']
+                            c['save'] = action['save']
+                            target.conditions.append(c)
+                            #debug 
+                            print(condition)
+                        print(str(effect) + " has been applied to " + self.name + self.id + "! --------------------------------++")
+                    else:
+                        # roll save damage
+                        print(self.name + self.id + " made it's save")
+                else:
+                    print("apply the effect")
+                #apply damage to target
+
+    def rollSaves(self, condition):
+        '''
+        This is initially implemented for the save roll at the beginning of the turn, but can/should be used on cast too
+        Target: the creature that is affected with conditions.
+        Condition: is a single objects that contains name, save_ability, and dc of condition'''
+        # TODO - roll save against conditions and effects
+        if DnD.Dice(int(self.ability_bonuses[condition['save']]), 20, role="save").roll() <= int(condition['dc']):
+            if condition['name'] == 'petrifying':
+                print(self.name + self.id + " has been petrified")
+                self.hp = 0
+                #check for victory?
+            else:
+                #remove condition
+                self.conditions.remove(condition)
+                print(self.name + self.id + " saved from condition")
 
     def toFile(s):
         """
