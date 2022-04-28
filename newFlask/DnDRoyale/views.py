@@ -30,7 +30,7 @@ def contact():
     """Renders the contact page."""
     return render_template(
         'contact.html',
-        title='Legal',
+        title='Legal, ' + os.getcwd(),
         year=datetime.now().year,
         message='Legal Notice'
     )
