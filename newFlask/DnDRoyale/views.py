@@ -53,7 +53,7 @@ def sendindex():
     
     creaturelist = ''
     # [old] Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
-    creaturespath = 'newFlask/DnDRoyale/creatures.csv' # testing production value
+    creaturespath = 'DnDRoyale/creatures.csv' # testing production value
     #creaturespath = 'DnD-Royale/newFlask/DnDRoyale/creatures.csv' #definitely dev value
     # development/production check
     #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
