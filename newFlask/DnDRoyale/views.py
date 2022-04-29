@@ -52,11 +52,10 @@ def sendindex():
     # Read creatures from bestiary  
     
     creaturelist = ''
-    # Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
-    creaturespath = 'DnD-Royale/newFlask/DnDRoyale/creatures.csv'
+    # [old] Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
+    creaturespath = 'newFlask/DnDRoyale/creatures.csv' # testing production value
+    #creaturespath = 'DnD-Royale/newFlask/DnDRoyale/creatures.csv' #definitely dev value
     # development/production check
-    if os.environ['FLASK_ENV'] != "development":
-        creaturespath = '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
     #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
     print("creaturespath : " + creaturespath)
     with open(creaturespath, encoding='utf-8', newline='') as csvfile:
