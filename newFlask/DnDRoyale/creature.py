@@ -83,7 +83,7 @@ class Creature:
             warnings.warn('Beastiary error, expected path ' + path + ' error ' + str(e))
             return {}
 
-    beastiary = load_beastiary('DnD-Royale/newFlask/DnDRoyale/creatures.csv')
+    beastiary = load_beastiary('DnDRoyale/creatures.csv')
     ability_names = ['str', 'dex', 'con', 'wis', 'int', 'cha']
     debug = True
 
