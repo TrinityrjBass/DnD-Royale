@@ -918,9 +918,9 @@ basilisk,,unaligned ,monstrosity,medium,natural armor,5,15,52,8,8,16,8,15,2,8,7,
    1
   ],
   ""max_targets"": 1,
-  ""save"": ""cn"",
+  ""save"": ""con"",
   ""dc"": 12,
-  ""conditions"": [[""petrifying""], [""restrained""]],
+  ""conditions"": [""petrifying""],
   ""on_save"": """",
   ""usable"": true
  }
