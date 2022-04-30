@@ -3,7 +3,8 @@ An update to the DnD Encounter Simulator app with some extra features.
 
 
 
-To start dev environment using VS Code, create bat file in battleRoyale folder and paste this inside : 
+To start dev environment using VS Code, create bat file in battleRoyale folder and paste this inside :
+
 CALL env\Scripts\activate
 set FLASK_APP=DnD-Royale\newFlask\app.py
 set FLASK_ENV=development
