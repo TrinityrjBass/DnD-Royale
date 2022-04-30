@@ -6,7 +6,6 @@ import json
 import os
 import threading, time
 from datetime import datetime
-from tkinter.dnd import dnd_start
 from flask import render_template, request
 from . import app, DnD
 
