@@ -6,10 +6,11 @@ import json
 import os
 import threading, time
 from datetime import datetime
+from tkinter.dnd import dnd_start
 from flask import render_template, request
 from . import app, DnD
 
-app.debug = True
+#app.debug = True
 #from DnDRoyale import creature
 print("loading views file")
 
@@ -52,27 +53,12 @@ def sendindex():
     # Read creatures from bestiary  
     
     creaturelist = ''
-    # [old] Production value for csv file : '/home/site/wwwroot/newFlask/DnDRoyale/creatures.csv'
-    creaturespath = 'DnDRoyale/creatures.csv' # testing production value
-    #creaturespath = 'DnD-Royale/newFlask/DnDRoyale/creatures.csv' #definitely dev value
-    # development/production check
-    #I think there's a better way to do this using the code in Creatures, or alternatively, sending the whole file to dnd.py?? maybe the fist option is better
-    print("creaturespath : " + creaturespath)
-    with open(creaturespath, encoding='utf-8', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',')
-        line_count = 0
-        xp = []
-        for row in reader:
-            if line_count == 0:
-                # skip column names
-                line_count+=1
-            else:
-                # put data in html tags and add name to list
-                creaturelist += '<option data-xp="'+ row[19] +'" value="'+row[0]+'">'+row[0]+'</option>'
-                line_count+=1
+    beastiary = DnD.creature.Creature.beastiary
 
+    for row in beastiary:
+        beast = beastiary[row]
+        creaturelist += '<option data-xp="'+ beast['xp'] +'" value="'+beast['name']+'">'+beast['name']+'</option>'
     return creaturelist
-
 
 #from the encounter simulator app
 @app.route('/poster/', methods=['POST'])
