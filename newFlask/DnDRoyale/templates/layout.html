@@ -7,39 +7,40 @@
           content="DnD, D&D, 5e, Dungeons and Dragons, next, online, python, battle, encounter, simulator">
     <title>{{ title }} - D&amp;D Battle Simulator</title>
     <script type="text/javascript" src="/static/scripts/jquery-3.5.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/static/scripts/jquery.canvasjs.min.js"></script>
     <script type="text/javascript" src="/static/scripts/canvasjs.min.js"></script>
     <script type="text/javascript" src="/static/scripts/script.js"></script>
     <script type="text/javascript" src="/static/scripts/attackTool.js"></script>
     <script type="text/javascript" src="/static/scripts/results.js"></script>
     <script type="text/javascript" src="/static/scripts/simCharts.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/content/fontawesome-free-5.12.1-web/css/all.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
 
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand">D&amp;D Battle Simulator</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                    <!-- <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> -->
                 </button>
-                <a href="/" class="navbar-brand">D&amp;D Battle Simulator</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}">About</a></li>
-                    <li><a href="{{ url_for('contact') }}">Legal</a></li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('home') }}">Home</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url_for('contact') }}">Legal</a></li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
     <div class="container body-content">
         {% block content %}{% endblock %}
@@ -50,8 +51,7 @@
     </div>
 
     <!--<script src="/static/scripts/jquery-3.5.0.js"></script>-->
-    <script src="/static/scripts/bootstrap.js"></script>
-    <script src="/static/scripts/respond.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     {% block scripts %}{% endblock %}
 
 </body>
