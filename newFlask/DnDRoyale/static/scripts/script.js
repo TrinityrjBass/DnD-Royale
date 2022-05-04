@@ -83,7 +83,8 @@ function Add(newbie) {
 }
 
 function AddA() {
-    var newbie = $("#drop").val();
+
+    var newbie = document.getElementById("selected").value // why can't I use JQ here?
     var numberOf = $("#numberOfA").val();
     var team = $("input[name='team']:checked").val()
     num_entities += parseInt(numberOf);
@@ -243,7 +244,7 @@ function clearB() {
 }
 
 function updateCustomBase() {
-    let baseCreature = $('#drop').val();
+    let baseCreature = $('#dropdown_content').val();
     if (baseCreature == 'cthulhu') {
         $('#base').val('commoner');
     } else 
@@ -284,12 +285,30 @@ function initial() {
 }
 
 function loadPowerDict() {
-    $("#drop").find('option').each(function (index, item) { // get all options that are selected
+    $("#dropdown_content").find('option').each(function (index, item) { // get all options that are selected
         print(item.value); //testing if the list loads before it's looked for.
-        powerdict[item.value] = parseInt(item.getAttribute('data-xp'));
+        print(item.getAttribute('data-xp'));
+        powerdict[item.textContent] = parseInt(item.getAttribute('data-xp'));
         // opt.forEach(function(item, index){ powerdict[item.value] = parseInt(item.getAttribute("data-xp"))}) 
     })
 }
+
+function filterFunction() {
+    var input, filter, ul, li, select, i;
+    input = document.getElementById("search_creature");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("dropdown_content");
+    select = div.getElementsByTagName("li");
+    // if (select[0].value = 'cthulhu') { select[0].remove();} // you get one chance to summon Cthulhu
+    for (i = 0; i < select.length; i++) {
+      txtValue = select[i].textContent || select[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        select[i].style.display = "";
+      } else if (i != 0) {
+          select[i].style.display = "none"; 
+      }
+    }
+  }
 
 // deprecating... but might be able to be used with Plotly
 function fix_doubles() {
@@ -485,6 +504,10 @@ function rosterTable(s) {
 
 function update_lineup() {
     display_rosters(lineup);
+}
+
+function clearSelected() {
+    $("#selected").val("");
 }
 
 $(document).ready(function () {

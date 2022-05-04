@@ -65,11 +65,13 @@
             <h3>Option A: Creature List</h3>
             Pick a creature from the dropdown list<br />
             <div class="card-body">
-                <label for="drop">Creature</label>
-                <select class="input-xs form-control" id=drop onchange="updateCustomBase()">
-                    <option data-xp="465000" value="cthulhu">Select creature</option><!--LABEL-->
+                <label for="dropdown_content">Creature</label>
+                <input class="form-control" list="dropdown_content" id="selected" placeholder="Search..." onclick="clearSelected()">
+                <datalist id='dropdown_content'>
+                    <!-- <option data-xp="465000" value="cthulhu">Select creature</option> -->
+                    <!--LABEL-->
                     {{list | safe }}
-                </select>
+                </datalist>
                 <br />
                 <label>Red</label>
                 <input type="radio" name="team" value="Red" class="combatant_team">
